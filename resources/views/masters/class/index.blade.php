@@ -35,21 +35,17 @@
                         <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
                             <thead>
                                 <tr>
-                                    <th>Kode</th>
                                     <th>Nama</th>
-                                    <th>KKM</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($lessons)
-                                    @foreach ($lessons as $lesson)
-                                        <tr id="data" data-id="{{ $lesson->id }}">
-                                            <td>{{ $lesson->code }}</td>
-                                            <td>{{ $lesson->name }}</td>
-                                            <td>{{ $lesson->kkm }}</td>
+                                @if ($classes)
+                                    @foreach ($classes as $class)
+                                        <tr id="data" data-id="{{ $class->id }}">
+                                            <td>{{ $class->name }}</td>
                                             <td id="no-data" class="text-center" style="width: 5%">
-                                                <form action="{{ $menu->url }}/{{ $lesson->id }}" method="POST" class="d-inline">
+                                                <form action="{{ $menu->url }}/{{ $class->id }}" method="POST" class="d-inline">
                                                     @method('delete')
                                                     @csrf
                                                     <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>

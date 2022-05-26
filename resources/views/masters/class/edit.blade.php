@@ -14,12 +14,13 @@
             <div class="col s12">
                 <div class="card">
                     <div class="card-content">
-                        <h5 class="card-title">Tambah {{ $menu->title }}</h5>
-                        <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">
+                        <h5 class="card-title">Ubah {{ $menu->title }}</h5>
+                        <form method="POST" action="{{ str_replace("/edit", "", url()->current()) }}">
+                            @method('put')
                             @csrf
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <input id="name" type="text" placeholder="Nama" name="name" value="{{ old('name') }}">
+                                    <input id="name" type="text" placeholder="Nama" name="name" value="{{ old('name', $class->name) }}">
                                     <label for="name">Nama</label>
                                     @error('name')
                                         <div class="error">{{ $message }}</div>

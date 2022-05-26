@@ -31,11 +31,6 @@ class ReasonController extends Controller
         return view('masters.reason.index', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
         $data = [
@@ -105,6 +100,6 @@ class ReasonController extends Controller
 
         $this->reasons->where('id', $id)->update($data);
 
-        return redirect($this->url)->with('status', 'Data berhasil dihapus');
+        return redirect($this->url)->with('status', 'Data berhasil dihapus.');
     }
 }

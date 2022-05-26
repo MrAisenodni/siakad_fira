@@ -165,5 +165,89 @@ class MasterSeeder extends Seeder
                 'created_by'    => 'Migrasi',
             ],
         ]);
+
+        // Master Ekstrakurikuler
+        DB::table('mst_extracurricular')->insert([
+            [
+                'name'          => 'Basket',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Voli',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Badminton',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Futsal',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Drumband',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Paskibra',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Pramuka',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Baca Tulis Al Quran',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Marawis',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Tari dan Seni Musik',
+                'created_by'    => 'Migrasi',
+            ],
+        ]);
+
+        // Master Bahasa
+        DB::table('mst_language')->insert([
+            [
+                'name'          => 'Indonesia',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Inggris',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Jawa',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Sunda',
+                'created_by'    => 'Migrasi',
+            ],
+        ]);
+
+        // Master Golongan Darah
+        DB::table('mst_blood_type')->insert([
+            [
+                'name'          => 'A',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'B',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'AB',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'O',
+                'created_by'    => 'Migrasi',
+            ],
+        ]);
     }
 }

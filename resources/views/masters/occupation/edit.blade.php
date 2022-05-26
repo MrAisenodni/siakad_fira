@@ -45,5 +45,4 @@
 
 @section('scripts')
     <script src="{{ asset('/extra-libs/prism/prism.js') }}"></script>
-    <script src="{{ asset('/libs/jquery-match-height/dist/jquery.matchHeight-min.js') }}"></script>
 @endsection

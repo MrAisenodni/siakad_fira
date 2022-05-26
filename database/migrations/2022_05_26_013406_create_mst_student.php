@@ -15,21 +15,54 @@ class CreateMstStudent extends Migration
     {
         Schema::create('mst_student', function (Blueprint $table) {
             $table->id();
-            $table->string('nis', 10)->unique();
+
+            // Personal
+            $table->string('nis', 25)->unique();
+            $table->string('nik', 16)->unique();
+            $table->string('nisn', 25)->unique();
             $table->string('full_name');
             $table->string('birth_place');
-            $table->date('birth_data');
+            $table->date('birth_date');
             $table->enum('gender', ['l', 'p']);
             $table->unsignedInteger('religion_id')->nullable();
+            $table->unsignedInteger('language_id')->nullable();
+            $table->unsignedInteger('blood_type')->nullable();
+            $table->string('diagnose')->nullable();
+            $table->string('physical_disorder')->nullable();
+            $table->decimal('height', 5)->nullable();
+            $table->decimal('berat', 5)->nullable();
+            $table->text('picture')->nullable();
+
+            // Family
             $table->unsignedInteger('family_status_id')->nullable();
             $table->string('child_to', 3);
+            $table->string('child_count', 3)->nullable();
+            $table->string('stepbrother_count', 3)->nullable();
+            $table->string('stepsibling_count', 3)->nullable();
+            $table->enum('citizen', ['wni', 'wna']);
+            
+            // Contact
             $table->text('address');
+            $table->decimal('distance')->nullable();
             $table->string('phone_number', 25)->nullable();
+            $table->string('home_number', 25)->nullable();
+
+            // Study
+            $table->string('level')->nullable();
+            $table->string('group')->nullable();
+            $table->date('start_date')->nullable();
+            $table->unsignedInteger('extracurricular_id')->nullable();
+
+            // Last Study
+            $table->string('sttb_no')->unique()->nullable();
             $table->string('first_study')->nullable();
             $table->string('major')->nullable();
             $table->date('study_date')->nullable();
-            $table->text('picture')->nullable();
             $table->unsignedInteger('study_year')->nullable();
+
+            // Other Study
+            $table->string('move_from')->nullable();
+            $table->string('move_reason')->nullable();
 
             // Struktur Baku
             $table->boolean('disabled')->default(0);

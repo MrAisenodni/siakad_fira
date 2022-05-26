@@ -99,15 +99,33 @@ class MenuSeeder extends Seeder
                 'menu_id'       => 10
             ],
             [
+                'title'         => 'Golongan Darah',
+                'url'           => '/master/golongan-darah',
+                'icon'          => 'fiber_manual_record',
+                'menu_id'       => 10
+            ],
+            [
                 'title'         => 'Mata Pelajaran',
                 'url'           => '/master/mata-pelajaran',
                 'icon'          => 'library_books',
                 'menu_id'       => 10
             ],
             [
+                'title'         => 'Bahasa',
+                'url'           => '/master/bahasa',
+                'icon'          => 'language',
+                'menu_id'       => 10
+            ],
+            [
                 'title'         => 'Kelas',
                 'url'           => '/master/kelas',
                 'icon'          => 'class',
+                'menu_id'       => 10
+            ],
+            [
+                'title'         => 'Ekstrakurikuler',
+                'url'           => '/master/ekstrakurikuler',
+                'icon'          => 'favorite',
                 'menu_id'       => 10
             ],
             [

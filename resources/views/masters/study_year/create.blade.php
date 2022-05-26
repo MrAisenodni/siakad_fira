@@ -18,10 +18,17 @@
                         <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">
                             @csrf
                             <div class="row">
-                                <div class="input-field col s12">
+                                <div class="input-field col s8">
                                     <input id="name" type="text" placeholder="Nama" name="name" value="{{ old('name') }}">
                                     <label for="name">Nama</label>
                                     @error('name')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="input-field col s4">
+                                    <input id="semester" type="text" placeholder="Nama" name="semester" value="{{ old('semester') }}">
+                                    <label for="semester">Semester</label>
+                                    @error('semester')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>

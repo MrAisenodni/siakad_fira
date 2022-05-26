@@ -21,20 +21,41 @@
                                 <div class="input-field col s3">
                                     <input id="code" type="text" placeholder="Kode" name="code" value="{{ old('code') }}">
                                     <label for="code">Kode</label>
+                                    @error('code')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                            </div>
-                            @error('code')
-                                <div class="error">{{ $message }}</div>
-                            @enderror
-                            <div class="row">
                                 <div class="input-field col s6">
                                     <input id="name" type="text" placeholder="Nama" name="name" value="{{ old('name') }}">
                                     <label for="name">Nama</label>
+                                    @error('name')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="input-field col s3">
+                                    <input id="kkm" type="text" placeholder="KKM" name="kkm" value="{{ old('kkm') }}">
+                                    <label for="kkm">Nilai KKM</label>
+                                    @error('kkm')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
-                            @error('name')
-                                <div class="error">{{ $message }}</div>
-                            @enderror
+
+                            <hr>
                             <div class="row">
-                                <div class="input-field col s3">
-                                    <input id="kkm" type=
+                                <div class="col s12" style="text-align: right">
+                                    <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}">KEMBALI</a>
+                                    <button class="waves-effect waves-light btn btn-round green strong" type="submit">SIMPAN</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('/extra-libs/prism/prism.js') }}"></script>
+@endsection

@@ -16,9 +16,21 @@ class CreateMstParent extends Migration
         Schema::create('mst_parent', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('student_id');
+
+            // Personal
             $table->string('full_name');
+            $table->date('birth_date');
+            $table->string('birth_place');
+            $table->enum('citizen', ['wni', 'wna']);
             $table->text('address');
+            $table->boolean('parent')->default(1);
+            
+            // Other
+            $table->string('last_study')->nullable();
             $table->unsignedInteger('occupation_id')->nullable();
+            $table->decimal('revenue')->nullable();
+            $table->enum('revenue_type', ['day', 'month', 'year']);
+            $table->boolean('died')->default(0);
 
             // Struktur Baku
             $table->boolean('disabled')->default(0);

@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Masters;
 
 use App\Http\Controllers\Controller;
-use App\Models\Masters\Lesson;
+use App\Models\Masters\StudyYear;
 use App\Models\Settings\{
     Menu,
     SubMenu,
 };
 use Illuminate\Http\Request;
 
-class LessonController extends Controller
+class StudyYearController extends Controller
 {
     public function __construct()
     {
-        $this->url = '/master/mata-pelajaran';
+        $this->url = '/master/tahun-pelajaran';
         $this->menus = new Menu();
         $this->sub_menus = new SubMenu();
-        $this->lessons = new Lesson();
+        $this->studies = new StudyYear();
     }
     
     public function index(Request $request)
@@ -25,10 +25,10 @@ class LessonController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
-            'lessons'       => $this->lessons->select('id', 'code', 'name', 'kkm')->where('disabled', 0)->get(),
+            'studies'       => $this->studies->select('id', 'name', 'semester')->where('disabled', 0)->get(),
         ];
 
-        return view('masters.lesson.index', $data);
+        return view('masters.study_year.index', $data);
     }
 
     public function create(Request $request)
@@ -38,41 +38,26 @@ class LessonController extends Controller
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
         ];
 
-        return view('masters.lesson.create', $data);
+        return view('masters.study_year.create', $data);
     }
 
     public function store(Request $request)
     {
         $input = $request->all();
-        $check = $this->lessons->select('id', 'disabled', 'code')->where('code', $input['code'])->first();
 
         $validated = $request->validate([
-            'code'          => 'required|unique:mst_lesson,code,1,disabled',
             'name'          => 'required',
-            'kkm'           => 'required|numeric|digits_between:1,5',
+            'semester'      => 'required',
         ]);
 
-        if ($check) {
-            $data = [
-                'code'      => $check['code'],
-                'disabled'  => 0,
-            ];
-        } else {
-            $data['code'] = $input['code'];
-        }
-
-        $data += [
+        $data = [
             'name'          => $input['name'],
-            'kkm'           => $input['kkm'],
+            'semester'      => $input['semester'],
             'created_by'    => 'Developer',
             'created_at'    => now(),
         ];
 
-        if ($check) {
-            $this->lessons->where('id', $check['id'])->update($data);
-        } else {
-            $this->lessons->insert($data);
-        }
+        $this->studies->insert($data);
 
         return redirect($this->url)->with('status', 'Data berhasil ditambahkan.');
     }
@@ -82,34 +67,29 @@ class LessonController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
-            'lesson'        => $this->lessons->select('id', 'code', 'name', 'kkm')->where('id', $id)->first(),
+            'study'         => $this->studies->select('id', 'name', 'semester')->where('id', $id)->first(),
         ];
 
-        return view('masters.lesson.edit', $data);
+        return view('masters.study_year.edit', $data);
     }
 
     public function update(Request $request, $id)
     {
         $input = $request->all();
-        $check = $this->lessons->select('id', 'disabled', 'code')->where('code', $input['code'])->first();
 
         $validated = $request->validate([
-            'code'          => 'required|unique:mst_lesson,code,'.$id.',id,disabled,0',
             'name'          => 'required',
-            'kkm'           => 'required|numeric|digits_between:1,5',
+            'semester'      => 'required',
         ]);
 
-        if ($check) $this->lessons->where('disabled', $check['disabled'])->where('id', $check['id'])->delete();
-
         $data = [
-            'code'          => $input['code'],
             'name'          => $input['name'],
-            'kkm'           => $input['kkm'],
+            'semester'      => $input['semester'],
             'updated_by'    => 'Developer',
             'updated_at'    => now(),
         ];
 
-        $this->lessons->where('id', $id)->update($data);
+        $this->studies->where('id', $id)->update($data);
 
         return redirect($this->url)->with('status', 'Data berhasil diubah.');
     }
@@ -122,7 +102,7 @@ class LessonController extends Controller
             'updated_at'    => now(),
         ];
 
-        $this->lessons->where('id', $id)->update($data);
+        $this->studies->where('id', $id)->update($data);
 
         return redirect($this->url)->with('status', 'Data berhasil dihapus.');
     }

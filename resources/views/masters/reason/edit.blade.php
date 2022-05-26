@@ -22,10 +22,10 @@
                                 <div class="input-field col s12">
                                     <input id="name" type="text" placeholder="Nama" name="name" value="{{ old('name', $reason->name) }}">
                                     <label for="name">Nama</label>
+                                    @error('name')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                @error('name')
-                                    <div class="error">{{ $message }}</div>
-                                @enderror
                             </div>
 
                             <hr>
@@ -45,5 +45,4 @@
 
 @section('scripts')
     <script src="{{ asset('/extra-libs/prism/prism.js') }}"></script>
-    <script src="{{ asset('/libs/jquery-match-height/dist/jquery.matchHeight-min.js') }}"></script>
 @endsection

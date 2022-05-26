@@ -37,7 +37,7 @@
         }, function(){   
             swal(
                 'Terhapus!',
-                'Data berhasil dihapus.',
+                'Data berhasil dihapus..',
                 'success',
             ).then(function() {
                 form.submit()
