@@ -35,21 +35,17 @@
                         <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
                             <thead>
                                 <tr>
-                                    <th>NIS</th>
-                                    <th>NISN</th>
                                     <th>Nama</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($students)
-                                    @foreach ($students as $student)
-                                        <tr id="data" data-id="{{ $student->id }}">
-                                            <td>{{ $student->nis }}</td>
-                                            <td>{{ $student->nisn }}</td>
-                                            <td>{{ $student->full_name }}</td>
+                                @if ($extracurriculars)
+                                    @foreach ($extracurriculars as $extracurricular)
+                                        <tr id="data" data-id="{{ $extracurricular->id }}">
+                                            <td>{{ $extracurricular->name }}</td>
                                             <td id="no-data" class="text-center" style="width: 5%">
-                                                <form action="{{ $menu->url }}/{{ $student->id }}" method="POST" class="d-inline">
+                                                <form action="{{ $menu->url }}/{{ $extracurricular->id }}" method="POST" class="d-inline">
                                                     @method('delete')
                                                     @csrf
                                                     <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>

@@ -21,8 +21,11 @@ class CreateMstParent extends Migration
             $table->string('full_name');
             $table->date('birth_date');
             $table->string('birth_place');
-            $table->enum('citizen', ['wni', 'wna']);
+            $table->enum('gender', ['l', 'p'])->nullable();
+            $table->enum('citizen', ['wni', 'wna'])->nullable();
             $table->text('address');
+            $table->string('phone_number', 25)->nullable();
+            $table->string('home_number', 25)->nullable();
             $table->boolean('parent')->default(1);
             
             // Other

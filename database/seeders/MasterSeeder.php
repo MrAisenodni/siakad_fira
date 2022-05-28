@@ -249,5 +249,29 @@ class MasterSeeder extends Seeder
                 'created_by'    => 'Migrasi',
             ],
         ]);
+
+        // Master Tahun Pelajaran
+        DB::table('mst_study_year')->insert([
+            [
+                'name'          => '2021/2022',
+                'semester'      => 'Ganjil',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => '2021/2022',
+                'semester'      => 'Genap',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => '2022/2023',
+                'semester'      => 'Ganjil',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => '2021/2022',
+                'semester'      => 'Genap',
+                'created_by'    => 'Migrasi',
+            ],
+        ]);
     }
 }

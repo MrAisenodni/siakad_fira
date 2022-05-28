@@ -26,11 +26,11 @@ class CreateMstStudent extends Migration
             $table->enum('gender', ['l', 'p']);
             $table->unsignedInteger('religion_id')->nullable();
             $table->unsignedInteger('language_id')->nullable();
-            $table->unsignedInteger('blood_type')->nullable();
+            $table->unsignedInteger('blood_type_id')->nullable();
             $table->string('diagnose')->nullable();
             $table->string('physical_disorder')->nullable();
             $table->decimal('height', 5)->nullable();
-            $table->decimal('berat', 5)->nullable();
+            $table->decimal('weight', 5)->nullable();
             $table->text('picture')->nullable();
 
             // Family
@@ -52,13 +52,14 @@ class CreateMstStudent extends Migration
             $table->string('group')->nullable();
             $table->date('start_date')->nullable();
             $table->unsignedInteger('extracurricular_id')->nullable();
+            $table->unsignedInteger('study_year_id')->nullable();
 
             // Last Study
             $table->string('sttb_no')->unique()->nullable();
             $table->string('first_study')->nullable();
             $table->string('major')->nullable();
-            $table->date('study_date')->nullable();
-            $table->unsignedInteger('study_year')->nullable();
+            $table->date('from_study_date')->nullable();
+            $table->date('to_study_date')->nullable();
 
             // Other Study
             $table->string('move_from')->nullable();

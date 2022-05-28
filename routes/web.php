@@ -7,6 +7,7 @@ use App\Http\Controllers\Studies\{
 use App\Http\Controllers\Masters\{
     BloodTypeController,
     ClassController,
+    ExtracurricularController,
     FamilyStatusController,
     LanguageController,
     LessonController,
@@ -38,6 +39,7 @@ Route::resource('/master/pekerjaan', OccupationController::class);
 Route::resource('/master/bahasa', LanguageController::class);
 Route::resource('/master/golongan-darah', BloodTypeController::class);
 Route::resource('/master/alasan', ReasonController::class);
+Route::resource('/master/ekstrakurikuler', ExtracurricularController::class);
 Route::resource('/master/agama', ReligionController::class);
 Route::resource('/master/tahun-pelajaran', StudyYearController::class);
 

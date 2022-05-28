@@ -91,71 +91,6 @@
                         </li>
                     </ul>
                 </li>
-                <!-- ============================================================== -->
-                <!-- Comment topbar icon scss in header.scss -->
-                <!-- ============================================================== -->
-                <li><a class="dropdown-trigger" href="javascript: void(0);" data-target="msg_dropdown"><i class="material-icons">comment</i></a>
-                    <ul id="msg_dropdown" class="mailbox dropdown-content">
-                        <li>
-                            <div class="drop-title">You have 4 new messages</div>
-                        </li>
-                        <li>
-                            <div class="message-center">
-                                <!-- Message -->
-                                <a href="#">
-                                        <span class="user-img">
-                                            <img src="{{ asset('/images/users/1.jpg') }}" alt="user" class="circle">
-                                            <span class="profile-status online pull-right"></span>
-                                        </span>
-                                        <span class="mail-contnet">
-                                            <h5>Chris Evans</h5>
-                                            <span class="mail-desc">Just see the my admin!</span>
-                                            <span class="time">9:30 AM</span>
-                                        </span>
-                                    </a>
-                                <!-- Message -->
-                                <a href="#">
-                                        <span class="user-img">
-                                            <img src="{{ asset('/images/users/2.jpg') }}" alt="user" class="circle">
-                                            <span class="profile-status busy pull-right"></span>
-                                        </span>
-                                        <span class="mail-contnet">
-                                            <h5>Ray Hudson</h5>
-                                            <span class="mail-desc">I've sung a song! See you at</span>
-                                            <span class="time">9:10 AM</span>
-                                        </span>
-                                    </a>
-                                <!-- Message -->
-                                <a href="#">
-                                        <span class="user-img">
-                                            <img src="{{ asset('/images/users/3.jpg') }}" alt="user" class="circle">
-                                            <span class="profile-status away pull-right"></span>
-                                        </span>
-                                        <span class="mail-contnet">
-                                            <h5>Lb James</h5>
-                                            <span class="mail-desc">I am a singer!</span>
-                                            <span class="time">9:08 AM</span>
-                                        </span>
-                                    </a>
-                                <!-- Message -->
-                                <a href="#">
-                                        <span class="user-img">
-                                            <img src="{{ asset('/images/users/4.jpg') }}" alt="user" class="circle">
-                                            <span class="profile-status offline pull-right"></span>
-                                        </span>
-                                        <span class="mail-contnet">
-                                            <h5>Don Andres</h5>
-                                            <span class="mail-desc">Just see the my admin!</span>
-                                            <span class="time">9:02 AM</span>
-                                        </span>
-                                    </a>
-                            </div>
-                        </li>
-                        <li>
-                            <a class="center-align" href="javascript:void(0);"> <strong>See all e-Mails</strong> </a>
-                        </li>
-                    </ul>
-                </li>
                 <li class="search-box">
                     <a href="javascript: void(0);"><i class="material-icons">search</i></a>
                     <form class="app-search">
@@ -170,26 +105,6 @@
             <!-- Right topbar icon scss in header.scss -->
             <!-- ============================================================== -->
             <ul class="right">
-                <li class="lang-dropdown"><a class="dropdown-trigger" href="javascript: void(0);" data-target="lang_dropdown"><i class="flag-icon flag-icon-in"></i></a>
-                    <ul id="lang_dropdown" class="dropdown-content">
-                        <li>
-                            <a href="#!" class="grey-text text-darken-1">
-                                <i class="flag-icon flag-icon-us"></i> English</a>
-                        </li>
-                        <li>
-                            <a href="#!" class="grey-text text-darken-1">
-                                <i class="flag-icon flag-icon-fr"></i> French</a>
-                        </li>
-                        <li>
-                            <a href="#!" class="grey-text text-darken-1">
-                                <i class="flag-icon flag-icon-es"></i> Spanish</a>
-                        </li>
-                        <li>
-                            <a href="#!" class="grey-text text-darken-1">
-                                <i class="flag-icon flag-icon-de"></i> German</a>
-                        </li>
-                    </ul>
-                </li>
                 <!-- ============================================================== -->
                 <!-- Profile icon scss in header.scss -->
                 <!-- ============================================================== -->
@@ -199,20 +114,18 @@
                             <div class="dw-user-box">
                                 <div class="u-img"><img src="{{ asset('/images/users/2.jpg') }}" alt="user"></div>
                                 <div class="u-text">
-                                    <h4>Steve Harvey</h4>
-                                    <p>steve@gmail.com</p>
-                                    <a class="waves-effect waves-light btn-small red white-text">View Profile</a>
+                                    <h4>Safira</h4>
+                                    <p>firafear@gmail.com</p>
+                                    <a class="waves-effect waves-light btn-small red white-text">Lihat Profil</a>
                                 </div>
                             </div>
                         </li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#"><i class="material-icons">account_circle</i> My Profile</a></li>
-                        <li><a href="#"><i class="material-icons">account_balance_wallet</i> My Balance</a></li>
-                        <li><a href="#"><i class="material-icons">inbox</i> Inbox</a></li>
+                        <li><a href="#"><i class="material-icons">inbox</i> Kotak Masuk</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#"><i class="material-icons">settings</i> Account Setting</a></li>
+                        <li><a href="#"><i class="material-icons">settings</i> Pengaturan</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#"><i class="material-icons">power_settings_new</i> Logout</a></li>
+                        <li><a href="#"><i class="material-icons">power_settings_new</i> Keluar</a></li>
                     </ul>
                 </li>
             </ul>
