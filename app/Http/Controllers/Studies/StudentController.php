@@ -397,8 +397,8 @@ class StudentController extends Controller
             'mother_revenue'        => 'required',
         ]);
 
-        if ($input['child_to'] >= $input['child_count']) return redirect($this->url.'/'.$id)->with('status', 'Anak Dari tidak boleh lebih besar dari Jumlah Saudara.')->withInput();
-        if ($input['from_study_date'] > $input['to_study_date']) return redirect($this->url.'/'.$id)->with('status', 'Tanggal Dari tidak boleh lebih besar dari Tanggal Sampai.')->withInput();
+        if ($input['child_to'] >= $input['child_count']) return redirect($this->url.'/'.$id.'/edit')->with('status', 'Anak Dari tidak boleh lebih besar dari Jumlah Saudara.')->withInput();
+        if ($input['from_study_date'] > $input['to_study_date']) return redirect($this->url.'/'.$id.'/edit')->with('status', 'Tanggal Dari tidak boleh lebih besar dari Tanggal Sampai.')->withInput();
 
         $data = [
             'nik'                   => $input['nik'],
@@ -438,8 +438,8 @@ class StudentController extends Controller
             'to_study_date'         => date('Y-m-d', strtotime(str_replace('/', '-', $input['to_study_date']))),
             'move_from'             => $input['move_from'],
             'move_reason'           => $input['move_reason'],
-            'created_by'            => 'Developer',
-            'created_at'            => now(),
+            'updated_by'            => 'Developer',
+            'updated_at'            => now(),
         ];
 
         $father = [
@@ -455,8 +455,8 @@ class StudentController extends Controller
             'occupation_id'     => $input['father_occupation'],
             'revenue'           => str_replace(",", ".", str_replace(".", "", $input['father_revenue'])),
             'revenue_type'      => $input['father_revenue_type'],
-            'created_at'        => now(),
-            'created_by'        => 'Developer',
+            'updated_at'        => now(),
+            'updated_by'        => 'Developer',
         ];
 
         $mother = [
@@ -472,8 +472,8 @@ class StudentController extends Controller
             'occupation_id'     => $input['mother_occupation'],
             'revenue'           => str_replace(",", ".", str_replace(".", "", $input['mother_revenue'])),
             'revenue_type'      => $input['mother_revenue_type'],
-            'created_at'        => now(),
-            'created_by'        => 'Developer',
+            'updated_at'        => now(),
+            'updated_by'        => 'Developer',
         ];
 
         if ($input['guardian']) 
@@ -507,8 +507,6 @@ class StudentController extends Controller
             'revenue'           => str_replace(",", ".", str_replace(".", "", $input['guardian_revenue'])),
             'revenue_type'      => $input['guardian_revenue_type'],
             'parent'            => 0,
-            'created_at'        => now(),
-            'created_by'        => 'Developer',
         ];
         ($guardian_died) ? $guardian['died'] = $guardian_died : $guardian['died'] = 0;
         // dd($guardian, $mother);
@@ -525,9 +523,18 @@ class StudentController extends Controller
         $this->parents->where('id', $c_father['id'])->update($father);
         $this->parents->where('id', $c_mother['id'])->update($mother);
         if($c_guardian) { 
+            $guardian += [
+                'updated_at'        => now(),
+                'updated_by'        => 'Developer',
+            ];
+
             $this->parents->where('id', $c_guardian['id'])->update($guardian);
         } else {
-            $guardian['student_id'] = $id;
+            $guardian += [
+                'student_id'        => $id,
+                'created_at'        => now(),
+                'created_by'        => 'Developer',
+            ];
 
             $this->parents->insert($guardian);
         }
