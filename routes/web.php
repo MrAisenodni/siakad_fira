@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\Studies\{
+    ParentController,
     StudentController,
 };
 use App\Http\Controllers\Masters\{
@@ -45,3 +46,4 @@ Route::resource('/master/tahun-pelajaran', StudyYearController::class);
 
 // Route Studi
 Route::resource('/studi/siswa', StudentController::class);
+Route::resource('/studi/orang-tua', ParentController::class);

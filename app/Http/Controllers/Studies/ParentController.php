@@ -3,37 +3,19 @@
 namespace App\Http\Controllers\Studies;
 
 use App\Http\Controllers\Controller;
-use App\Models\Masters\{
-    BloodType,
-    Extracurricular,
-    FamilyStatus,
-    Language,
-    Occupation,
-    Religion,
-    StudyYear,
-};
+use App\Models\Masters\Occupation;
 use App\Models\Settings\Menu;
-use App\Models\Studies\{
-    Student,
-    ParentModel,
-};
+use App\Models\Studies\ParentModel;
 use Illuminate\Http\Request;
 
-class StudentController extends Controller
+class ParentController extends Controller
 {
     public function __construct()
     {
-        $this->url = '/studi/siswa';
+        $this->url = '/studi/orang-tua';
         $this->menus = new Menu();
-        $this->students = new Student();
         $this->parents = new ParentModel();
-        $this->religions = new Religion();
-        $this->blood_types = new BloodType();
-        $this->languages = new Language();
-        $this->families = new FamilyStatus();
-        $this->studies = new StudyYear();
         $this->occupations = new Occupation();
-        $this->extracurriculars = new Extracurricular();
     }
     
     public function index(Request $request)
@@ -41,10 +23,10 @@ class StudentController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'students'      => $this->students->where('disabled', 0)->get(),
+            'parents'       => $this->parents->select('id', 'full_name', 'parent', 'gender', 'died', 'student_id')->where('disabled', 0)->get(),
         ];
 
-        return view('studies.student.index', $data);
+        return view('studies.parent.index', $data);
     }
 
     public function create(Request $request)
@@ -61,7 +43,7 @@ class StudentController extends Controller
             'studies'           => $this->studies->select('id', 'name')->where('disabled', 0)->get(),
         ];
 
-        return view('studies.student.create', $data);
+        return view('studies.parent.create', $data);
     }
 
     public function store(Request $request)
@@ -70,7 +52,7 @@ class StudentController extends Controller
         $mother_died = $request->mother_died;
         $guardian_died = $request->guardian_died;
         $input = $request->all();
-        $check = $this->students
+        $check = $this->parents
                         ->where('nik', $input['nik'])
                         ->where('nis', $input['nis'])
                         ->where('nisn', $input['nisn'])
@@ -79,9 +61,9 @@ class StudentController extends Controller
         // dd($input, $guardian_died, $father_died, $mother_died);
 
         $validated = $request->validate([
-            'nik'           => 'required|numeric|unique:mst_student,nik,1,disabled|digits_between:1,16',
-            'nis'           => 'required|numeric|unique:mst_student,nis,1,disabled|digits_between:1,20',
-            'nisn'          => 'required|numeric|unique:mst_student,nisn,1,disabled|digits_between:1,20',
+            'nik'           => 'required|numeric|unique:mst_parent,nik,1,disabled|digits_between:1,16',
+            'nis'           => 'required|numeric|unique:mst_parent,nis,1,disabled|digits_between:1,20',
+            'nisn'          => 'required|numeric|unique:mst_parent,nisn,1,disabled|digits_between:1,20',
             'full_name'     => 'required',
             'birth_place'   => 'required',
             'birth_date'    => 'required|date_format:d/m/Y',
@@ -110,7 +92,7 @@ class StudentController extends Controller
             'group'             => 'required',
             'start_date'        => 'required|date_format:d/m/Y',
             'study_year'        => 'required',
-            'sttb_no'           => 'required|unique:mst_student,sttb_no,1,disabled',
+            'sttb_no'           => 'required|unique:mst_parent,sttb_no,1,disabled',
             'first_study'       => 'required',
             'from_study_date'   => 'required|date_format:d/m/Y',
             'to_study_date'     => 'required|date_format:d/m/Y',
@@ -268,11 +250,11 @@ class StudentController extends Controller
         ($guardian_died) ? $guardian['died'] = $guardian_died : $guardian['died'] = 0;
 
         if ($check) {
-            $this->students->where('id', $check['id'])->update($data);
+            $this->parents->where('id', $check['id'])->update($data);
 
-            $c_father = $this->parents->where('student_id', $check['id'])->where('parent', 1)->where('gender', 'l')->first();
-            $c_mother = $this->parents->where('student_id', $check['id'])->where('parent', 1)->where('gender', 'p')->first();
-            $c_guardian = $this->parents->where('student_id', $check['id'])->where('parent', 0)->first();
+            $c_father = $this->parents->where('parent_id', $check['id'])->where('parent', 1)->where('gender', 'l')->first();
+            $c_mother = $this->parents->where('parent_id', $check['id'])->where('parent', 1)->where('gender', 'p')->first();
+            $c_guardian = $this->parents->where('parent_id', $check['id'])->where('parent', 0)->first();
 
             // update parents
             $this->parents->where('id', $c_father['id'])->update($father);
@@ -280,16 +262,16 @@ class StudentController extends Controller
             if ($c_guardian) { 
                 $this->parents->where('id', $c_guardian['id'])->update($guardian);
             } else {
-                $guardian['student_id'] = $check['id'];
+                $guardian['parent_id'] = $check['id'];
 
                 $this->parents->insert($guardian);
             };
         } else {
-            $id = $this->students->insertGetId($data);
+            $id = $this->parents->insertGetId($data);
 
-            $father['student_id'] = $id;
-            $mother['student_id'] = $id;
-            $guardian['student_id'] = $id;
+            $father['parent_id'] = $id;
+            $mother['parent_id'] = $id;
+            $guardian['parent_id'] = $id;
 
             // insert parents
             $this->parents->insert($father);
@@ -312,13 +294,13 @@ class StudentController extends Controller
             'occupations'       => $this->occupations->select('id', 'name')->where('disabled', 0)->get(),
             'religions'         => $this->religions->select('id', 'name')->where('disabled', 0)->get(),
             'studies'           => $this->studies->select('id', 'name')->where('disabled', 0)->get(),
-            'student'           => $this->students->where('id', $id)->first(),
-            'father'            => $this->parents->where('student_id', $id)->where('gender', 'l')->where('parent', 1)->where('disabled', 0)->first(),
-            'mother'            => $this->parents->where('student_id', $id)->where('gender', 'p')->where('parent', 1)->where('disabled', 0)->first(),
-            'guardian'          => $this->parents->where('student_id', $id)->where('parent', 0)->where('disabled', 0)->first(),
+            'parent'           => $this->parents->where('id', $id)->first(),
+            'father'            => $this->parents->where('parent_id', $id)->where('gender', 'l')->where('parent', 1)->where('disabled', 0)->first(),
+            'mother'            => $this->parents->where('parent_id', $id)->where('gender', 'p')->where('parent', 1)->where('disabled', 0)->first(),
+            'guardian'          => $this->parents->where('parent_id', $id)->where('parent', 0)->where('disabled', 0)->first(),
         ];
         
-        return view('studies.student.edit', $data);
+        return view('studies.parent.edit', $data);
     }
 
     public function update(Request $request, $id)
@@ -327,7 +309,7 @@ class StudentController extends Controller
         $mother_died = $request->mother_died;
         $guardian_died = $request->guardian_died;
         $input = $request->all();
-        $check = $this->students
+        $check = $this->parents
                         ->where('nik', $input['nik'])
                         ->where('nis', $input['nis'])
                         ->where('nisn', $input['nisn'])
@@ -336,9 +318,9 @@ class StudentController extends Controller
         // dd($input, $guardian_died, $father_died, $mother_died);
 
         $validated = $request->validate([
-            'nik'           => 'required|numeric|unique:mst_student,nik,'.$id.',id,disabled,0|digits_between:1,16',
-            'nis'           => 'required|numeric|unique:mst_student,nis,'.$id.',id,disabled,0|digits_between:1,20',
-            'nisn'          => 'required|numeric|unique:mst_student,nisn,'.$id.',id,disabled,0|digits_between:1,20',
+            'nik'           => 'required|numeric|unique:mst_parent,nik,'.$id.',id,disabled,0|digits_between:1,16',
+            'nis'           => 'required|numeric|unique:mst_parent,nis,'.$id.',id,disabled,0|digits_between:1,20',
+            'nisn'          => 'required|numeric|unique:mst_parent,nisn,'.$id.',id,disabled,0|digits_between:1,20',
             'full_name'     => 'required',
             'birth_place'   => 'required',
             'birth_date'    => 'required|date_format:d/m/Y',
@@ -367,7 +349,7 @@ class StudentController extends Controller
             'group'             => 'required',
             'start_date'        => 'required|date_format:d/m/Y',
             'study_year'        => 'required',
-            'sttb_no'           => 'required|unique:mst_student,sttb_no,'.$id.',id,disabled,0',
+            'sttb_no'           => 'required|unique:mst_parent,sttb_no,'.$id.',id,disabled,0',
             'first_study'       => 'required',
             'from_study_date'   => 'required|date_format:d/m/Y',
             'to_study_date'     => 'required|date_format:d/m/Y',
@@ -513,13 +495,13 @@ class StudentController extends Controller
         ($guardian_died) ? $guardian['died'] = $guardian_died : $guardian['died'] = 0;
         // dd($guardian, $mother);
 
-        if ($check) $this->students->where('id', $check['id'])->delete();
+        if ($check) $this->parents->where('id', $check['id'])->delete();
 
-        $this->students->where('id', $id)->update($data);
+        $this->parents->where('id', $id)->update($data);
 
-        $c_father = $this->parents->where('student_id', $id)->where('parent', 1)->where('gender', 'l')->first();
-        $c_mother = $this->parents->where('student_id', $id)->where('parent', 1)->where('gender', 'p')->first();
-        $c_guardian = $this->parents->where('student_id', $id)->where('parent', 0)->first();
+        $c_father = $this->parents->where('parent_id', $id)->where('parent', 1)->where('gender', 'l')->first();
+        $c_mother = $this->parents->where('parent_id', $id)->where('parent', 1)->where('gender', 'p')->first();
+        $c_guardian = $this->parents->where('parent_id', $id)->where('parent', 0)->first();
 
         // update parents
         $this->parents->where('id', $c_father['id'])->update($father);
@@ -527,7 +509,7 @@ class StudentController extends Controller
         if($c_guardian) { 
             $this->parents->where('id', $c_guardian['id'])->update($guardian);
         } else {
-            $guardian['student_id'] = $id;
+            $guardian['parent_id'] = $id;
 
             $this->parents->insert($guardian);
         }
@@ -543,7 +525,7 @@ class StudentController extends Controller
             'updated_at'    => now(),
         ];
 
-        $this->students->where('id', $id)->update($data);
+        $this->parents->where('id', $id)->update($data);
 
         return redirect($this->url)->with('status', 'Data berhasil dihapus.');
     }

@@ -31,7 +31,7 @@ class CreateMstParent extends Migration
             // Other
             $table->string('last_study')->nullable();
             $table->unsignedInteger('occupation_id')->nullable();
-            $table->decimal('revenue')->nullable();
+            $table->double('revenue')->nullable();
             $table->enum('revenue_type', ['day', 'month', 'year']);
             $table->boolean('died')->default(0);
 
