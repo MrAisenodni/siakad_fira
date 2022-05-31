@@ -217,6 +217,7 @@ return [
         'name'                  => 'Nama',
         'nik'                   => 'NIK',
         'nis'                   => 'NIS',
+        'nip'                   => 'NIP',
         'nisn'                  => 'NISN',
         'kkm'                   => 'Nilai KKM',
         'phone_number'          => 'Nomor HP',

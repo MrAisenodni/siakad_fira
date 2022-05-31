@@ -333,7 +333,6 @@ class StudentController extends Controller
                         ->where('nisn', $input['nisn'])
                         ->where('disabled', 1)
                         ->first();
-        // dd($input, $guardian_died, $father_died, $mother_died);
 
         $validated = $request->validate([
             'nik'           => 'required|numeric|unique:mst_student,nik,'.$id.',id,disabled,0|digits_between:1,16',
