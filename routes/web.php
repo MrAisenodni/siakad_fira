@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\Studies\{
+    ClassController as StdClassController,
+    LessonController as StdLessonController,
     ParentController,
+    ScheduleController,
     StudentController,
     TeacherController,
 };
@@ -47,5 +50,8 @@ Route::resource('/master/tahun-pelajaran', StudyYearController::class);
 
 // Route Studi
 Route::resource('/studi/guru', TeacherController::class);
+Route::resource('/studi/jadwal-pembelajaran', ScheduleController::class);
+Route::resource('/studi/kelas', StdClassController::class);
+Route::resource('/studi/mata-pelajaran', StdLessonController::class);
 Route::resource('/studi/orang-tua', ParentController::class);
 Route::resource('/studi/siswa', StudentController::class);

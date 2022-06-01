@@ -17,7 +17,6 @@ class CreateStdLesson extends Migration
             $table->id();
             $table->foreignId('lesson_id')->constrained('mst_lesson');
             $table->foreignId('teacher_id')->constrained('mst_teacher');
-            $table->foreignId('student_id')->constrained('mst_student');
             $table->foreignId('class_id')->constrained('mst_class');
             $table->foreignId('study_year_id')->constrained('mst_study_year');
                                     

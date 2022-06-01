@@ -220,11 +220,16 @@ $(function() {
     // ============================================================== 
     // date-time picker
     // ============================================================== 
-    $('.datepicker').datepicker({
+    $('.datepicker').bootstrapMaterialDatePicker({
         format: 'dd/mm/yyyy',
         onClose: true,
+        lang: 'id',
     });
-    $('.timepicker').timepicker();
+    $('.timepicker').bootstrapMaterialDatePicker({
+        format: 'HH:mm',
+        time: true,
+        date: false,
+    });
     // ============================================================== 
     // select
     // ============================================================== 

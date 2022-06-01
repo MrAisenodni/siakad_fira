@@ -35,23 +35,23 @@
                         <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
                             <thead>
                                 <tr>
-                                    <th>NIS</th>
-                                    <th>NISN</th>
-                                    <th>Nama</th>
-                                    <th>No HP/Telepon</th>
+                                    <th>Nama Guru</th>
+                                    <th>Nama Siswa</th>
+                                    <th>Kelas</th>
+                                    <th>Tahun Ajar</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($students)
-                                    @foreach ($students as $student)
-                                        <tr id="data" data-id="{{ $student->id }}">
-                                            <td>{{ $student->nis }}</td>
-                                            <td>{{ $student->nisn }}</td>
-                                            <td>{{ $student->full_name }}</td>
-                                            <td>{{ $student->phone_number }}@if($student->home_number != 0) /{{ $student->home_number }} @endif</td>
+                                @if ($classes)
+                                    @foreach ($classes as $class)
+                                        <tr id="data" data-id="{{ $class->id }}">
+                                            <td>{{ $class->teacher->nip }} - {{ $class->teacher->full_name }}</td>
+                                            <td>{{ $class->student->nis }} - {{ $class->student->full_name }}</td>
+                                            <td>{{ $class->class->name }}</td>
+                                            <td>{{ $class->study_year->name }}</td>
                                             <td id="no-data" class="text-center" style="width: 5%">
-                                                <form action="{{ $menu->url }}/{{ $student->id }}" method="POST" class="d-inline">
+                                                <form action="{{ $menu->url }}/{{ $class->id }}" method="POST" class="d-inline">
                                                     @method('delete')
                                                     @csrf
                                                     <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>

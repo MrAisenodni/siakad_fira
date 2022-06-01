@@ -41,7 +41,7 @@ class StudentController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'students'      => $this->students->where('disabled', 0)->get(),
+            'students'      => $this->students->select('id', 'nis', 'nisn', 'full_name', 'phone_number', 'home_number')->where('disabled', 0)->get(),
         ];
 
         return view('studies.student.index', $data);

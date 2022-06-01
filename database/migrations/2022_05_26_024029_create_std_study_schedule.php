@@ -15,8 +15,10 @@ class CreateStdStudySchedule extends Migration
     {
         Schema::create('std_study_schedule', function (Blueprint $table) {
             $table->id();
-            $table->char('day');
+            $table->enum('day', [1,2,3,4,5,6,7]);
             $table->time('clock');
+            $table->enum('type', ['std', 'uts', 'uas']);
+            $table->unsignedInteger('spv_teacher_id')->nullable();
             $table->foreignId('lesson_id')->constrained('std_lesson');
                                     
             // Struktur Baku

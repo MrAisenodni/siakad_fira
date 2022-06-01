@@ -35,23 +35,43 @@
                         <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
                             <thead>
                                 <tr>
-                                    <th>NIS</th>
-                                    <th>NISN</th>
-                                    <th>Nama</th>
-                                    <th>No HP/Telepon</th>
+                                    <th>Jadwal</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th>Kelas</th>
+                                    <th>Guru</th>
+                                    <th>Pengawas</th>
+                                    <th>Tipe</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($students)
-                                    @foreach ($students as $student)
-                                        <tr id="data" data-id="{{ $student->id }}">
-                                            <td>{{ $student->nis }}</td>
-                                            <td>{{ $student->nisn }}</td>
-                                            <td>{{ $student->full_name }}</td>
-                                            <td>{{ $student->phone_number }}@if($student->home_number != 0) /{{ $student->home_number }} @endif</td>
+                                @if ($schedules)
+                                    @foreach ($schedules as $schedule)
+                                        <tr id="data" data-id="{{ $schedule->id }}">
+                                            <td>
+                                                @if ($schedule->day == '1') Senin ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
+                                                @if ($schedule->day == '2') Selasa ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
+                                                @if ($schedule->day == '3') Rabu ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
+                                                @if ($schedule->day == '4') Kamis ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
+                                                @if ($schedule->day == '5') Jumat ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
+                                                @if ($schedule->day == '6') Sabtu ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
+                                                @if ($schedule->day == '7') Minggu ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
+                                            </td>
+                                            <td>{{ $schedule->lesson->lesson->name }}</td>
+                                            <td>{{ $schedule->lesson->class->name }}</td>
+                                            <td>{{ $schedule->lesson->teacher->full_name }}</td>
+                                            <td>@if ($schedule->spv_teacher_id) {{ $schedule->teacher->full_name }} @else - @endif</td>
+                                            <td>
+                                                @if ($schedule->type == 'uas')
+                                                    <p class="red-text">UAS</p>
+                                                @elseif ($schedule->type == 'uts')
+                                                    <p class="green-text">UTS</p>
+                                                @else
+                                                    Umum
+                                                @endif
+                                            </td>
                                             <td id="no-data" class="text-center" style="width: 5%">
-                                                <form action="{{ $menu->url }}/{{ $student->id }}" method="POST" class="d-inline">
+                                                <form action="{{ $menu->url }}/{{ $schedule->id }}" method="POST" class="d-inline">
                                                     @method('delete')
                                                     @csrf
                                                     <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>

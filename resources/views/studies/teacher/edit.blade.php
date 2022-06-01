@@ -17,7 +17,7 @@
             <div class="col s12">
                 <div class="card">
                     <div class="card-content">
-                        <h5 class="card-title">Tambah {{ $menu->title }}</h5>
+                        <h5 class="card-title">Ubah {{ $menu->title }}</h5>
                         @if (session('status'))
                             <div class="success-alert-bar p-15 m-t-10 m-b-10 red white-text" style="display: block">
                                 {{ session('status') }}
