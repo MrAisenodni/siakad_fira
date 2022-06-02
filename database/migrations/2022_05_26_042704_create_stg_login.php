@@ -19,7 +19,7 @@ class CreateStgLogin extends Migration
             $table->string('username')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['teacher', 'student', 'head', 'parent']);
+            $table->enum('role', ['admin', 'teacher', 'student', 'parent']);
             $table->rememberToken();
             $table->timestamps();
         });

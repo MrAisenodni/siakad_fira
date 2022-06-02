@@ -8,6 +8,9 @@
     
     {{-- Select2 --}}
     <link href="{{ asset('/libs/select2/dist/css/select2.css') }}" rel="stylesheet">
+    
+    {{-- Datepicker --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('/libs/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css') }}">
 @endsection
 
 @section('content')
@@ -182,4 +185,11 @@
     
     {{-- Select2 --}}
     <script src="{{ asset('/libs/select2/dist/js/select2.min.js') }}"></script>
+
+    {{-- Datepicker --}}
+    <script src="{{ asset('/libs/moment/moment.js') }}"></script>
+    <script src="{{ asset('/libs/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker-custom.js') }}"></script>
+    
+    {{-- Form --}}
+    <script src="{{ asset('/dist/js/form.js') }}"></script>
 @endsection

@@ -114,8 +114,18 @@
                             <div class="dw-user-box">
                                 <div class="u-img"><img src="{{ asset('/images/users/2.jpg') }}" alt="user"></div>
                                 <div class="u-text">
-                                    <h4>Safira</h4>
-                                    <p>firafear@gmail.com</p>
+                                    <h4>@if(session()->get('srole') == 'admin') Administrator @else {{ session()->get('sname') }} @endif</h4>
+                                    <p>
+                                        @if (session()->get('srole') == 'admin')
+                                            Admin
+                                        @elseif (session()->get('srole') == 'student')
+                                            Siswa
+                                        @elseif (session()->get('srole') == 'teacher')
+                                            Guru
+                                        @else
+                                            Orang Tua
+                                        @endif
+                                    </p>
                                     <a class="waves-effect waves-light btn-small red white-text">Lihat Profil</a>
                                 </div>
                             </div>
@@ -125,7 +135,7 @@
                         <li role="separator" class="divider"></li>
                         <li><a href="#"><i class="material-icons">settings</i> Pengaturan</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#"><i class="material-icons">power_settings_new</i> Keluar</a></li>
+                        <li><a href="/logout"><i class="material-icons">power_settings_new</i> Keluar</a></li>
                     </ul>
                 </li>
             </ul>

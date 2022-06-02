@@ -31,7 +31,7 @@ class ClassController extends Controller
     public function index(Request $request)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'classes'       => $this->classes->select('id', 'student_id', 'teacher_id', 'class_id', 'study_year_id')->where('disabled', 0)->get(),
         ];

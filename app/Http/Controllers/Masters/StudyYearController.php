@@ -23,7 +23,7 @@ class StudyYearController extends Controller
     public function index(Request $request)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
             'studies'       => $this->studies->select('id', 'name', 'semester')->where('disabled', 0)->get(),
         ];
@@ -34,7 +34,7 @@ class StudyYearController extends Controller
     public function create(Request $request)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
         ];
 
@@ -65,7 +65,7 @@ class StudyYearController extends Controller
     public function edit($id)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
             'study'         => $this->studies->select('id', 'name', 'semester')->where('id', $id)->first(),
         ];

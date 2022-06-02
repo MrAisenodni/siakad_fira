@@ -14,6 +14,6 @@ class Menu extends Model
 
     public function sub_menus() 
     {
-        return $this->hasMany(SubMenu::class)->select('title', 'url', 'icon', 'menu_id')->where('disabled', 0);
+        return $this->hasMany(SubMenu::class)->select('title', 'url', 'icon', 'menu_id', 'role')->where('disabled', 0);
     }
 }

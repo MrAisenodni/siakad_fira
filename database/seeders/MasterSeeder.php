@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\{
+    DB,
+    Schema,
+};
 
 class MasterSeeder extends Seeder
 {
@@ -14,6 +17,19 @@ class MasterSeeder extends Seeder
      */
     public function run()
     {
+        // Truncate All Table Master
+        Schema::disableForeignKeyConstraints();
+        DB::table('mst_religion')->truncate();
+        DB::table('mst_family_status')->truncate();
+        DB::table('mst_occupation')->truncate();
+        DB::table('mst_class')->truncate();
+        DB::table('mst_reason')->truncate();
+        DB::table('mst_extracurricular')->truncate();
+        DB::table('mst_language')->truncate();
+        DB::table('mst_blood_type')->truncate();
+        DB::table('mst_study_year')->truncate();
+        Schema::enableForeignKeyConstraints();
+
         // Master Agama
         DB::table('mst_religion')->insert([
             [

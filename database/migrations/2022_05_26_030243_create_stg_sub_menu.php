@@ -19,6 +19,7 @@ class CreateStgSubMenu extends Migration
             $table->string('url')->nullable();
             $table->string('icon')->nullable();
             $table->foreignId('menu_id')->constrained('stg_menu');
+            $table->string('role')->nullable();
                                     
             // Struktur Baku
             $table->boolean('disabled')->default(0);

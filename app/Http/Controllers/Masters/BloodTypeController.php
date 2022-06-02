@@ -23,18 +23,22 @@ class BloodTypeController extends Controller
     public function index(Request $request)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
             'blood_types'   => $this->blood_types->select('id', 'name')->where('disabled', 0)->get(),
         ];
 
-        return view('masters.blood_type.index', $data);
+        if (session()->get('srole') == 'admin') {
+            return view('masters.blood_type.index', $data);
+        } else {
+            return redirect('/');
+        }
     }
 
     public function create(Request $request)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
         ];
 
@@ -63,7 +67,7 @@ class BloodTypeController extends Controller
     public function edit($id)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
             'blood_type'      => $this->blood_types->select('id', 'name')->where('id', $id)->first(),
         ];

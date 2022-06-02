@@ -9,6 +9,7 @@ use App\Models\Masters\{
     FamilyStatus,
     StudyYear,
 };
+use App\Models\Studies\ParentModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

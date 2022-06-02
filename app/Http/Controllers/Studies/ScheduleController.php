@@ -25,7 +25,7 @@ class ScheduleController extends Controller
     public function index(Request $request)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'schedules'     => $this->schedules->select('id', 'day', 'clock', 'spv_teacher_id', 'type', 'lesson_id')->where('disabled', 0)->get(),
         ];

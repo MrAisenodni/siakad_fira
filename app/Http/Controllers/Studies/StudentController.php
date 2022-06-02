@@ -39,7 +39,7 @@ class StudentController extends Controller
     public function index(Request $request)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'students'      => $this->students->select('id', 'nis', 'nisn', 'full_name', 'phone_number', 'home_number')->where('disabled', 0)->get(),
         ];

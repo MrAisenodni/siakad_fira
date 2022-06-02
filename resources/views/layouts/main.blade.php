@@ -29,7 +29,7 @@
         <div class="preloader">
             <div class="loader">
                 <div class="loader__figure"></div>
-                <p class="loader__label">Material Admin</p>
+                <p class="loader__label">Mohon Tunggu...</p>
             </div>
         </div>
         <!-- ============================================================== -->

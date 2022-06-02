@@ -19,6 +19,7 @@ class CreateStgMenu extends Migration
             $table->string('url')->nullable();
             $table->string('icon')->nullable();
             $table->boolean('parent')->default(0);
+            $table->string('role')->nullable();
                                     
             // Struktur Baku
             $table->boolean('disabled')->default(0);

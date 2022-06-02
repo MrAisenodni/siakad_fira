@@ -21,6 +21,8 @@ use App\Http\Controllers\Masters\{
     ReligionController,
     StudyYearController,
 };
+use App\Http\Middleware\AuthCheck;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,24 +36,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [PagesController::class, 'dashboard']);
+Route::get('/login', [PagesController::class, 'form_login']);
+Route::get('/logout', [PagesController::class, 'logout']);
+Route::post('/login', [PagesController::class, 'login']);
 
-// Route Master
-Route::resource('/master/agama', ReligionController::class);
-Route::resource('/master/alasan', ReasonController::class);
-Route::resource('/master/bahasa', LanguageController::class);
-Route::resource('/master/ekstrakurikuler', ExtracurricularController::class);
-Route::resource('/master/golongan-darah', BloodTypeController::class);
-Route::resource('/master/kelas', ClassController::class);
-Route::resource('/master/mata-pelajaran', LessonController::class);
-Route::resource('/master/pekerjaan', OccupationController::class);
-Route::resource('/master/status-keluarga', FamilyStatusController::class);
-Route::resource('/master/tahun-pelajaran', StudyYearController::class);
+Route::middleware('authcheck')->group(function() {
+    Route::get('/', [PagesController::class, 'dashboard']);
+    
+    // Route Master
+    Route::resource('/master/agama', ReligionController::class);
+    Route::resource('/master/alasan', ReasonController::class);
+    Route::resource('/master/bahasa', LanguageController::class);
+    Route::resource('/master/ekstrakurikuler', ExtracurricularController::class);
+    Route::resource('/master/golongan-darah', BloodTypeController::class);
+    Route::resource('/master/kelas', ClassController::class);
+    Route::resource('/master/mata-pelajaran', LessonController::class);
+    Route::resource('/master/pekerjaan', OccupationController::class);
+    Route::resource('/master/status-keluarga', FamilyStatusController::class);
+    Route::resource('/master/tahun-pelajaran', StudyYearController::class);
 
-// Route Studi
-Route::resource('/studi/guru', TeacherController::class);
-Route::resource('/studi/jadwal-pembelajaran', ScheduleController::class);
-Route::resource('/studi/kelas', StdClassController::class);
-Route::resource('/studi/mata-pelajaran', StdLessonController::class);
-Route::resource('/studi/orang-tua', ParentController::class);
-Route::resource('/studi/siswa', StudentController::class);
+    // Route Studi
+    Route::resource('/studi/guru', TeacherController::class);
+    Route::resource('/studi/jadwal-pembelajaran', ScheduleController::class);
+    Route::resource('/studi/kelas', StdClassController::class);
+    Route::resource('/studi/mata-pelajaran', StdLessonController::class);
+    Route::resource('/studi/orang-tua', ParentController::class);
+    Route::resource('/studi/siswa', StudentController::class);
+});

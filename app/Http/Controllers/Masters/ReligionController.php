@@ -23,7 +23,7 @@ class ReligionController extends Controller
     public function index(Request $request)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
             'religions'     => $this->religions->select('id', 'name')->where('disabled', 0)->get(),
         ];
@@ -34,7 +34,7 @@ class ReligionController extends Controller
     public function create(Request $request)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
         ];
 
@@ -63,7 +63,7 @@ class ReligionController extends Controller
     public function edit($id)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
             'religion'      => $this->religions->select('id', 'name')->where('id', $id)->first(),
         ];
