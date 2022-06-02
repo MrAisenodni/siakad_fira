@@ -28,7 +28,8 @@ class StudyYearController extends Controller
             'studies'       => $this->studies->select('id', 'name', 'semester')->where('disabled', 0)->get(),
         ];
 
-        return view('masters.study_year.index', $data);
+        if (session()->get('srole') == 'admin') return view('masters.study_year.index', $data);
+        abort(403);
     }
 
     public function create(Request $request)
@@ -38,7 +39,8 @@ class StudyYearController extends Controller
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
         ];
 
-        return view('masters.study_year.create', $data);
+        if (session()->get('srole') == 'admin') return view('masters.study_year.create', $data);
+        abort(403);
     }
 
     public function store(Request $request)
@@ -70,7 +72,8 @@ class StudyYearController extends Controller
             'study'         => $this->studies->select('id', 'name', 'semester')->where('id', $id)->first(),
         ];
 
-        return view('masters.study_year.edit', $data);
+        if (session()->get('srole') == 'admin') return view('masters.study_year.edit', $data);
+        abort(403);
     }
 
     public function update(Request $request, $id)

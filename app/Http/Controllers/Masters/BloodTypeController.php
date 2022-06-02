@@ -28,11 +28,8 @@ class BloodTypeController extends Controller
             'blood_types'   => $this->blood_types->select('id', 'name')->where('disabled', 0)->get(),
         ];
 
-        if (session()->get('srole') == 'admin') {
-            return view('masters.blood_type.index', $data);
-        } else {
-            return redirect('/');
-        }
+        if (session()->get('srole') == 'admin') return view('masters.blood_type.index', $data);
+        abort(403);
     }
 
     public function create(Request $request)
@@ -42,7 +39,8 @@ class BloodTypeController extends Controller
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
         ];
 
-        return view('masters.blood_type.create', $data);
+        if (session()->get('srole') == 'admin') return view('masters.blood_type.create', $data);
+        abort(403);
     }
 
     public function store(Request $request)
@@ -72,7 +70,8 @@ class BloodTypeController extends Controller
             'blood_type'      => $this->blood_types->select('id', 'name')->where('id', $id)->first(),
         ];
 
-        return view('masters.blood_type.edit', $data);
+        if (session()->get('srole') == 'admin') return view('masters.blood_type.edit', $data);
+        abort(403);
     }
 
     public function update(Request $request, $id)

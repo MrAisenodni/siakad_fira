@@ -28,7 +28,8 @@ class LanguageController extends Controller
             'languages'     => $this->languages->select('id', 'name')->where('disabled', 0)->get(),
         ];
 
-        return view('masters.language.index', $data);
+        if (session()->get('srole') == 'admin') return view('masters.language.index', $data);
+        abort(403);
     }
 
     public function create(Request $request)
@@ -38,7 +39,8 @@ class LanguageController extends Controller
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
         ];
 
-        return view('masters.language.create', $data);
+        if (session()->get('srole') == 'admin') return view('masters.language.create', $data);
+        abort(403);
     }
 
     public function store(Request $request)
@@ -68,7 +70,8 @@ class LanguageController extends Controller
             'language'      => $this->languages->select('id', 'name')->where('id', $id)->first(),
         ];
 
-        return view('masters.language.edit', $data);
+        if (session()->get('srole') == 'admin') return view('masters.language.edit', $data);
+        abort(403);
     }
 
     public function update(Request $request, $id)

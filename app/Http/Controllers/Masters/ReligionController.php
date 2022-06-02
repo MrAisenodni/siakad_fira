@@ -28,7 +28,8 @@ class ReligionController extends Controller
             'religions'     => $this->religions->select('id', 'name')->where('disabled', 0)->get(),
         ];
 
-        return view('masters.religion.index', $data);
+        if (session()->get('srole') == 'admin') return view('masters.religion.index', $data);
+        abort(403);
     }
 
     public function create(Request $request)
@@ -38,7 +39,8 @@ class ReligionController extends Controller
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
         ];
 
-        return view('masters.religion.create', $data);
+        if (session()->get('srole') == 'admin') return view('masters.religion.create', $data);
+        abort(403);
     }
 
     public function store(Request $request)
@@ -68,7 +70,8 @@ class ReligionController extends Controller
             'religion'      => $this->religions->select('id', 'name')->where('id', $id)->first(),
         ];
 
-        return view('masters.religion.edit', $data);
+        if (session()->get('srole') == 'admin') return view('masters.religion.edit', $data);
+        abort(403);
     }
 
     public function update(Request $request, $id)

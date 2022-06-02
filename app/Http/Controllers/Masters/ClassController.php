@@ -28,7 +28,8 @@ class ClassController extends Controller
             'classes'       => $this->classes->select('id', 'name')->where('disabled', 0)->get(),
         ];
 
-        return view('masters.class.index', $data);
+        if (session()->get('srole') == 'admin') return view('masters.class.index', $data);
+        abort(403);
     }
 
     public function create(Request $request)
@@ -38,7 +39,8 @@ class ClassController extends Controller
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
         ];
 
-        return view('masters.class.create', $data);
+        if (session()->get('srole') == 'admin') return view('masters.class.create', $data);
+        abort(403);
     }
 
     public function store(Request $request)
@@ -68,7 +70,8 @@ class ClassController extends Controller
             'class'         => $this->classes->select('id', 'name')->where('id', $id)->first(),
         ];
 
-        return view('masters.class.edit', $data);
+        if (session()->get('srole') == 'admin') return view('masters.class.edit', $data);
+        abort(403);
     }
 
     public function update(Request $request, $id)

@@ -28,7 +28,8 @@ class OccupationController extends Controller
             'occupations'   => $this->occupations->select('id', 'name')->where('disabled', 0)->get(),
         ];
 
-        return view('masters.occupation.index', $data);
+        if (session()->get('srole') == 'admin') return view('masters.occupation.index', $data);
+        abort(403);
     }
 
     public function create(Request $request)
@@ -38,7 +39,8 @@ class OccupationController extends Controller
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
         ];
 
-        return view('masters.occupation.create', $data);
+        if (session()->get('srole') == 'admin') return view('masters.occupation.create', $data);
+        abort(403);
     }
 
     public function store(Request $request)
@@ -68,7 +70,8 @@ class OccupationController extends Controller
             'occupation'    => $this->occupations->select('id', 'name')->where('id', $id)->first(),
         ];
 
-        return view('masters.occupation.edit', $data);
+        if (session()->get('srole') == 'admin') return view('masters.occupation.edit', $data);
+        abort(403);
     }
 
     public function update(Request $request, $id)

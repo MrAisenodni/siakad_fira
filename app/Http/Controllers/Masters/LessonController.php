@@ -28,7 +28,8 @@ class LessonController extends Controller
             'lessons'       => $this->lessons->select('id', 'code', 'name', 'kkm')->where('disabled', 0)->get(),
         ];
 
-        return view('masters.lesson.index', $data);
+        if (session()->get('srole') == 'admin') return view('masters.lesson.index', $data);
+        abort(403);
     }
 
     public function create(Request $request)
@@ -38,7 +39,8 @@ class LessonController extends Controller
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
         ];
 
-        return view('masters.lesson.create', $data);
+        if (session()->get('srole') == 'admin') return view('masters.lesson.create', $data);
+        abort(403);
     }
 
     public function store(Request $request)
@@ -85,7 +87,8 @@ class LessonController extends Controller
             'lesson'        => $this->lessons->select('id', 'code', 'name', 'kkm')->where('id', $id)->first(),
         ];
 
-        return view('masters.lesson.edit', $data);
+        if (session()->get('srole') == 'admin') return view('masters.lesson.edit', $data);
+        abort(403);
     }
 
     public function update(Request $request, $id)

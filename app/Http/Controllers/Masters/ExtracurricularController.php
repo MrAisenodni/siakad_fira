@@ -28,7 +28,8 @@ class ExtracurricularController extends Controller
             'extracurriculars'  => $this->extracurriculars->select('id', 'name')->where('disabled', 0)->get(),
         ];
 
-        return view('masters.extracurricular.index', $data);
+        if (session()->get('srole') == 'admin') return view('masters.extracurricular.index', $data);
+        abort(403);
     }
 
     public function create(Request $request)
@@ -38,7 +39,8 @@ class ExtracurricularController extends Controller
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
         ];
 
-        return view('masters.extracurricular.create', $data);
+        if (session()->get('srole') == 'admin') return view('masters.extracurricular.create', $data);
+        abort(403);
     }
 
     public function store(Request $request)
@@ -68,7 +70,8 @@ class ExtracurricularController extends Controller
             'extracurricular'   => $this->extracurriculars->select('id', 'name')->where('id', $id)->first(),
         ];
 
-        return view('masters.extracurricular.edit', $data);
+        if (session()->get('srole') == 'admin') return view('masters.extracurricular.edit', $data);
+        abort(403);
     }
 
     public function update(Request $request, $id)
