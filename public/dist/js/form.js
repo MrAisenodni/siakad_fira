@@ -71,22 +71,4 @@ $(function() {
         car_pos = updated_len - original_len + car_pos
         input[0].setSelectionRange(car_pos, car_pos)
     }
-    // ============================================================== 
-    // date-time picker
-    // ============================================================== 
-    $('.datepicker').bootstrapMaterialDatePicker({
-        format: 'dd/mm/yyyy',
-        onClose: true,
-        lang: 'id',
-    });
-    $('.timepicker').bootstrapMaterialDatePicker({
-        format: 'HH:mm',
-        time: true,
-        date: false,
-    });
-    // ============================================================== 
-    // select
-    // ============================================================== 
-    $('select').not('.disabled').formSelect();
-    $('.select2').select2();
 });

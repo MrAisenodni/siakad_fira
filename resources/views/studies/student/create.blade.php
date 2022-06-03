@@ -823,4 +823,6 @@
 
     {{-- Form --}}
     <script src="{{ asset('/dist/js/form.js') }}"></script>
+    @include('scripts.datepicker')
+    @include('scripts.select2')
 @endsection

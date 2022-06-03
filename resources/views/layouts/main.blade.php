@@ -22,37 +22,38 @@
 </head>
 
 <body>
-    <div class="main-wrapper" id="main-wrapper">
-        <!-- ============================================================== -->
-        <!-- Preloader - style you can find in spinners.css -->
-        <!-- ============================================================== -->
-        <div class="preloader">
-            <div class="loader">
-                <div class="loader__figure"></div>
-                <p class="loader__label">Mohon Tunggu...</p>
+    <div class="body">
+        <div class="main-wrapper" id="main-wrapper">
+            <!-- ============================================================== -->
+            <!-- Preloader - style you can find in spinners.css -->
+            <!-- ============================================================== -->
+            <div class="preloader">
+                <div class="loader">
+                    <div class="loader__figure"></div>
+                    <p class="loader__label">Mohon Tunggu...</p>
+                </div>
             </div>
+            <!-- ============================================================== -->
+            <!-- Preloader - style you can find in spinners.css -->
+            <!-- ============================================================== -->
+            @include('layouts.header')
+            <!-- ============================================================== -->
+            <!-- Sidebar scss in sidebar.scss -->
+            <!-- ============================================================== -->
+            @include('layouts.navbar')
+            <!-- ============================================================== -->
+            <!-- Sidebar scss in sidebar.scss -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Page wrapper scss in scafholding.scss -->
+            <!-- ============================================================== -->
+            @yield('content')
+            <!-- ============================================================== -->
+            <!-- Container fluid scss in scafholding.scss -->
+            <!-- ============================================================== -->
+            <footer class="center-align m-b-30">Hak Cipta Milik <a href="https://mraisenodni.github.io/">Safira</a>.</footer>
+            {{-- @yield('sidebar') --}}
         </div>
-        <!-- ============================================================== -->
-        <!-- Preloader - style you can find in spinners.css -->
-        <!-- ============================================================== -->
-        @include('layouts.header')
-        <!-- ============================================================== -->
-        <!-- Sidebar scss in sidebar.scss -->
-        <!-- ============================================================== -->
-        @include('layouts.navbar')
-        <!-- ============================================================== -->
-        <!-- Sidebar scss in sidebar.scss -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Page wrapper scss in scafholding.scss -->
-        <!-- ============================================================== -->
-        @yield('content')
-        <!-- ============================================================== -->
-        <!-- Container fluid scss in scafholding.scss -->
-        <!-- ============================================================== -->
-        <footer class="center-align m-b-30">Hak Cipta Milik <a href="https://mraisenodni.github.io/">Safira</a>.</footer>
-    </div>
-        @yield('sidebar')
     </div>
     <!-- ============================================================== -->
     <!-- All Required js -->

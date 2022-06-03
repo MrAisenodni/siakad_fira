@@ -124,4 +124,9 @@
     {{-- Datepicker --}}
     <script src="{{ asset('/libs/moment/moment.js') }}"></script>
     <script src="{{ asset('/libs/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker-custom.js') }}"></script>
+
+    {{-- Form --}}
+    <script src="{{ asset('/dist/js/form.js') }}"></script>
+    @include('scripts.datepicker')
+    @include('scripts.select2')
 @endsection

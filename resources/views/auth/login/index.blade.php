@@ -35,23 +35,39 @@
                         <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
                             <thead>
                                 <tr>
-                                    <th>Nama Guru</th>
-                                    <th>Nama Siswa</th>
-                                    <th>Kelas</th>
-                                    <th>Tahun Ajar</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Username</th>
+                                    <th>Posisi</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($classes)
-                                    @foreach ($classes as $clas)
-                                        <tr id="data" data-id="{{ $clas->id }}">
-                                            <td>[{{ $clas->teacher->nip }}] {{ $clas->teacher->full_name }}</td>
-                                            <td>{{ $clas->student->nis }} - {{ $clas->student->full_name }}</td>
-                                            <td>{{ $clas->class->name }}</td>
-                                            <td>{{ $clas->study_year->name }}</td>
+                                @if ($logins)
+                                    @foreach ($logins as $login)
+                                        <tr id="data" data-id="{{ $login->id }}">
+                                            <td>
+                                                @if ($login->role == 'teacher')
+                                                    [{{ $login->teacher->nip }}] {{ $login->teacher->full_name }}
+                                                @elseif ($login->role == 'admin')
+                                                    Administrator
+                                                @else
+                                                    [{{ $login->student->nis }}] {{ $login->student->full_name }}
+                                                @endif
+                                            </td>
+                                            <td>{{ $login->username }}</td>
+                                            <td>
+                                                @if ($login->role == 'teacher')
+                                                    Guru
+                                                @elseif ($login->role == 'student')
+                                                    Siswa
+                                                @elseif ($login->role == 'parent')
+                                                    Orang Tua
+                                                @else 
+                                                    Administrator
+                                                @endif
+                                            </td>
                                             <td id="no-data" class="text-center" style="width: 5%">
-                                                <form action="{{ $menu->url }}/{{ $clas->id }}" method="POST" class="d-inline">
+                                                <form action="{{ $menu->url }}/{{ $login->id }}" method="POST" class="d-inline">
                                                     @method('delete')
                                                     @csrf
                                                     <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>

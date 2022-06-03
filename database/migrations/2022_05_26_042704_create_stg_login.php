@@ -21,6 +21,8 @@ class CreateStgLogin extends Migration
             $table->string('password');
             $table->enum('role', ['admin', 'teacher', 'student', 'parent']);
             $table->rememberToken();
+
+            $table->boolean('disabled')->default(0);
             $table->timestamps();
         });
     }

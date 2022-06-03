@@ -107,6 +107,13 @@ class MenuSeeder extends Seeder
         // Tabel Sub Menu
         DB::table('stg_sub_menu')->insert([
             [
+                'title'         => 'Akun Login',
+                'url'           => '/master/login',
+                'icon'          => 'lock',
+                'menu_id'       => 11,
+                'role'          => 'admin',
+            ],
+            [
                 'title'         => 'Agama',
                 'url'           => '/master/agama',
                 'icon'          => 'brightness_7',

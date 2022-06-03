@@ -23,6 +23,7 @@ class MasterSeeder extends Seeder
         DB::table('mst_family_status')->truncate();
         DB::table('mst_occupation')->truncate();
         DB::table('mst_class')->truncate();
+        DB::table('mst_lesson')->truncate();
         DB::table('mst_reason')->truncate();
         DB::table('mst_extracurricular')->truncate();
         DB::table('mst_language')->truncate();
@@ -50,6 +51,124 @@ class MasterSeeder extends Seeder
             ],
             [
                 'name'          => 'Konghucu',
+                'created_by'    => 'Migrasi',
+            ],
+        ]);
+
+        // Master Mata Pelajaran (18)
+        DB::table('mst_lesson')->insert([
+            [
+                'name'          => 'Biologi',
+                'code'          => 'IPA001',
+                'kkm'           => 75,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Fisika',
+                'code'          => 'IPA002',
+                'kkm'           => 73,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Kimia',
+                'code'          => 'IPA003',
+                'kkm'           => 70,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Matematika Lanjutan',
+                'code'          => 'IPA004',
+                'kkm'           => 75,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Ekonomi',
+                'code'          => 'IPS001',
+                'kkm'           => 66,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Sosiologi',
+                'code'          => 'IPS002',
+                'kkm'           => 65,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Sejarah Lanjutan',
+                'code'          => 'IPS003',
+                'kkm'           => 70,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Bahasa Jerman',
+                'code'          => 'IPS004',
+                'kkm'           => 72,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Bahasa Indonesia',
+                'code'          => 'IPC001',
+                'kkm'           => 76,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Bahasa Inggris',
+                'code'          => 'IPC002',
+                'kkm'           => 72,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Matematika',
+                'code'          => 'IPC003',
+                'kkm'           => 78,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Sejarah',
+                'code'          => 'IPC004',
+                'kkm'           => 66,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Olahraga',
+                'code'          => 'IPC005',
+                'kkm'           => 65,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Seni BUdaya',
+                'code'          => 'IPC006',
+                'kkm'           => 72,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Pendidikan Kewaganegaraan',
+                'code'          => 'IPC007',
+                'kkm'           => 68,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Agama Islam',
+                'code'          => 'IPC008',
+                'kkm'           => 71,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Agama Kristen',
+                'code'          => 'IPC009',
+                'kkm'           => 71,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Agama Buddha',
+                'code'          => 'IPC010',
+                'kkm'           => 71,
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Pendidikan Lingkungan Hidup',
+                'code'          => 'IPC011',
+                'kkm'           => 62,
                 'created_by'    => 'Migrasi',
             ],
         ]);
@@ -118,7 +237,7 @@ class MasterSeeder extends Seeder
             ],
         ]);
 
-        // Master Kelas
+        // Master Kelas (9)
         DB::table('mst_class')->insert([
             [
                 'name'          => '10.1',

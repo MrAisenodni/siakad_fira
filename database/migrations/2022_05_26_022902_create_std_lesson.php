@@ -15,10 +15,10 @@ class CreateStdLesson extends Migration
     {
         Schema::create('std_lesson', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lesson_id')->constrained('mst_lesson');
-            $table->foreignId('teacher_id')->constrained('mst_teacher');
-            $table->foreignId('class_id')->constrained('mst_class');
-            $table->foreignId('study_year_id')->constrained('mst_study_year');
+            $table->unsignedInteger('lesson_id')->nullable();
+            $table->unsignedInteger('teacher_id')->nullable();
+            $table->unsignedInteger('class_id')->nullable();
+            $table->unsignedInteger('study_year_id')->nullable();
                                     
             // Struktur Baku
             $table->boolean('disabled')->default(0);

@@ -36,6 +36,7 @@
                             <thead>
                                 <tr>
                                     <th>Nama Guru</th>
+                                    <th>Mata Pelajaran</th>
                                     <th>Kelas</th>
                                     <th>Tahun Ajar</th>
                                     <th>Aksi</th>
@@ -46,6 +47,7 @@
                                     @foreach ($lessons as $lesson)
                                         <tr id="data" data-id="{{ $lesson->id }}">
                                             <td>[{{ $lesson->teacher->nip }}] {{ $lesson->teacher->full_name }}</td>
+                                            <td>{{ $lesson->lesson->name }}</td>
                                             <td>{{ $lesson->class->name }}</td>
                                             <td>{{ $lesson->study_year->name }}</td>
                                             <td id="no-data" class="text-center" style="width: 5%">

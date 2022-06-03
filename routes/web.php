@@ -15,6 +15,7 @@ use App\Http\Controllers\Masters\{
     ExtracurricularController,
     FamilyStatusController,
     LanguageController,
+    LoginController,
     LessonController,
     OccupationController,
     ReasonController,
@@ -50,6 +51,7 @@ Route::middleware('authcheck')->group(function() {
     Route::resource('/master/ekstrakurikuler', ExtracurricularController::class);
     Route::resource('/master/golongan-darah', BloodTypeController::class);
     Route::resource('/master/kelas', ClassController::class);
+    Route::resource('/master/login', LoginController::class);
     Route::resource('/master/mata-pelajaran', LessonController::class);
     Route::resource('/master/pekerjaan', OccupationController::class);
     Route::resource('/master/status-keluarga', FamilyStatusController::class);

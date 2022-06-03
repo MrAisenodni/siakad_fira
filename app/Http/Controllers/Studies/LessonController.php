@@ -33,7 +33,7 @@ class LessonController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'lessons'       => $this->lessons->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('disabled', 0)->get(),
+            'lessons'       => $this->lessons->select('id', 'teacher_id', 'class_id', 'study_year_id', 'lesson_id')->where('disabled', 0)->get(),
         ];
 
         return view('studies.lesson.index', $data);
