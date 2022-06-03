@@ -114,7 +114,7 @@
                             <div class="dw-user-box">
                                 <div class="u-img"><img src="{{ asset('/images/users/2.jpg') }}" alt="user"></div>
                                 <div class="u-text">
-                                    <h4>@if(session()->get('srole') == 'admin') Administrator @else {{ session()->get('sname') }} @endif</h4>
+                                    <h4>{{ session()->get('sname') }}</h4>
                                     <p>
                                         @if (session()->get('srole') == 'admin')
                                             Admin

@@ -57,6 +57,7 @@ class PagesController extends Controller
                 
                 if ($check->role == 'teacher') $request->session()->put('sname', $check->teacher->full_name);
                 if ($check->role == 'student' || 'parent' && $check->role != 'admin') $request->session()->put('sname', $check->student->full_name);
+                if ($check->role == 'admin') $request->session()->put('sname', 'Administrator');
 
                 return redirect()->intended('/');
             } else {

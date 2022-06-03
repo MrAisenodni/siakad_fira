@@ -22,8 +22,12 @@ class CreateStgLogin extends Migration
             $table->enum('role', ['admin', 'teacher', 'student', 'parent']);
             $table->rememberToken();
 
+            // Struktur Baku
             $table->boolean('disabled')->default(0);
-            $table->timestamps();
+            $table->string('created_by')->nullable();
+            $table->dateTime('created_at')->default(now());
+            $table->string('updated_by')->nullable();
+            $table->dateTime('updated_at')->nullable();
         });
     }
 

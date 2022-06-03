@@ -13,6 +13,7 @@ use App\Models\Studies\{
     Student,
 };
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -56,12 +57,29 @@ class LoginController extends Controller
         $input = $request->all();
 
         $validated = $request->validate([
-            'name'          => 'required',
+            'username'          => 'required',
+            'password'          => 'required',
         ]);
+        
+        if ($request->role == 'teacher') {
+            $validated = $request->validate([
+                'teacher_name'  => 'required',
+            ]);
 
-        $data = [
-            'name'          => $input['name'],
-            'created_by'    => 'Developer',
+            $data['user_id'] =$input['teacher_name'];
+        } else {
+            $validated = $request->validate([
+                'student_name'  => 'required',
+            ]);
+
+            $data['user_id'] =$input['student_name'];
+        }
+
+        $data += [
+            'username'      => $input['username'],
+            'password'      => Hash::make($input['password']),
+            'role'          => $input['role'],
+            'created_by'    => session()->get('sname'),
             'created_at'    => now(),
         ];
 
@@ -77,7 +95,7 @@ class LoginController extends Controller
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
             'teachers'      => $this->teachers->select('id', 'full_name', 'nip')->where('disabled', 0)->get(),
             'students'      => $this->students->select('id', 'full_name', 'nis')->where('disabled', 0)->get(),
-            'login'         => $this->logins->select('id', 'user_id', 'username')->where('id', $id)->first(),
+            'login'         => $this->logins->select('id', 'user_id', 'username', 'role')->where('id', $id)->first(),
         ];
 
         if (session()->get('srole') == 'admin') return view('auth.login.edit', $data);
@@ -89,12 +107,29 @@ class LoginController extends Controller
         $input = $request->all();
 
         $validated = $request->validate([
-            'name'          => 'required',
+            'username'          => 'required',
+            'password'          => 'required',
         ]);
+        
+        if ($request->role == 'teacher') {
+            $validated = $request->validate([
+                'teacher_name'  => 'required',
+            ]);
 
-        $data = [
-            'name'          => $input['name'],
-            'updated_by'    => 'Developer',
+            $data['user_id'] =$input['teacher_name'];
+        } else {
+            $validated = $request->validate([
+                'student_name'  => 'required',
+            ]);
+
+            $data['user_id'] =$input['student_name'];
+        }
+
+        $data += [
+            'username'      => $input['username'],
+            'password'      => Hash::make($input['password']),
+            'role'          => $input['role'],
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 

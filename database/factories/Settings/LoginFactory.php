@@ -15,6 +15,7 @@ class LoginFactory extends Factory
         return [
             'email_verified_at' => now(),
             'remember_token'    => Str::random(10),
+            'created_by'        => 'Migrasi',
         ];
     }
 }
