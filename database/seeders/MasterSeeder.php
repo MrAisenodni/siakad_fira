@@ -31,7 +31,7 @@ class MasterSeeder extends Seeder
         DB::table('mst_study_year')->truncate();
         Schema::enableForeignKeyConstraints();
 
-        // Master Agama
+        // Master Agama (5)
         DB::table('mst_religion')->insert([
             [
                 'name'          => 'Islam',
@@ -173,7 +173,7 @@ class MasterSeeder extends Seeder
             ],
         ]);
 
-        // Master Status Keluarga
+        // Master Status Keluarga (5)
         DB::table('mst_family_status')->insert([
             [
                 'name'          => 'Anak Kandung',
@@ -301,7 +301,7 @@ class MasterSeeder extends Seeder
             ],
         ]);
 
-        // Master Ekstrakurikuler
+        // Master Ekstrakurikuler (10)
         DB::table('mst_extracurricular')->insert([
             [
                 'name'          => 'Basket',
@@ -365,7 +365,7 @@ class MasterSeeder extends Seeder
             ],
         ]);
 
-        // Master Golongan Darah
+        // Master Golongan Darah (4)
         DB::table('mst_blood_type')->insert([
             [
                 'name'          => 'A',

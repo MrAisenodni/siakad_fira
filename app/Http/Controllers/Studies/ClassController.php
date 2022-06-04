@@ -36,6 +36,17 @@ class ClassController extends Controller
             'classes'       => $this->classes->select('id', 'student_id', 'teacher_id', 'class_id', 'study_year_id')->where('disabled', 0)->get(),
         ];
 
+        if (session()->get('srole') == 'admin') {
+            $data['classes'] = $this->classes->select('id', 'student_id', 'teacher_id', 'class_id', 'study_year_id')->where('disabled', 0)->get();
+
+            return view('studies.class.index', $data);
+        } elseif (session()->get('srole') == 'teacher') {
+            $data['classes'] = $this->classes->select('id', 'student_id', 'teacher_id', 'class_id', 'study_year_id')->where('teacher_id', session()->get('suser_id'))->where('disabled', 0)->get();
+
+            return view('teachers.class.index', $data);
+        } else {
+            abort(403);
+        }
         return view('studies.class.index', $data);
     }
 

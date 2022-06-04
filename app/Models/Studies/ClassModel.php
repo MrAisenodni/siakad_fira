@@ -21,7 +21,7 @@ class ClassModel extends Model
 
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class)->select('id', 'full_name', 'nip')->where('disabled', 0);
+        return $this->belongsTo(Teacher::class)->select('id', 'full_name', 'nip')->where('disabled', 0)->orderBy('nip');
     }
     
     public function study_year()
@@ -31,7 +31,7 @@ class ClassModel extends Model
 
     public function student()
     {
-        return $this->belongsTo(Student::class)->select('nisn', 'nis', 'id', 'full_name')->where('disabled', 0);
+        return $this->belongsTo(Student::class)->select('nisn', 'nis', 'id', 'full_name')->where('disabled', 0)->where('disabled', 0)->orderBy('nis');
     }
 
     public function class()

@@ -12,7 +12,10 @@ use App\Models\Masters\{
     Religion,
     StudyYear,
 };
-use App\Models\Settings\Menu;
+use App\Models\Settings\{
+    Login,
+    Menu,
+};
 use App\Models\Studies\{
     Student,
     ParentModel,
@@ -24,16 +27,17 @@ class StudentController extends Controller
     public function __construct()
     {
         $this->url = '/studi/siswa';
+        $this->logins = new Login();
+        $this->blood_types = new BloodType();
+        $this->extracurriculars = new Extracurricular();
+        $this->families = new FamilyStatus();
+        $this->languages = new Language();
         $this->menus = new Menu();
-        $this->students = new Student();
+        $this->occupations = new Occupation();
         $this->parents = new ParentModel();
         $this->religions = new Religion();
-        $this->blood_types = new BloodType();
-        $this->languages = new Language();
-        $this->families = new FamilyStatus();
+        $this->students = new Student();
         $this->studies = new StudyYear();
-        $this->occupations = new Occupation();
-        $this->extracurriculars = new Extracurricular();
     }
     
     public function index(Request $request)
@@ -41,10 +45,19 @@ class StudentController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'students'      => $this->students->select('id', 'nis', 'nisn', 'full_name', 'phone_number', 'home_number')->where('disabled', 0)->get(),
         ];
+        
+        if (session()->get('srole') == 'admin') {
+            $data['students'] = $this->students->select('id', 'nis', 'nisn', 'full_name', 'phone_number', 'home_number')->where('disabled', 0)->get();
 
-        return view('studies.student.index', $data);
+            return view('studies.student.index', $data);
+        } elseif (session()->get('srole') == 'teacher') {
+            $data['students'] = $this->students->select('id', 'nis', 'nisn', 'full_name', 'phone_number', 'home_number')->where('disabled', 0)->orderBy('nis')->get();
+
+            return view('teachers.student.index', $data);
+        } else {
+            abort(403);
+        }
     }
 
     public function create(Request $request)
@@ -303,22 +316,31 @@ class StudentController extends Controller
     public function edit(Request $request, $id)
     {
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'blood_types'       => $this->blood_types->select('id', 'name')->where('disabled', 0)->get(),
-            'extracurriculars'  => $this->extracurriculars->select('id', 'name')->where('disabled', 0)->get(),
-            'families'          => $this->families->select('id', 'name')->where('disabled', 0)->get(),
-            'languages'         => $this->languages->select('id', 'name')->where('disabled', 0)->get(),
-            'occupations'       => $this->occupations->select('id', 'name')->where('disabled', 0)->get(),
-            'religions'         => $this->religions->select('id', 'name')->where('disabled', 0)->get(),
-            'studies'           => $this->studies->select('id', 'name')->where('disabled', 0)->get(),
             'student'           => $this->students->where('id', $id)->first(),
             'father'            => $this->parents->where('student_id', $id)->where('gender', 'l')->where('parent', 1)->where('disabled', 0)->first(),
             'mother'            => $this->parents->where('student_id', $id)->where('gender', 'p')->where('parent', 1)->where('disabled', 0)->first(),
             'guardian'          => $this->parents->where('student_id', $id)->where('parent', 0)->where('disabled', 0)->first(),
         ];
-        
-        return view('studies.student.edit', $data);
+
+        if (session()->get('srole') == 'admin') {
+            $data += [
+                'blood_types'       => $this->blood_types->select('id', 'name')->where('disabled', 0)->get(),
+                'extracurriculars'  => $this->extracurriculars->select('id', 'name')->where('disabled', 0)->get(),
+                'families'          => $this->families->select('id', 'name')->where('disabled', 0)->get(),
+                'languages'         => $this->languages->select('id', 'name')->where('disabled', 0)->get(),
+                'occupations'       => $this->occupations->select('id', 'name')->where('disabled', 0)->get(),
+                'religions'         => $this->religions->select('id', 'name')->where('disabled', 0)->get(),
+                'studies'           => $this->studies->select('id', 'name')->where('disabled', 0)->get(),
+            ];
+
+            return view('studies.student.edit', $data);
+        } elseif (session()->get('srole') == 'teacher') {
+            return view('teachers.student.edit', $data);
+        } else {
+            abort(403);
+        }
     }
 
     public function update(Request $request, $id)

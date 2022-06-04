@@ -4,6 +4,7 @@ namespace App\Models\Studies;
 
 use App\Models\Masters\{
     BloodType,
+    Extracurricular,
     Language,
     Religion,
     FamilyStatus,
@@ -42,5 +43,10 @@ class Student extends Model
     public function blood_type()
     {
         return $this->belongsTo(BloodType::class)->select('id', 'name')->where('disabled', 0);
+    }
+
+    public function extracurricular()
+    {
+        return $this->belongsTo(Extracurricular::class)->select('id', 'name')->where('disabled', 0);
     }
 }
