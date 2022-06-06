@@ -27,16 +27,23 @@ class ScheduleController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'schedules'     => $this->schedules->select('id', 'day', 'clock', 'spv_teacher_id', 'type', 'lesson_id')->where('disabled', 0)->get(),
         ];
 
-        return view('studies.schedule.index', $data);
+        if (session()->get('srole') == 'admin') {
+            $data['schedules'] = $this->schedules->select('id', 'day', 'clock_in', 'clock_out', 'spv_teacher_id', 'type', 'lesson_id')->where('disabled', 0)->orderBy('day')->orderBy('clock_in')->get();
+
+            return view('studies.schedule.index', $data);
+        } elseif (session()->get('srole') == 'teacher') {
+            return view('teachers.schedule.index', $data);
+        } else {
+
+        }
     }
 
     public function create(Request $request)
     {
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'lessons'           => $this->lessons->select('id', 'teacher_id', 'class_id', 'study_year_id', 'lesson_id')->where('disabled', 0)->get(),
             'teachers'          => $this->teachers->select('id', 'nip', 'full_name')->where('disabled', 0)->where('role', 'teacher')->get(),
@@ -51,16 +58,18 @@ class ScheduleController extends Controller
         $input = $request->all();
 
         $validated = $request->validate([
-            'clock'     => 'required',
+            'clock_in'  => 'required|date_format:H:i',
+            'clock_out' => 'required|date_format:H:i|after:clock_in',
             'lesson'    => 'required',
         ]);
 
         $data = [
             'day'               => $input['day'],
-            'clock'             => $input['clock'],
+            'clock_in'          => $input['clock_in'],
+            'clock_out'         => $input['clock_out'],
             'lesson_id'         => $input['lesson'],
             'spv_teacher_id'    => $teacher,
-            'created_by'        => 'Developer',
+            'created_by'        => session()->get('sname'),
             'created_at'        => now(),
         ];
 
@@ -72,7 +81,7 @@ class ScheduleController extends Controller
     public function edit(Request $request, $id)
     {
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'lessons'           => $this->lessons->select('id', 'teacher_id', 'class_id', 'study_year_id', 'lesson_id')->where('disabled', 0)->get(),
             'teachers'          => $this->teachers->select('id', 'nip', 'full_name')->where('disabled', 0)->where('role', 'teacher')->get(),
@@ -88,16 +97,18 @@ class ScheduleController extends Controller
         $input = $request->all();
 
         $validated = $request->validate([
-            'clock'     => 'required',
+            'clock_in'  => 'required|date_format:H:i',
+            'clock_out' => 'required|date_format:H:i|after:clock_in',
             'lesson'    => 'required',
         ]);
 
         $data = [
             'day'               => $input['day'],
-            'clock'             => $input['clock'],
+            'clock_in'          => $input['clock_in'],
+            'clock_out'         => $input['clock_out'],
             'lesson_id'         => $input['lesson'],
             'spv_teacher_id'    => $teacher,
-            'updated_by'        => 'Developer',
+            'updated_by'        => session()->get('sname'),
             'updated_at'        => now(),
         ];
 
@@ -110,7 +121,7 @@ class ScheduleController extends Controller
     {
         $data = [
             'disabled'      => 1,
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 

@@ -142,7 +142,7 @@ class LoginController extends Controller
     {
         $data = [
             'disabled'      => 1,
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 

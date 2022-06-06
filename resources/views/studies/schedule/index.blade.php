@@ -36,6 +36,7 @@
                             <thead>
                                 <tr>
                                     <th>Jadwal</th>
+                                    <th>Waktu</th>
                                     <th>Mata Pelajaran</th>
                                     <th>Kelas</th>
                                     <th>Guru</th>
@@ -49,14 +50,15 @@
                                     @foreach ($schedules as $schedule)
                                         <tr id="data" data-id="{{ $schedule->id }}">
                                             <td>
-                                                @if ($schedule->day == '1') Senin ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
-                                                @if ($schedule->day == '2') Selasa ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
-                                                @if ($schedule->day == '3') Rabu ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
-                                                @if ($schedule->day == '4') Kamis ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
-                                                @if ($schedule->day == '5') Jumat ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
-                                                @if ($schedule->day == '6') Sabtu ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
-                                                @if ($schedule->day == '7') Minggu ({{ date('H:i', strtotime($schedule->clock)) }}) @endif
+                                                @if ($schedule->day == '1') Senin @endif
+                                                @if ($schedule->day == '2') Selasa @endif
+                                                @if ($schedule->day == '3') Rabu @endif
+                                                @if ($schedule->day == '4') Kamis @endif
+                                                @if ($schedule->day == '5') Jumat @endif
+                                                @if ($schedule->day == '6') Sabtu @endif
+                                                @if ($schedule->day == '7') Minggu @endif
                                             </td>
+                                            <td>({{ date('H:i', strtotime($schedule->clock_in)) }} - {{ date('H:i', strtotime($schedule->clock_out)) }})</td>
                                             <td>{{ $schedule->lesson->lesson->name }}</td>
                                             <td>{{ $schedule->lesson->class->name }}</td>
                                             <td>{{ $schedule->lesson->teacher->full_name }}</td>
@@ -67,7 +69,7 @@
                                                 @elseif ($schedule->type == 'uts')
                                                     <p class="green-text">UTS</p>
                                                 @else
-                                                    Umum
+                                                    Pelajaran
                                                 @endif
                                             </td>
                                             <td id="no-data" class="text-center" style="width: 5%">

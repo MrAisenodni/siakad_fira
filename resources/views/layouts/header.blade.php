@@ -126,12 +126,12 @@
                                             Orang Tua
                                         @endif
                                     </p>
-                                    <a class="waves-effect waves-light btn-small red white-text">Lihat Profil</a>
+                                    <a href="/studi/profil" class="waves-effect waves-light btn-small red white-text">Lihat Profil</a>
                                 </div>
                             </div>
                         </li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#"><i class="material-icons">inbox</i> Kotak Masuk</a></li>
+                        <li><a href="/studi/notifikasi"><i class="material-icons">inbox</i> Kotak Masuk</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="#"><i class="material-icons">settings</i> Pengaturan</a></li>
                         <li role="separator" class="divider"></li>

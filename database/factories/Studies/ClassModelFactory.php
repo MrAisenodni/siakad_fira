@@ -13,10 +13,7 @@ class ClassModelFactory extends Factory
     public function definition()
     {
         return [
-            'student_id'        => $this->faker->numberBetween(1, 200),
-            'teacher_id'        => $this->faker->numberBetween(1, 25),
-            'class_id'          => $this->faker->numberBetween(1, 9),
-            'study_year_id'     => $this->faker->numberBetween(1, 4),
+            'study_year_id'     => 1,
             'created_at'        => now(),
             'created_by'        => 'Migrasi',
         ];

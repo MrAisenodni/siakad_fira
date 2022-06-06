@@ -20,7 +20,7 @@ class CreateStdPresent extends Migration
             $table->unsignedInteger('reason_id')->nullable();
             $table->string('reason')->nullable();
             $table->unsignedInteger('user_id');
-            $table->foreignId('lesson_id')->constrained('std_lesson');
+            $table->unsignedInteger('lesson_id')->nullable();
             $table->enum('role', ['student', 'teacher']);
                                     
             // Struktur Baku

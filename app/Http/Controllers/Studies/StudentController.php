@@ -45,15 +45,12 @@ class StudentController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
+            'students'      => $this->students->select('id', 'nis', 'nisn', 'full_name', 'phone_number', 'home_number')->where('disabled', 0)->orderBy('nis')->get(),
         ];
         
-        if (session()->get('srole') == 'admin') {
-            $data['students'] = $this->students->select('id', 'nis', 'nisn', 'full_name', 'phone_number', 'home_number')->where('disabled', 0)->get();
-
+        if (session()->get('srole') == 'admin' || session()->get('srole') == 'teacher') {
             return view('studies.student.index', $data);
         } elseif (session()->get('srole') == 'teacher') {
-            $data['students'] = $this->students->select('id', 'nis', 'nisn', 'full_name', 'phone_number', 'home_number')->where('disabled', 0)->orderBy('nis')->get();
-
             return view('teachers.student.index', $data);
         } else {
             abort(403);
@@ -63,7 +60,7 @@ class StudentController extends Controller
     public function create(Request $request)
     {
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'blood_types'       => $this->blood_types->select('id', 'name')->where('disabled', 0)->get(),
             'extracurriculars'  => $this->extracurriculars->select('id', 'name')->where('disabled', 0)->get(),
@@ -74,7 +71,8 @@ class StudentController extends Controller
             'studies'           => $this->studies->select('id', 'name')->where('disabled', 0)->get(),
         ];
 
-        return view('studies.student.create', $data);
+        if (session()->get('srole') == 'admin') return view('studies.student.create', $data);
+        abort(403);
     }
 
     public function store(Request $request)
@@ -89,7 +87,6 @@ class StudentController extends Controller
                         ->where('nisn', $input['nisn'])
                         ->where('disabled', 1)
                         ->first();
-        // dd($input, $guardian_died, $father_died, $mother_died);
 
         $validated = $request->validate([
             'nik'           => 'required|numeric|unique:mst_student,nik,1,disabled|digits_between:1,16',
@@ -106,7 +103,7 @@ class StudentController extends Controller
             
             // Validasi Keluarga
             'family_status'     => 'required',
-            'child_to'          => 'required|numeric|digits_between:1,2',
+            'child_to'          => 'required|numeric|digits_between:1,2|before:child_count',
             'child_count'       => 'required|numeric|digits_between:1,2',
             'stepbrother_count' => 'numeric|digits_between:1,2',
             'stepsibling_count' => 'numeric|digits_between:1,2',
@@ -126,7 +123,7 @@ class StudentController extends Controller
             'sttb_no'           => 'required|unique:mst_student,sttb_no,1,disabled',
             'first_study'       => 'required',
             'from_study_date'   => 'required|date_format:d/m/Y',
-            'to_study_date'     => 'required|date_format:d/m/Y',
+            'to_study_date'     => 'required|date_format:d/m/Y|after:from_study_date',
 
             // Validasi Ayah
             'father_name'           => 'required',
@@ -206,7 +203,7 @@ class StudentController extends Controller
             'to_study_date'         => date('Y-m-d', strtotime(str_replace('/', '-', $input['to_study_date']))),
             'move_from'             => $input['move_from'],
             'move_reason'           => $input['move_reason'],
-            'created_by'            => 'Developer',
+            'created_by'            => session()->get('sname'),
             'created_at'            => now(),
         ];
 
@@ -224,7 +221,7 @@ class StudentController extends Controller
             'revenue'           => str_replace(",", ".", str_replace(".", "", $input['father_revenue'])),
             'revenue_type'      => $input['father_revenue_type'],
             'created_at'        => now(),
-            'created_by'        => 'Developer',
+            'created_by'        => session()->get('sname'),
         ];
 
         $mother = [
@@ -241,7 +238,7 @@ class StudentController extends Controller
             'revenue'           => str_replace(",", ".", str_replace(".", "", $input['mother_revenue'])),
             'revenue_type'      => $input['mother_revenue_type'],
             'created_at'        => now(),
-            'created_by'        => 'Developer',
+            'created_by'        => session()->get('sname'),
         ];
 
         if ($input['guardian']) 
@@ -276,7 +273,7 @@ class StudentController extends Controller
             'revenue_type'      => $input['guardian_revenue_type'],
             'parent'            => 0,
             'created_at'        => now(),
-            'created_by'        => 'Developer',
+            'created_by'        => session()->get('sname'),
         ];
         ($guardian_died) ? $guardian['died'] = $guardian_died : $guardian['died'] = 0;
 
@@ -316,7 +313,7 @@ class StudentController extends Controller
     public function edit(Request $request, $id)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'student'           => $this->students->where('id', $id)->first(),
             'father'            => $this->parents->where('student_id', $id)->where('gender', 'l')->where('parent', 1)->where('disabled', 0)->first(),
@@ -371,7 +368,7 @@ class StudentController extends Controller
             
             // Validasi Keluarga
             'family_status'     => 'required',
-            'child_to'          => 'required|numeric|digits_between:1,2',
+            'child_to'          => 'required|numeric|digits_between:1,2|before:child_count',
             'child_count'       => 'required|numeric|digits_between:1,2',
             'stepbrother_count' => 'numeric|digits_between:1,2',
             'stepsibling_count' => 'numeric|digits_between:1,2',
@@ -391,7 +388,7 @@ class StudentController extends Controller
             'sttb_no'           => 'required|unique:mst_student,sttb_no,'.$id.',id,disabled,0',
             'first_study'       => 'required',
             'from_study_date'   => 'required|date_format:d/m/Y',
-            'to_study_date'     => 'required|date_format:d/m/Y',
+            'to_study_date'     => 'required|date_format:d/m/Y|after:from_study_date',
 
             // Validasi Ayah
             'father_name'           => 'required',
@@ -459,7 +456,7 @@ class StudentController extends Controller
             'to_study_date'         => date('Y-m-d', strtotime(str_replace('/', '-', $input['to_study_date']))),
             'move_from'             => $input['move_from'],
             'move_reason'           => $input['move_reason'],
-            'updated_by'            => 'Developer',
+            'updated_by'            => session()->get('sname'),
             'updated_at'            => now(),
         ];
 
@@ -477,7 +474,7 @@ class StudentController extends Controller
             'revenue'           => str_replace(",", ".", str_replace(".", "", $input['father_revenue'])),
             'revenue_type'      => $input['father_revenue_type'],
             'updated_at'        => now(),
-            'updated_by'        => 'Developer',
+            'updated_by'        => session()->get('sname'),
         ];
 
         $mother = [
@@ -494,7 +491,7 @@ class StudentController extends Controller
             'revenue'           => str_replace(",", ".", str_replace(".", "", $input['mother_revenue'])),
             'revenue_type'      => $input['mother_revenue_type'],
             'updated_at'        => now(),
-            'updated_by'        => 'Developer',
+            'updated_by'        => session()->get('sname'),
         ];
 
         if ($input['guardian']) 
@@ -546,7 +543,7 @@ class StudentController extends Controller
         if($c_guardian) { 
             $guardian += [
                 'updated_at'        => now(),
-                'updated_by'        => 'Developer',
+                'updated_by'        => session()->get('sname'),
             ];
 
             $this->parents->where('id', $c_guardian['id'])->update($guardian);
@@ -554,7 +551,7 @@ class StudentController extends Controller
             $guardian += [
                 'student_id'        => $id,
                 'created_at'        => now(),
-                'created_by'        => 'Developer',
+                'created_by'        => session()->get('sname'),
             ];
 
             $this->parents->insert($guardian);
@@ -567,7 +564,7 @@ class StudentController extends Controller
     {
         $data = [
             'disabled'      => 1,
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 

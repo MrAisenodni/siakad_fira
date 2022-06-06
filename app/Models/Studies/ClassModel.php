@@ -31,7 +31,7 @@ class ClassModel extends Model
 
     public function student()
     {
-        return $this->belongsTo(Student::class)->select('nisn', 'nis', 'id', 'full_name')->where('disabled', 0)->where('disabled', 0)->orderBy('nis');
+        return $this->belongsTo(Student::class)->select('nisn', 'nis', 'id', 'full_name', 'gender', 'phone_number', 'home_number', 'religion_id', 'address')->where('disabled', 0)->where('disabled', 0)->orderBy('nis');
     }
 
     public function class()

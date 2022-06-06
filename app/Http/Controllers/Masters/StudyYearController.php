@@ -55,7 +55,7 @@ class StudyYearController extends Controller
         $data = [
             'name'          => $input['name'],
             'semester'      => $input['semester'],
-            'created_by'    => 'Developer',
+            'created_by'    => session()->get('sname'),
             'created_at'    => now(),
         ];
 
@@ -88,7 +88,7 @@ class StudyYearController extends Controller
         $data = [
             'name'          => $input['name'],
             'semester'      => $input['semester'],
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 
@@ -101,7 +101,7 @@ class StudyYearController extends Controller
     {
         $data = [
             'disabled'      => 1,
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 

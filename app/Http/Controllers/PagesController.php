@@ -40,7 +40,7 @@ class PagesController extends Controller
         ]);
 
         $check = $this->login->where('username', $request->username)->first();
-
+        
         if(!$check) {
             return back()->withErrors([
                 'username'  => 'Nama Pengguna yang Anda masukkan salah.',

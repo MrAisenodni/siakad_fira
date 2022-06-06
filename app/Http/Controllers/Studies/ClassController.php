@@ -10,6 +10,7 @@ use App\Models\Masters\{
 use App\Models\Settings\Menu;
 use App\Models\Studies\{
     ClassModel,
+    ParentModel,
     Student,
     Teacher,
 };
@@ -23,6 +24,7 @@ class ClassController extends Controller
         $this->menus = new Menu();
         $this->classes = new ClassModel();
         $this->mst_classes = new MstClass();
+        $this->parents = new ParentModel();
         $this->students = new Student();
         $this->studies = new StudyYear();
         $this->teachers = new Teacher();
@@ -36,24 +38,14 @@ class ClassController extends Controller
             'classes'       => $this->classes->select('id', 'student_id', 'teacher_id', 'class_id', 'study_year_id')->where('disabled', 0)->get(),
         ];
 
-        if (session()->get('srole') == 'admin') {
-            $data['classes'] = $this->classes->select('id', 'student_id', 'teacher_id', 'class_id', 'study_year_id')->where('disabled', 0)->get();
-
-            return view('studies.class.index', $data);
-        } elseif (session()->get('srole') == 'teacher') {
-            $data['classes'] = $this->classes->select('id', 'student_id', 'teacher_id', 'class_id', 'study_year_id')->where('teacher_id', session()->get('suser_id'))->where('disabled', 0)->get();
-
-            return view('teachers.class.index', $data);
-        } else {
-            abort(403);
-        }
-        return view('studies.class.index', $data);
+        if (session()->get('srole') == 'admin') return view('studies.class.index', $data);
+        abort(403);
     }
 
     public function create(Request $request)
     {
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->get(),
             'studies'           => $this->studies->select('id', 'name')->where('disabled', 0)->get(),
@@ -61,7 +53,8 @@ class ClassController extends Controller
             'mst_classes'       => $this->mst_classes->select('id', 'name')->where('disabled', 0)->get(),
         ];
 
-        return view('studies.class.create', $data);
+        if (session()->get('srole') == 'admin') return view('studies.class.create', $data);
+        abort(403);
     }
 
     public function store(Request $request)
@@ -100,7 +93,7 @@ class ClassController extends Controller
         }
 
         $data += [
-            'created_by'            => 'Developer',
+            'created_by'            => session()->get('sname'),
             'created_at'            => now(),
         ];
 
@@ -121,7 +114,7 @@ class ClassController extends Controller
     public function edit(Request $request, $id)
     {
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->get(),
             'studies'           => $this->studies->select('id', 'name')->where('disabled', 0)->get(),
@@ -130,7 +123,8 @@ class ClassController extends Controller
             'class'             => $this->classes->where('id', $id)->first(),
         ];
         
-        return view('studies.class.edit', $data);
+        if (session()->get('srole') == 'admin') return view('studies.class.edit', $data);
+        abort(403);
     }
 
     public function update(Request $request, $id)
@@ -149,7 +143,7 @@ class ClassController extends Controller
             'student_id'    => $input['student'],
             'class_id'      => $input['class'],
             'study_year_id' => $input['study'],
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 
@@ -162,7 +156,7 @@ class ClassController extends Controller
     {
         $data = [
             'disabled'      => 1,
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 

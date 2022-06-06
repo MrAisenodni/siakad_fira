@@ -65,14 +65,14 @@ class MenuSeeder extends Seeder
                 'url'           => '/studi/kelas',
                 'icon'          => 'class',
                 'parent'        => 0,
-                'role'          => 'admin,teacher,parent,student',
+                'role'          => 'admin',
             ],
             [
                 'title'         => 'Mata Pelajaran',
                 'url'           => '/studi/mata-pelajaran',
                 'icon'          => 'local_library',
                 'parent'        => 0,
-                'role'          => 'admin,teacher,parent,student',
+                'role'          => 'admin',
             ],
             [
                 'title'         => 'Presensi',

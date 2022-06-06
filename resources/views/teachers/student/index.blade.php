@@ -21,13 +21,6 @@
                             <div class="col s10">
                                 <h5 class="card-title">Daftar {{ $menu->title }}</h5>
                             </div>
-                            @if (session('status'))
-                                <div class="col s12">
-                                    <div class="success-alert-bar p-15 m-t-10 green white-text" style="display: block">
-                                        {{ session('status') }}
-                                    </div>
-                                </div>
-                            @endif
                         </div>
                         <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
                             <thead>
@@ -36,7 +29,6 @@
                                     <th>NISN</th>
                                     <th>Nama</th>
                                     <th>No HP/Telepon</th>
-                                    {{-- <th>Aksi</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -47,13 +39,6 @@
                                             <td>{{ $student->nisn }}</td>
                                             <td>{{ $student->full_name }}</td>
                                             <td>{{ $student->phone_number }}@if($student->home_number != 0) /{{ $student->home_number }} @endif</td>
-                                            {{-- <td id="no-data" class="text-center" style="width: 5%">
-                                                <form action="{{ $menu->url }}/{{ $student->id }}" method="POST" class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>
-                                                </form>
-                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 @endif

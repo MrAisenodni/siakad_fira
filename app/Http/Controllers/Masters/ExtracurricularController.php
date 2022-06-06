@@ -23,7 +23,7 @@ class ExtracurricularController extends Controller
     public function index(Request $request)
     {
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
             'extracurriculars'  => $this->extracurriculars->select('id', 'name')->where('disabled', 0)->get(),
         ];
@@ -53,7 +53,7 @@ class ExtracurricularController extends Controller
 
         $data = [
             'name'          => $input['name'],
-            'created_by'    => 'Developer',
+            'created_by'    => session()->get('sname'),
             'created_at'    => now(),
         ];
 
@@ -84,7 +84,7 @@ class ExtracurricularController extends Controller
 
         $data = [
             'name'          => $input['name'],
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 
@@ -97,7 +97,7 @@ class ExtracurricularController extends Controller
     {
         $data = [
             'disabled'      => 1,
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 

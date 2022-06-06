@@ -36,13 +36,14 @@ class LessonController extends Controller
             'lessons'       => $this->lessons->select('id', 'teacher_id', 'class_id', 'study_year_id', 'lesson_id')->where('disabled', 0)->get(),
         ];
 
-        return view('studies.lesson.index', $data);
+        if (session()->get('srole') == 'admin') return view('studies.lesson.index', $data);
+        abort(403);
     }
 
     public function create(Request $request)
     {
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'classes'           => $this->classes->select('id', 'name')->where('disabled', 0)->get(),
             'studies'           => $this->studies->select('id', 'name')->where('disabled', 0)->get(),
@@ -50,7 +51,8 @@ class LessonController extends Controller
             'mst_lessons'       => $this->mst_lessons->select('id', 'name')->where('disabled', 0)->get(),
         ];
 
-        return view('studies.lesson.create', $data);
+        if (session()->get('srole') == 'admin') return view('studies.lesson.create', $data);
+        abort(403);
     }
 
     public function store(Request $request)
@@ -89,7 +91,7 @@ class LessonController extends Controller
         }
 
         $data += [
-            'created_by'            => 'Developer',
+            'created_by'            => session()->get('sname'),
             'created_at'            => now(),
         ];
 
@@ -110,7 +112,7 @@ class LessonController extends Controller
     public function edit(Request $request, $id)
     {
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'classes'           => $this->classes->select('id', 'name')->where('disabled', 0)->get(),
             'studies'           => $this->studies->select('id', 'name')->where('disabled', 0)->get(),
@@ -119,7 +121,8 @@ class LessonController extends Controller
             'lesson'            => $this->lessons->where('id', $id)->first(),
         ];
         
-        return view('studies.lesson.edit', $data);
+        if (session()->get('srole') == 'admin') return view('studies.lesson.edit', $data);
+        abort(403);
     }
 
     public function update(Request $request, $id)
@@ -138,7 +141,7 @@ class LessonController extends Controller
             'lesson_id'     => $input['lesson'],
             'class_id'      => $input['class'],
             'study_year_id' => $input['study'],
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 
@@ -151,7 +154,7 @@ class LessonController extends Controller
     {
         $data = [
             'disabled'      => 1,
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 

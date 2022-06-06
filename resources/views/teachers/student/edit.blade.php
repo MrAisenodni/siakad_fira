@@ -380,7 +380,6 @@
                             <div class="row">
                                 <div class="col s12" style="text-align: right">
                                     <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}">KEMBALI</a>
-                                    <button class="waves-effect waves-light btn btn-round green strong" type="submit">SIMPAN</button>
                                 </div>
                             </div>
                         </form>

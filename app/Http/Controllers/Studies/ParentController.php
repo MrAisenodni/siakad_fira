@@ -26,13 +26,14 @@ class ParentController extends Controller
             'parents'       => $this->parents->select('id', 'full_name', 'parent', 'gender', 'died', 'student_id')->where('disabled', 0)->get(),
         ];
 
-        return view('studies.parent.index', $data);
+        if (session()->get('srole') == 'admin') return view('studies.parent.index', $data);
+        abort(403);
     }
 
     public function create(Request $request)
     {
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'blood_types'       => $this->blood_types->select('id', 'name')->where('disabled', 0)->get(),
             'extracurriculars'  => $this->extracurriculars->select('id', 'name')->where('disabled', 0)->get(),
@@ -43,7 +44,8 @@ class ParentController extends Controller
             'studies'           => $this->studies->select('id', 'name')->where('disabled', 0)->get(),
         ];
 
-        return view('studies.parent.create', $data);
+        if (session()->get('srole') == 'admin') return view('studies.parent.create', $data);
+        abort(403);
     }
 
     public function edit(Request $request, $id)
@@ -60,14 +62,15 @@ class ParentController extends Controller
         }
 
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id')->where('disabled', 0)->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'occupations'       => $this->occupations->select('id', 'name')->where('disabled', 0)->get(),
             'parent'            => $this->parents->where('id', $id)->first(),
             'status'            => $status,
         ];
         
-        return view('studies.parent.edit', $data);
+        if (session()->get('srole') == 'admin') return view('studies.parent.edit', $data);
+        abort(403);
     }
 
     public function update(Request $request, $id)
@@ -106,7 +109,7 @@ class ParentController extends Controller
             'revenue_type'      => $input['revenue_type'],
             'died'              => $died,
             'updated_at'        => now(),
-            'updated_by'        => 'Developer',
+            'updated_by'        => session()->get('sname'),
         ];
 
         $this->parents->where('id', $id)->update($data);
@@ -118,7 +121,7 @@ class ParentController extends Controller
     {
         $data = [
             'disabled'      => 1,
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 

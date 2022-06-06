@@ -66,7 +66,7 @@ class LessonController extends Controller
         $data += [
             'name'          => $input['name'],
             'kkm'           => $input['kkm'],
-            'created_by'    => 'Developer',
+            'created_by'    => session()->get('sname'),
             'created_at'    => now(),
         ];
 
@@ -108,7 +108,7 @@ class LessonController extends Controller
             'code'          => $input['code'],
             'name'          => $input['name'],
             'kkm'           => $input['kkm'],
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 
@@ -121,7 +121,7 @@ class LessonController extends Controller
     {
         $data = [
             'disabled'      => 1,
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 

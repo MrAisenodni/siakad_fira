@@ -43,6 +43,7 @@ class UserSeeder extends Seeder
                 'student_id'    => $sequence->index+1,
                 'gender'        => 'p',
             ])->create();
+        Teacher::factory()->count(25)->create();
         Login::factory()->count(200)->sequence(fn ($sequence) => 
             [
                 'user_id'       => $sequence->index+1,
@@ -71,6 +72,5 @@ class UserSeeder extends Seeder
                 'password'      => Hash::make('Adm1n!@#'),
                 'role'          => 'admin',
             ])->create();
-        Teacher::factory()->count(25)->create();
     }
 }

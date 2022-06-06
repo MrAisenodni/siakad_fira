@@ -136,7 +136,7 @@ class MasterSeeder extends Seeder
                 'created_by'    => 'Migrasi',
             ],
             [
-                'name'          => 'Seni BUdaya',
+                'name'          => 'Seni Budaya',
                 'code'          => 'IPC006',
                 'kkm'           => 72,
                 'created_by'    => 'Migrasi',

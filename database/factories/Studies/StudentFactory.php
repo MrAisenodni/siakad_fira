@@ -36,7 +36,7 @@ class StudentFactory extends Factory
             'group'             => $this->faker->randomElement(['Unggulan', 'Biasa', 'Superior']),
             'start_date'        => $this->faker->date(),
             'extracurricular_id'=> $this->faker->numberBetween(1, 10),
-            'study_year_id'     => $this->faker->numberBetween(1, 5),
+            'study_year_id'     => 1,
             'sttb_no'           => $this->faker->numerify('############'),
             'first_study'       => $this->faker->company(),
             'major'             => $this->faker->randomElement(['IPA', 'IPS', 'IPC']),

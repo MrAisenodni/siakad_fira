@@ -53,7 +53,7 @@ class ReasonController extends Controller
 
         $data = [
             'name'          => $input['name'],
-            'created_by'    => 'Developer',
+            'created_by'    => session()->get('sname'),
             'created_at'    => now(),
         ];
 
@@ -67,7 +67,7 @@ class ReasonController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
-            'reason'    => $this->reasons->select('id', 'name')->where('id', $id)->first(),
+            'reason'        => $this->reasons->select('id', 'name')->where('id', $id)->first(),
         ];
 
         if (session()->get('srole') == 'admin') return view('masters.reason.edit', $data);
@@ -84,7 +84,7 @@ class ReasonController extends Controller
 
         $data = [
             'name'          => $input['name'],
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 
@@ -97,7 +97,7 @@ class ReasonController extends Controller
     {
         $data = [
             'disabled'      => 1,
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 

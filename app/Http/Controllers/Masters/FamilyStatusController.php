@@ -53,7 +53,7 @@ class FamilyStatusController extends Controller
 
         $data = [
             'name'          => $input['name'],
-            'created_by'    => 'Developer',
+            'created_by'    => session()->get('sname'),
             'created_at'    => now(),
         ];
 
@@ -84,7 +84,7 @@ class FamilyStatusController extends Controller
 
         $data = [
             'name'          => $input['name'],
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 
@@ -97,7 +97,7 @@ class FamilyStatusController extends Controller
     {
         $data = [
             'disabled'      => 1,
-            'updated_by'    => 'Developer',
+            'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 

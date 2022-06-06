@@ -3,11 +3,24 @@
 $(function() {
 
     // ============================================================== 
+    // guru/siswa selected
+    // ============================================================== 
+    $('.role_present').change(function () {
+        var check = $('option:selected', this).val()
+
+        if (check == 'student') {
+            $('#teacher').prop('disabled', true)
+            $('#student').prop('disabled', false)
+        } else {
+            $('#teacher').prop('disabled', false)
+            $('#student').prop('disabled', true)
+        }
+    })
+    // ============================================================== 
     // guardian setting switch
     // ============================================================== 
     $('#sw_guardian:checkbox').click(function () {
         var input = $(this).closest('form').find(':input[id="guardian"]')
-        console.log($(this).closest('form'))
         
         if ($(this).prop('checked')) {
             input.prop('disabled', false)

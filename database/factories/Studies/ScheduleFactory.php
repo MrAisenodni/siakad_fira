@@ -2,19 +2,19 @@
 
 namespace Database\Factories\Studies;
 
-use App\Models\Studies\Lesson;
+use App\Models\Studies\Schedule;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-class LessonFactory extends Factory
+class ScheduleFactory extends Factory
 {
-    protected $model = Lesson::class;
+    protected $model = Schedule::class;
     
     public function definition()
     {
         return [
-            'teacher_id'        => $this->faker->numberBetween(1, 25),
-            'study_year_id'     => 1,
+            'type'              => 'std',
+            'lesson_id'         => $this->faker->numberBetween(1, 144),
             'created_at'        => now(),
             'created_by'        => 'Migrasi',
         ];
