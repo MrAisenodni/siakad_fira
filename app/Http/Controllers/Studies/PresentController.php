@@ -49,7 +49,7 @@ class PresentController extends Controller
         } else {
             $data += [
                 'check'         => $this->presents->select('id')->where('clock_in', 'like', '%'.date('Y-m-d', strtotime(now())).'%')->where('user_id', session()->get('suser_id'))->where('role', 'teacher')->first(),
-                'presents'      => $this->presents->select('id', 'clock_in', 'clock_out', 'reason_id', 'reason', 'user_id', 'lesson_id', 'role')->where('role', 'teacher')->where('user_id', session()->get('suser_id'))->where('disabled', 0)->get(),
+                'presents'      => $this->presents->select('id', 'clock_in', 'clock_out', 'reason_id', 'reason', 'user_id', 'lesson_id', 'role')->where('role', 'student')->where('user_id', session()->get('suser_id'))->where('disabled', 0)->get(),
             ];
 
             return view('students.present.index', $data);
@@ -81,7 +81,7 @@ class PresentController extends Controller
             return view('teachers.present.create', $data);
         } else {
             $data += [
-                'role'          => 'teacher',
+                'role'          => 'student',
                 'user_id'       => session()->get('suser_id'),
             ];
 

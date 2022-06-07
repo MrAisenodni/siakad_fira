@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Studies;
 use App\Http\Controllers\Controller;
 use App\Models\Settings\Menu;
 use App\Models\Studies\{
-    Schedule,
+    ClassModel,
     Lesson,
+    Schedule,
     Teacher,
 };
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class ScheduleController extends Controller
     {
         $this->url = '/studi/jadwal-pembelajaran';
         $this->menus = new Menu();
+        $this->classes = new ClassModel();
         $this->lessons = new Lesson();
         $this->schedules = new Schedule();
         $this->teachers = new Teacher();
@@ -34,9 +36,18 @@ class ScheduleController extends Controller
 
             return view('studies.schedule.index', $data);
         } elseif (session()->get('srole') == 'teacher') {
+            $lesson_id = $this->lessons->select('id')->where('teacher_id', session()->get('suser_id'))->where('disabled', 0)->get();
+            dd($lesson_id);
+            $data['schedules'] = $this->schedules->select('id', 'day', 'clock_in', 'clock_out', 'spv_teacher_id', 'type', 'lesson_id')->where('lesson_id', $lesson_id)->where('disabled', 0)->orderBy('day')->get();
+            
             return view('teachers.schedule.index', $data);
         } else {
+            $class = $this->classes->select('id')->where('student_id', session()->get('suser_id'))->where('disabled', 0)->first();
+            $lesson = $this->lessons->select('id')->where('class_id', $class->id)->where('disabled', 0)->get();
 
+            $data['schedules'] = $this->schedules->select('id', 'day', 'clock_in', 'clock_out', 'spv_teacher_id', 'type', 'lesson_id')->whereIn('lesson_id', $lesson)->where('disabled', 0)->orderBy('day')->get();
+
+            return view('students.schedule.index', $data);
         }
     }
 
