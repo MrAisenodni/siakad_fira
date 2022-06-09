@@ -20,7 +20,7 @@ class ParentModelFactory extends Factory
             // 'gender'            => 'l',
             'citizen'           => 'wni',
             'address'           => $this->faker->address(),
-            'phone_number'      => $this->faker->phoneNumber(),
+            'phone_number'      => trim($this->faker->e164PhoneNumber(), "+"), 
             'last_study'        => $this->faker->randomElement(['Doktor', 'Sarjana', 'Magister', 'SMA', 'SMP', 'SD']),
             'occupation_id'     => $this->faker->randomNumber(1, true),
             'revenue'           => $this->faker->randomFloat(0, 3000000, 15000000),

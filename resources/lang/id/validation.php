@@ -23,7 +23,7 @@ return [
     'alpha_num' => 'The :attribute must only contain letters and numbers.',
     'array' => 'The :attribute must be an array.',
     'before' => ':attribute harus kurang dari :date.',
-    'before_or_equal' => 'The :attribute must be a date before or equal to :date.',
+    'before_or_equal' => ':attribute harus kurang dari atau sama dengan :date.',
     'between' => [
         'numeric' => 'The :attribute must be between :min and :max.',
         'file' => 'The :attribute must be between :min and :max kilobytes.',
@@ -159,6 +159,7 @@ return [
     */
 
     'attributes' => [
+        'amount'                => 'Nominal',
         'address'               => 'Alamat',
         'birth_date'            => 'Tanggal Lahir',
         'birth_place'           => 'Tempat Lahir',
@@ -202,6 +203,7 @@ return [
         'guardian_revenue'      => 'Penghasilan Wali',
         'height'                => 'Tinggi',
         'home_number'           => 'Nomor Telepon',
+        'installment_amount'    => 'Nominal Cicilan',
         'language'              => 'Bahasa',
         'lesson'                => 'Mata Pelajaran',
         'level'                 => 'Tingkatan',
@@ -239,6 +241,8 @@ return [
         'to_study_date'         => 'Sampai Tanggal',
         'username'              => 'Nama Pengguna',
         'teacher'               => 'Guru',
+        'value'                 => 'Nominal',
         'weight'                => 'Berat',
+        'year'                  => 'Tahun',
     ],
 ];

@@ -68,10 +68,10 @@ $(function() {
             }
 
             right_side = right_side.substring(0, 2)
-            input_val = left_side + "," + right_side
+            input_val = "Rp " + left_side + "," + right_side
         } else {
             input_val = formatNumber(input_val)
-            input_val = input_val
+            input_val = "Rp " + input_val
 
             if (blur === "blur") {
                 input_val += ",00"

@@ -2795,7 +2795,7 @@
                 }
             },
             currency: {
-                prefix: "$ ",
+                prefix: "Rp ",
                 groupSeparator: ",",
                 alias: "numeric",
                 placeholder: "0",

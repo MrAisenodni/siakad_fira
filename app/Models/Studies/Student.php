@@ -10,7 +10,10 @@ use App\Models\Masters\{
     FamilyStatus,
     StudyYear,
 };
-use App\Models\Studies\ParentModel;
+use App\Models\Studies\{
+    ClassModel,
+    ParentModel,
+};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -48,5 +51,10 @@ class Student extends Model
     public function extracurricular()
     {
         return $this->belongsTo(Extracurricular::class)->select('id', 'name')->where('disabled', 0);
+    }
+
+    public function class()
+    {
+        return $this->belongsTo(ClassModel::class, 'id', 'student_id')->select('id', 'student_id', 'class_id')->where('disabled', 0);
     }
 }

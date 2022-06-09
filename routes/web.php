@@ -5,6 +5,7 @@ use App\Http\Controllers\Studies\{
     ClassController as StdClassController,
     LessonController as StdLessonController,
     ParentController,
+    PaymentController as StdPaymentController,
     PresentController,
     ProfileController,
     ScheduleController,
@@ -20,6 +21,7 @@ use App\Http\Controllers\Masters\{
     LoginController,
     LessonController,
     OccupationController,
+    PaymentController,
     ReasonController,
     ReligionController,
     StudyYearController,
@@ -56,6 +58,7 @@ Route::middleware('authcheck')->group(function() {
     Route::resource('/master/login', LoginController::class);
     Route::resource('/master/mata-pelajaran', LessonController::class);
     Route::resource('/master/pekerjaan', OccupationController::class);
+    Route::resource('/master/spp', PaymentController::class);
     Route::resource('/master/status-keluarga', FamilyStatusController::class);
     Route::resource('/master/tahun-pelajaran', StudyYearController::class);
     
@@ -68,4 +71,5 @@ Route::middleware('authcheck')->group(function() {
     Route::resource('/studi/presensi', PresentController::class);
     Route::resource('/studi/profil', ProfileController::class);
     Route::resource('/studi/siswa', StudentController::class);
+    Route::resource('/studi/spp', StdPaymentController::class);
 });

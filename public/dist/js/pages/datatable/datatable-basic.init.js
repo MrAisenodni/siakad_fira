@@ -22,11 +22,23 @@ $('#zero_config').DataTable({
         var path = location.pathname
 
         $('tbody>tr').hover(function () {
+            var id = $(this).attr('data-id')
+            var select = $(this).attr('data-select')
+            
             $('form>button', this).addClass('white-text').removeClass('materialize-red-text')
             $(this).addClass('blue white-text')
+            
+            if (select == id) 
+                $(this).addClass('blue white-text')
         }, function () {
+            var id = $(this).attr('data-id')
+            var select = $(this).attr('data-select')
+
             $('form>button', this).addClass('materialize-red-text').removeClass('white-text')
             $(this).removeClass('blue white-text')
+
+            if (select == id) 
+                $(this).addClass('blue white-text')
         })
 
         $('td#no-data').on('click', function() {
@@ -38,6 +50,32 @@ $('#zero_config').DataTable({
 
             if (bool) location = path+'/'+id+'/edit'
             bool = 1
+        })
+
+        $('tr#data_select').click(function () {
+            var id = $(this).attr('data-id')
+            var select = $(this).attr('data-select')
+
+            $.ajax({
+                url: '/api/siswa/'+id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if(response != null) {
+                        $('tr#data_select').attr('data-select', null)
+                        $('tr[data-id='+id+']').attr('data-select', response.data.student.id)
+                        $('#student').val(id)
+                        $('#nis').val(response.data.student.nis)
+                        $('#full_name').val(response.data.student.full_name)
+                        $('#clas').val(response.data.claz.name)
+                    }
+                }
+            })
+
+            $('tbody>tr').removeClass('blue white-text')
+            if (select == id) {
+                $(this).addClass('blue white-text')
+            } 
         })
     }
 });

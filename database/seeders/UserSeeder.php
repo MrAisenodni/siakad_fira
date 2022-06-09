@@ -48,28 +48,28 @@ class UserSeeder extends Seeder
             [
                 'user_id'       => $sequence->index+1,
                 'username'      => 'siswa'.strval($sequence->index+1),
-                'password'      => Hash::make('S15wa!@#'),
+                'password'      => Hash::make('siswa123'),
                 'role'          => 'student',
             ])->create();
         Login::factory()->count(200)->sequence(fn ($sequence) => 
             [
                 'user_id'       => $sequence->index+1,
                 'username'      => 'orangtua'.strval($sequence->index+1),
-                'password'      => Hash::make('P4rent!@#'),
+                'password'      => Hash::make('orangtua123'),
                 'role'          => 'parent',
             ])->create();
         Login::factory()->count(25)->sequence(fn ($sequence) => 
             [
                 'user_id'       => $sequence->index+1,
                 'username'      => 'guru'.strval($sequence->index+1),
-                'password'      => Hash::make('T34cher!@#'),
+                'password'      => Hash::make('guru123'),
                 'role'          => 'teacher',
             ])->create();
         Login::factory()->count(1)->sequence(fn ($sequence) => 
             [
                 'user_id'       => $sequence->index,
                 'username'      => 'administrator',
-                'password'      => Hash::make('Adm1n!@#'),
+                'password'      => Hash::make('admin123'),
                 'role'          => 'admin',
             ])->create();
     }

@@ -103,7 +103,7 @@ class StudentController extends Controller
             
             // Validasi Keluarga
             'family_status'     => 'required',
-            'child_to'          => 'required|numeric|digits_between:1,2|before:child_count',
+            'child_to'          => 'required|numeric|digits_between:1,2|before_or_equal:child_count',
             'child_count'       => 'required|numeric|digits_between:1,2',
             'stepbrother_count' => 'numeric|digits_between:1,2',
             'stepsibling_count' => 'numeric|digits_between:1,2',
@@ -112,8 +112,8 @@ class StudentController extends Controller
             // Validasi Kontak
             'address'       => 'required',
             'distance'      => 'required|numeric|digits_between:1,7',
-            'phone_number'  => 'required|numeric|digits_between:1,25',
-            'home_number'   => 'numeric|digits_between:1,25',
+            'phone_number'  => 'required|digits_between:1,25',
+            'home_number'   => 'digits_between:1,25',
 
             // Validasi Pendidikan
             'level'             => 'required',
@@ -131,11 +131,11 @@ class StudentController extends Controller
             'father_birth_date'     => 'required|date_format:d/m/Y',
             'father_citizen'        => 'required',
             'father_address'        => 'required',
-            'father_phone_number'   => 'required|numeric|digits_between:1,25',
-            'father_home_number'    => 'numeric|digits_between:1,25',
+            'father_phone_number'   => 'required|digits_between:1,25',
+            'father_home_number'    => 'digits_between:1,25',
             'father_last_study'     => 'required',
             'father_occupation'     => 'required',
-            'father_revenue'        => 'required|numeric',
+            'father_revenue'        => 'required',
 
             // Validasi Ibu
             'mother_name'           => 'required',
@@ -143,11 +143,11 @@ class StudentController extends Controller
             'mother_birth_date'     => 'required|date_format:d/m/Y',
             'mother_citizen'        => 'required',
             'mother_address'        => 'required',
-            'mother_phone_number'   => 'required|numeric|digits_between:1,25',
-            'mother_home_number'    => 'numeric|digits_between:1,25',
+            'mother_phone_number'   => 'required|digits_between:1,25',
+            'mother_home_number'    => 'digits_between:1,25',
             'mother_last_study'     => 'required',
             'mother_occupation'     => 'required',
-            'mother_revenue'        => 'required|numeric',
+            'mother_revenue'        => 'required',
         ]);
 
         if ($input['child_to'] >= $input['child_count']) return redirect($this->url.'/create')->with('status', 'Anak Dari tidak boleh lebih besar dari Jumlah Saudara.')->withInput();
@@ -218,7 +218,7 @@ class StudentController extends Controller
             'home_number'       => $input['father_home_number'],
             'last_study'        => $input['father_last_study'],
             'occupation_id'     => $input['father_occupation'],
-            'revenue'           => str_replace(",", ".", str_replace(".", "", $input['father_revenue'])),
+            'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['father_revenue'], "Rp"))),
             'revenue_type'      => $input['father_revenue_type'],
             'created_at'        => now(),
             'created_by'        => session()->get('sname'),
@@ -235,7 +235,7 @@ class StudentController extends Controller
             'home_number'       => $input['mother_home_number'],
             'last_study'        => $input['mother_last_study'],
             'occupation_id'     => $input['mother_occupation'],
-            'revenue'           => str_replace(",", ".", str_replace(".", "", $input['mother_revenue'])),
+            'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['mother_revenue'], "Rp"))),
             'revenue_type'      => $input['mother_revenue_type'],
             'created_at'        => now(),
             'created_by'        => session()->get('sname'),
@@ -249,11 +249,11 @@ class StudentController extends Controller
                 'guardian_birth_date'     => 'required|date_format:d/m/Y',
                 'guardian_citizen'        => 'required',
                 'guardian_address'        => 'required',
-                'guardian_phone_number'   => 'required|numeric|digits_between:1,25',
-                'guardian_home_number'    => 'numeric|digits_between:1,25',
+                'guardian_phone_number'   => 'required|digits_between:1,25',
+                'guardian_home_number'    => 'digits_between:1,25',
                 'guardian_last_study'     => 'required',
                 'guardian_occupation'     => 'required',
-                'guardian_revenue'        => 'required|numeric',
+                'guardian_revenue'        => 'required',
             ]);
         ($father_died) ? $father['died'] = $father_died : $father['died'] = 0;
         ($mother_died) ? $mother['died'] = $mother_died : $mother['died'] = 0;
@@ -269,7 +269,7 @@ class StudentController extends Controller
             'home_number'       => $input['guardian_home_number'],
             'last_study'        => $input['guardian_last_study'],
             'occupation_id'     => $input['guardian_occupation'],
-            'revenue'           => str_replace(",", ".", str_replace(".", "", $input['guardian_revenue'])),
+            'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['guardian_revenue'], "Rp"))),
             'revenue_type'      => $input['guardian_revenue_type'],
             'parent'            => 0,
             'created_at'        => now(),
@@ -368,7 +368,7 @@ class StudentController extends Controller
             
             // Validasi Keluarga
             'family_status'     => 'required',
-            'child_to'          => 'required|numeric|digits_between:1,2|before:child_count',
+            'child_to'          => 'required|numeric|digits_between:1,2|before_or_equal:child_count',
             'child_count'       => 'required|numeric|digits_between:1,2',
             'stepbrother_count' => 'numeric|digits_between:1,2',
             'stepsibling_count' => 'numeric|digits_between:1,2',
@@ -377,8 +377,8 @@ class StudentController extends Controller
             // Validasi Kontak
             'address'       => 'required',
             'distance'      => 'required|numeric|digits_between:1,7',
-            'phone_number'  => 'required|numeric|digits_between:1,25',
-            'home_number'   => 'numeric|digits_between:1,25',
+            'phone_number'  => 'required|digits_between:1,25',
+            'home_number'   => 'digits_between:1,25',
 
             // Validasi Pendidikan
             'level'             => 'required',
@@ -396,8 +396,8 @@ class StudentController extends Controller
             'father_birth_date'     => 'required|date_format:d/m/Y',
             'father_citizen'        => 'required',
             'father_address'        => 'required',
-            'father_phone_number'   => 'required|numeric|digits_between:1,25',
-            'father_home_number'    => 'numeric|digits_between:1,25',
+            'father_phone_number'   => 'required|digits_between:1,25',
+            'father_home_number'    => 'digits_between:1,25',
             'father_last_study'     => 'required',
             'father_occupation'     => 'required',
             'father_revenue'        => 'required',
@@ -408,8 +408,8 @@ class StudentController extends Controller
             'mother_birth_date'     => 'required|date_format:d/m/Y',
             'mother_citizen'        => 'required',
             'mother_address'        => 'required',
-            'mother_phone_number'   => 'required|numeric|digits_between:1,25',
-            'mother_home_number'    => 'numeric|digits_between:1,25',
+            'mother_phone_number'   => 'required|digits_between:1,25',
+            'mother_home_number'    => 'digits_between:1,25',
             'mother_last_study'     => 'required',
             'mother_occupation'     => 'required',
             'mother_revenue'        => 'required',
@@ -471,7 +471,7 @@ class StudentController extends Controller
             'home_number'       => $input['father_home_number'],
             'last_study'        => $input['father_last_study'],
             'occupation_id'     => $input['father_occupation'],
-            'revenue'           => str_replace(",", ".", str_replace(".", "", $input['father_revenue'])),
+            'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['father_revenue'], "Rp"))),
             'revenue_type'      => $input['father_revenue_type'],
             'updated_at'        => now(),
             'updated_by'        => session()->get('sname'),
@@ -488,7 +488,7 @@ class StudentController extends Controller
             'home_number'       => $input['mother_home_number'],
             'last_study'        => $input['mother_last_study'],
             'occupation_id'     => $input['mother_occupation'],
-            'revenue'           => str_replace(",", ".", str_replace(".", "", $input['mother_revenue'])),
+            'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['mother_revenue'], "Rp"))),
             'revenue_type'      => $input['mother_revenue_type'],
             'updated_at'        => now(),
             'updated_by'        => session()->get('sname'),
@@ -522,12 +522,11 @@ class StudentController extends Controller
             'home_number'       => $input['guardian_home_number'],
             'last_study'        => $input['guardian_last_study'],
             'occupation_id'     => $input['guardian_occupation'],
-            'revenue'           => str_replace(",", ".", str_replace(".", "", $input['guardian_revenue'])),
+            'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['guardian_revenue'], "Rp"))),
             'revenue_type'      => $input['guardian_revenue_type'],
             'parent'            => 0,
         ];
         ($guardian_died) ? $guardian['died'] = $guardian_died : $guardian['died'] = 0;
-        // dd($guardian, $mother);
 
         if ($check) $this->students->where('id', $check['id'])->delete();
 

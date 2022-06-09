@@ -29,6 +29,7 @@ class MasterSeeder extends Seeder
         DB::table('mst_language')->truncate();
         DB::table('mst_blood_type')->truncate();
         DB::table('mst_study_year')->truncate();
+        DB::table('mst_payment')->truncate();
         Schema::enableForeignKeyConstraints();
 
         // Master Agama (5)
@@ -405,6 +406,35 @@ class MasterSeeder extends Seeder
             [
                 'name'          => '2021/2022',
                 'semester'      => 'Genap',
+                'created_by'    => 'Migrasi',
+            ],
+        ]);
+
+        // Master Tahun Pelajaran (5)
+        DB::table('mst_payment')->insert([
+            [
+                'year'          => '2019',
+                'amount'        => '150000',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'year'          => '2020',
+                'amount'        => '210000',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'year'          => '2021',
+                'amount'        => '280000',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'year'          => '2022',
+                'amount'        => '350000',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'year'          => '2023',
+                'amount'        => '420000',
                 'created_by'    => 'Migrasi',
             ],
         ]);

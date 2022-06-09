@@ -87,14 +87,14 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="height" type="text" placeholder="143" name="height" value="{{ old('height', $student->height) }}">
+                                            <input id="height" type="text" placeholder="143" name="height" value="{{ old('height', round($student->height)) }}" class="auto_round">
                                             <label for="height">Tinggi Badan (cm) <span class="materialize-red-text">*</span></label>
                                             @error('height')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="weight" type="text" placeholder="55" name="weight" value="{{ old('weight', $student->weight) }}">
+                                            <input id="weight" type="text" placeholder="55" name="weight" value="{{ old('weight', round($student->weight)) }}" class="auto_round">
                                             <label for="weight">Berat Badan (kg) <span class="materialize-red-text">*</span></label>
                                             @error('weight')
                                                 <div class="error">{{ $message }}</div>
@@ -212,14 +212,14 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="stepbrother_count" type="text" placeholder="0" name="stepbrother_count" value="{{ old('stepbrother_count', $student->stepbrother_count) }}">
+                                            <input id="stepbrother_count" type="text" placeholder="0" name="stepbrother_count" value="@if ($student->stepbrother_count) {{ old('stepbrother_count', $student->stepbrother_count) }} @else {{ old('stepbrother_count', 0) }} @endif">
                                             <label for="stepbrother_count">Saudara Tiri</label>
                                             @error('stepbrother_count')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="stepsibling_count" type="text" placeholder="0" name="stepsibling_count" value="{{ old('stepsibling_count', $student->stepsibling_count) }}">
+                                            <input id="stepsibling_count" type="text" placeholder="0" name="stepsibling_count" value="@if ($student->stepsibling_count) {{ old('stepsibling_count', $student->stepsibling_count) }} @else {{ old('stepsibling_count', 0) }} @endif">
                                             <label for="stepsibling_count">Saudara Angkat</label>
                                             @error('stepsibling_count')
                                                 <div class="error">{{ $message }}</div>
@@ -334,7 +334,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="father_revenue" type="text" placeholder="3.000.000" name="father_revenue" value="{{ old('father_revenue', $father->revenue) }}" data-type="currency">
+                                            <input id="father_revenue" type="text" placeholder="3.000.000" name="father_revenue" value="Rp {{ old('father_revenue', number_format($father->revenue, 0, ',', '.')) }},00" data-type="currency">
                                             <label for="father_revenue">Penghasilan <span class="materialize-red-text">*</span></label>
                                             @error('father_revenue')
                                                 <div class="error">{{ $message }}</div>
@@ -381,7 +381,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="mother_birth_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="mother_birth_date" value="{{ old('mother_birth_date', date('d/m/Y', strtotime($mother->birth_place))) }}">
+                                            <input id="mother_birth_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="mother_birth_date" value="{{ old('mother_birth_date', date('d/m/Y', strtotime($mother->birth_date))) }}">
                                             <label for="mother_birth_date">Tanggal Lahir <span class="materialize-red-text">*</span></label>
                                             @error('mother_birth_date')
                                                 <div class="error">{{ $message }}</div>
@@ -470,7 +470,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="mother_revenue" type="text" placeholder="3.000.000" name="mother_revenue" value="{{ old('mother_revenue', $mother->revenue) }}" data-type="currency">
+                                            <input id="mother_revenue" type="text" placeholder="3.000.000" name="mother_revenue" value="Rp {{ old('mother_revenue', number_format($mother->revenue, 0, ',', '.')) }},00" data-type="currency">
                                             <label for="mother_revenue">Penghasilan <span class="materialize-red-text">*</span></label>
                                             @error('mother_revenue')
                                                 <div class="error">{{ $message }}</div>
@@ -516,21 +516,21 @@
                                     </div><hr>
                                     <div class="row">
                                         <div class="input-field col s6">
-                                            <input id="guardian" type="text" placeholder="Nama Wali" name="guardian_name" value="@if($guardian) {{ old('guardian_name', $guardian->full_name) }} @else {{ old('guardian_name') }} @endif" @if(!$guardian) disabled @endif>
+                                            <input id="guardian" type="text" placeholder="Nama Wali" name="guardian_name" value="@if($guardian) {{ old('guardian_name', $guardian->full_name) }} @else {{ old('guardian_name') }} @endif" @if(old('guardian') != 1) disabled @endif>
                                             <label for="guardian_name">Nama Wali</label>
                                             @error('guardian_name')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s4">
-                                            <input id="guardian" type="text" placeholder="Tempat Lahir" name="guardian_birth_place" value="@if($guardian) {{ old('guardian_birth_place', $guardian->birth_place) }} @else {{ old('guardian_birth_place') }} @endif"  @if(!$guardian) disabled @endif>
+                                            <input id="guardian" type="text" placeholder="Tempat Lahir" name="guardian_birth_place" value="@if($guardian) {{ old('guardian_birth_place', $guardian->birth_place) }} @else {{ old('guardian_birth_place') }} @endif"  @if(old('guardian') != 1) disabled @endif>
                                             <label for="guardian_birth_place">Tempat Lahir</label>
                                             @error('guardian_birth_place')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="guardian" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="guardian_birth_date" value="@if($guardian) {{ old('guardian_birth_date', date('d/m/Y', strtotime($guardian->birth_date))) }} @else {{ old('guardian_birth_date') }} @endif"  @if(!$guardian) disabled @endif>
+                                            <input id="guardian" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="guardian_birth_date" value="@if($guardian) {{ old('guardian_birth_date', date('d/m/Y', strtotime($guardian->birth_date))) }} @else {{ old('guardian_birth_date', '01/01/1970') }} @endif"  @if(old('guardian') != 1) disabled @endif>
                                             <label for="guardian_birth_date">Tanggal Lahir</label>
                                             @error('guardian_birth_date')
                                                 <div class="error">{{ $message }}</div>
@@ -541,7 +541,7 @@
                                     {{-- Kontak Wali --}}
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <textarea placeholder="Alamat" id="guardian" class="materialize-textarea" name="guardian_address"  @if(!$guardian) disabled @endif>@if($guardian) {{ old('guardian_address', $guardian->address) }} @else {{ old('guardian_address') }} @endif</textarea>
+                                            <textarea placeholder="Alamat" id="guardian" class="materialize-textarea" name="guardian_address"  @if(old('guardian') != 1) disabled @endif>@if($guardian) {{ old('guardian_address', $guardian->address) }} @else {{ old('guardian_address') }} @endif</textarea>
                                             <label for="guardian_address">Alamat</label>
                                             @error('guardian_address')
                                                 <div class="error">{{ $message }}</div>
@@ -555,11 +555,11 @@
                                                     Jenis Kelamin <span class="materialize-red-text">*</span>
                                                 </label>
                                                 <label>
-                                                    <input id="guardian" name="guardian_gender" type="radio" @if($guardian) @if(old('guardian_gender', $guardian->gender) == 'l') checked @endif @else @if(old('guardian_gender') == 'l') checked @endif @endif value="l"  @if(!$guardian) disabled @endif />
+                                                    <input id="guardian" name="guardian_gender" type="radio" @if($guardian) @if(old('guardian_gender', $guardian->gender) == 'l') checked @endif @else @if(old('guardian_gender') == 'l') checked @endif @endif value="l"  @if(old('guardian') != 1) disabled @endif />
                                                     <span>Laki-Laki</span>
                                                 </label>
                                                 <label>
-                                                    <input id="guardian" name="guardian_gender" type="radio" @if($guardian) @if(old('guardian_gender', $guardian->gender) == 'p') checked @endif @else @if(old('guardian_gender') == 'p') checked @endif @endif value="p" checked  @if(!$guardian) disabled @endif />
+                                                    <input id="guardian" name="guardian_gender" type="radio" @if($guardian) @if(old('guardian_gender', $guardian->gender) == 'p') checked @endif @else @if(old('guardian_gender') == 'p') checked @endif @endif value="p" checked  @if(old('guardian') != 1) disabled @endif />
                                                     <span>Perempuan</span>
                                                 </label>
                                             </p>
@@ -569,14 +569,14 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="guardian" type="text" placeholder="Nomor HP" name="guardian_phone_number" value="@if($guardian) {{ old('guardian_phone_number', $guardian->phone_number) }} @else {{ old('guardian_phone_number') }} @endif"  @if(!$guardian) disabled @endif>
+                                            <input id="guardian" type="text" placeholder="Nomor HP" name="guardian_phone_number" value="@if($guardian) {{ old('guardian_phone_number', $guardian->phone_number) }} @else {{ old('guardian_phone_number') }} @endif"  @if(old('guardian') != 1) disabled @endif>
                                             <label for="guardian_phone_number">Nomor HP <span class="materialize-red-text">*</span></label>
                                             @error('guardian_phone_number')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="guardian" type="text" placeholder="Nomor Telepon" name="guardian_home_number" value="@if($guardian) {{ old('guardian_home_number', $guardian->home_number) }} @else {{ old('guardian_home_number') }} @endif"  @if(!$guardian) disabled @endif>
+                                            <input id="guardian" type="text" placeholder="Nomor Telepon" name="guardian_home_number" value="@if($guardian) {{ old('guardian_home_number', $guardian->home_number) }} @else {{ old('guardian_home_number') }} @endif"  @if(old('guardian') != 1) disabled @endif>
                                             <label for="guardian_home_number">Nomor Telepon</label>
                                             @error('guardian_home_number')
                                                 <div class="error">{{ $message }}</div>
@@ -598,7 +598,7 @@
                                     {{-- Pendidikan/Pekerjaan Wali --}}
                                     <div class="row">
                                         <div class="input-field col s4">
-                                            <input id="guardian" type="text" placeholder="S1 Agrobisnis" name="guardian_last_study" value="@if($guardian) {{ old('guardian_last_study', $guardian->last_study) }} @else {{ old('guardian_last_study') }} @endif"  @if(!$guardian) disabled @endif>
+                                            <input id="guardian" type="text" placeholder="S1 Agrobisnis" name="guardian_last_study" value="@if($guardian) {{ old('guardian_last_study', $guardian->last_study) }} @else {{ old('guardian_last_study') }} @endif"  @if(old('guardian') != 1) disabled @endif>
                                             <label for="guardian_last_study">Pendidikan Terakhir</label>
                                             @error('guardian_last_study')
                                                 <div class="error">{{ $message }}</div>
@@ -619,7 +619,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="guardian" type="text" placeholder="3.000.000" name="guardian_revenue" value="@if($guardian) {{ old('guardian_revenue', $guardian->revenue) }} @else {{ old('guardian_revenue') }} @endif"  @if(!$guardian) disabled @endif data-type="currency">
+                                            <input id="guardian" type="text" placeholder="3.000.000" name="guardian_revenue" value="@if($guardian) Rp {{ old('guardian_revenue', number_format($guardian->revenue, 0, ',', '.')) }},00 @else {{ old('guardian_revenue') }} @endif"  @if(old('guardian') != 1) disabled @endif data-type="currency">
                                             <label for="guardian_revenue">Penghasilan</label>
                                             @error('guardian_revenue')
                                                 <div class="error">{{ $message }}</div>
@@ -641,7 +641,7 @@
                                             <div class="switch">
                                                 <label>
                                                     Meninggal?
-                                                    <input type="checkbox" @if($guardian) @if(old('guardian_died', $guardian->died) == 1) checked @endif @else @if(old('guardian_died') == 1) selected @endif @endif name="guardian_died" id="guardian"  @if(!$guardian) disabled @endif value="1">
+                                                    <input type="checkbox" @if($guardian) @if(old('guardian_died', $guardian->died) == 1) checked @endif @else @if(old('guardian_died') == 1) selected @endif @endif name="guardian_died" id="guardian"  @if(old('guardian') != 1) disabled @endif value="1">
                                                     <span class="lever"></span>
                                                 </label>
                                             </div>
@@ -661,7 +661,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s2">
-                                            <input id="distance" type="text" placeholder="10" name="distance" value="{{ old('distance', $student->distance) }}">
+                                            <input id="distance" type="text" placeholder="10" name="distance" value="{{ old('distance', round($student->distance)) }}">
                                             <label for="distance">Jarak Tempuh (km) <span class="materialize-red-text">*</span></label>
                                             @error('distance')
                                                 <div class="error">{{ $message }}</div>
