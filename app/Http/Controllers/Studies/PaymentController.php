@@ -10,6 +10,7 @@ use App\Models\Studies\{
     Payment,
 };
 use Illuminate\Http\Request;
+use Twilio\Rest\Client;
 
 class PaymentController extends Controller
 {
@@ -128,5 +129,29 @@ class PaymentController extends Controller
         $this->payments->where('id', $id)->update($data);
 
         return redirect($this->url)->with('status', 'Data berhasil dihapus.');
+    }
+
+    public function test(Request $request)
+    {
+        $phone = $request->phone_number;
+
+        $this->whatsappNotification($phone);
+
+        return redirect($this->url)->with('status', 'Notifikasi Terkirim.');
+    }
+
+    private function whatsappNotification(string $recipient)
+    {
+        $sid = getenv("TWILIO_AUTH_SID");
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $wa_from = getenv("TWILIO_WHATSAPP_FROM");
+        $twilio = new Client($sid, $token);
+
+        $body = "Sisa tagihanmu tinggal Rp 150.000";
+
+        return $twilio->messages->create("whatsapp:$recipient", [
+            "from"      => "whatsapp:$wa_from",
+            "body"      => $body,
+        ]);
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\Studies\{
     PaymentController as StdPaymentController,
     PresentController,
     ProfileController,
+    ReportScoreController,
     ScheduleController,
     StudentController,
     TeacherController,
@@ -72,4 +73,6 @@ Route::middleware('authcheck')->group(function() {
     Route::resource('/studi/profil', ProfileController::class);
     Route::resource('/studi/siswa', StudentController::class);
     Route::resource('/studi/spp', StdPaymentController::class);
+    Route::resource('/studi/nilai-siswa', ReportScoreController::class);
+    Route::post('/what', [StdPaymentController::class, 'test']);
 });

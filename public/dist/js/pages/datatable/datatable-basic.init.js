@@ -52,6 +52,13 @@ $('#zero_config').DataTable({
             bool = 1
         })
 
+        $('tr#show').click(function () {
+            var id = $(this).attr('data-id')
+
+            if (bool) location = path+'/'+id
+            bool = 1
+        })
+
         $('tr#data_select').click(function () {
             var id = $(this).attr('data-id')
             var select = $(this).attr('data-select')

@@ -21,7 +21,7 @@ class TeacherFactory extends Factory
             'phone_number'      => $this->faker->phoneNumber(),
             'email'             => $this->faker->freeEmail(),
             'last_study'        => $this->faker->randomElement(['Doktor', 'Sarjana', 'Magister', 'SMA', 'SMP', 'SD']),
-            'religion_id'       => $this->faker->randomNumber(1, true),
+            'religion_id'       => $this->faker->numberBetween(1, 5),
             'role'              => 'teacher',
             'created_at'        => now(),
             'created_by'        => 'Migrasi',

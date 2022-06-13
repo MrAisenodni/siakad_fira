@@ -8,6 +8,7 @@ use App\Models\Studies\{
     ClassModel,
     Lesson,
     Schedule,
+    Student,
     Teacher,
 };
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ class ScheduleController extends Controller
         $this->classes = new ClassModel();
         $this->lessons = new Lesson();
         $this->schedules = new Schedule();
+        $this->students = new Student();
         $this->teachers = new Teacher();
     }
     
@@ -37,15 +39,15 @@ class ScheduleController extends Controller
             return view('studies.schedule.index', $data);
         } elseif (session()->get('srole') == 'teacher') {
             $lesson_id = $this->lessons->select('id')->where('teacher_id', session()->get('suser_id'))->where('disabled', 0)->get();
-            dd($lesson_id);
-            $data['schedules'] = $this->schedules->select('id', 'day', 'clock_in', 'clock_out', 'spv_teacher_id', 'type', 'lesson_id')->where('lesson_id', $lesson_id)->where('disabled', 0)->orderBy('day')->get();
+            
+            $data['schedules'] = $this->schedules->select('id', 'day', 'clock_in', 'clock_out', 'spv_teacher_id', 'type', 'lesson_id')->whereIn('lesson_id', $lesson_id)->where('disabled', 0)->orderBy('day')->get();
             
             return view('teachers.schedule.index', $data);
         } else {
             $class = $this->classes->select('id')->where('student_id', session()->get('suser_id'))->where('disabled', 0)->first();
-            $lesson = $this->lessons->select('id')->where('class_id', $class->id)->where('disabled', 0)->get();
+            $lesson_id = $this->lessons->select('id')->where('class_id', $class->id)->where('disabled', 0)->get();
 
-            $data['schedules'] = $this->schedules->select('id', 'day', 'clock_in', 'clock_out', 'spv_teacher_id', 'type', 'lesson_id')->whereIn('lesson_id', $lesson)->where('disabled', 0)->orderBy('day')->get();
+            $data['schedules'] = $this->schedules->select('id', 'day', 'clock_in', 'clock_out', 'spv_teacher_id', 'type', 'lesson_id')->whereIn('lesson_id', $lesson_id)->where('disabled', 0)->orderBy('day')->get();
 
             return view('students.schedule.index', $data);
         }
@@ -60,7 +62,8 @@ class ScheduleController extends Controller
             'teachers'          => $this->teachers->select('id', 'nip', 'full_name')->where('disabled', 0)->where('role', 'teacher')->get(),
         ];
 
-        return view('studies.schedule.create', $data);
+        if (session()->get('srole') == 'admin') return view('studies.schedule.create', $data);
+        abort(403);
     }
 
     public function store(Request $request)
@@ -89,7 +92,28 @@ class ScheduleController extends Controller
         return redirect($this->url)->with('status', 'Data berhasil ditambahkan.');
     }
 
-    public function edit(Request $request, $id)
+    public function show($id)
+    {
+        $data = [
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
+            'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
+            'schedule'          => $this->schedules->where('id', $id)->first(),
+        ];
+        
+        if (session()->get('srole') == 'admin') {
+            return view('studies.schedule.show', $data);
+        } elseif (session()->get('srole') == 'teacher') {
+            $lesson = $this->lessons->select('class_id')->where('id', $data['schedule']->lesson_id)->where('disabled', 0)->first();
+            $student_id = $this->classes->select('student_id')->where('disabled', 0)->where('class_id', $lesson->class_id)->get();
+            $data['students'] = $this->students->select('id', 'nis', 'nisn', 'full_name', 'phone_number', 'home_number')->whereIn('id', $student_id)->where('disabled', 0)->get();
+
+            return view('teachers.schedule.show', $data);
+        } else {
+            return view('students.schedule.show', $data);
+        }
+    }
+
+    public function edit($id)
     {
         $data = [
             'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
@@ -99,7 +123,8 @@ class ScheduleController extends Controller
             'schedule'          => $this->schedules->where('id', $id)->first(),
         ];
         
-        return view('studies.schedule.edit', $data);
+        if (session()->get('srole') == 'admin') return view('studies.schedule.edit', $data);
+        abort(403);
     }
 
     public function update(Request $request, $id)

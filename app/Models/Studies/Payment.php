@@ -15,7 +15,7 @@ class Payment extends Model
 
     public function student()
     {
-        return $this->belongsTo(Student::class)->select('id', 'full_name', 'nis')->where('disabled', 0);
+        return $this->belongsTo(Student::class)->select('id', 'full_name', 'nis', 'phone_number')->where('disabled', 0);
     }
 
     public function payment()

@@ -20,18 +20,20 @@
             <div class="col s12">
                 <div class="card">
                     <div class="card-content">
-                        <h5 class="card-title">{{ $menu->title }} @if (session()->get('srole') == 'teacher')
-                            Guru
-                        @else
+                        <h5 class="card-title">{{ $menu->title }} @if (session()->get('srole') == 'student')
                             Siswa
                         @endif</h5>
                         @if (session('status'))
-                            <div class="success-alert-bar p-15 m-t-10 m-b-10 red white-text" style="display: block">
+                            <div class="success-alert-bar p-15 m-t-10 m-b-10 green white-text" style="display: block">
                                 {{ session('status') }}
                             </div>
                         @endif
-                        <form method="POST" action="{{ str_replace("/edit", "", url()->current()) }}">
-                            @method('put')
+                        @if (session('error'))
+                            <div class="success-alert-bar p-15 m-t-10 m-b-10 red white-text" style="display: block">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                        <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">
                             @csrf
                             <div class="row">
                                 <div class="col s12">
@@ -47,28 +49,28 @@
                                     {{-- Personal --}}
                                     <div class="row">
                                         <div class="input-field col s3">
-                                            <input id="nik" type="text" placeholder="NIK" name="nik" value="{{ old('nik', $student->nik) }}">
+                                            <input id="nik" type="text" placeholder="NIK" name="nik" value="{{ old('nik', $student->nik) }}" disabled>
                                             <label for="nik">NIK <span class="materialize-red-text">*</span></label>
                                             @error('nik')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="nis" type="text" placeholder="NIS" name="nis" value="{{ old('nis', $student->nis) }}">
+                                            <input id="nis" type="text" placeholder="NIS" name="nis" value="{{ old('nis', $student->nis) }}" disabled>
                                             <label for="nis">NIS <span class="materialize-red-text">*</span></label>
                                             @error('nis')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="nisn" type="text" placeholder="NISN" name="nisn" value="{{ old('nisn', $student->nisn) }}">
+                                            <input id="nisn" type="text" placeholder="NISN" name="nisn" value="{{ old('nisn', $student->nisn) }}" disabled>
                                             <label for="nisn">NISN <span class="materialize-red-text">*</span></label>
                                             @error('nisn')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s5">
-                                            <input id="full_name" type="text" placeholder="Nama Lengkap" name="full_name" value="{{ old('full_name', $student->full_name) }}">
+                                            <input id="full_name" type="text" placeholder="Nama Lengkap" name="full_name" value="{{ old('full_name', $student->full_name) }}" disabled>
                                             <label for="full_name">Nama Lengkap <span class="materialize-red-text">*</span></label>
                                             @error('full_name')
                                                 <div class="error">{{ $message }}</div>
@@ -78,28 +80,28 @@
 
                                     <div class="row">
                                         <div class="input-field col s3">
-                                            <input id="birth_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="birth_date" value="{{ old('birth_date', date('d/m/Y', strtotime($student->birth_date))) }}">
+                                            <input id="birth_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="birth_date" value="{{ old('birth_date', date('d/m/Y', strtotime($student->birth_date))) }}" disabled>
                                             <label for="birth_date">Tanggal Lahir <span class="materialize-red-text">*</span></label>
                                             @error('birth_date')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s5">
-                                            <input id="birth_place" type="text" placeholder="Tempat Lahir" name="birth_place" value="{{ old('birth_place', $student->birth_place) }}">
+                                            <input id="birth_place" type="text" placeholder="Tempat Lahir" name="birth_place" value="{{ old('birth_place', $student->birth_place) }}" disabled>
                                             <label for="birth_place">Tempat Lahir <span class="materialize-red-text">*</span></label>
                                             @error('birth_place')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="height" type="text" placeholder="143" name="height" value="{{ old('height', $student->height) }}">
+                                            <input id="height" type="text" placeholder="143" name="height" value="{{ old('height', $student->height) }}" disabled>
                                             <label for="height">Tinggi Badan (cm) <span class="materialize-red-text">*</span></label>
                                             @error('height')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="weight" type="text" placeholder="55" name="weight" value="{{ old('weight', $student->weight) }}">
+                                            <input id="weight" type="text" placeholder="55" name="weight" value="{{ old('weight', $student->weight) }}" disabled>
                                             <label for="weight">Berat Badan (kg) <span class="materialize-red-text">*</span></label>
                                             @error('weight')
                                                 <div class="error">{{ $message }}</div>
@@ -114,11 +116,11 @@
                                                     Jenis Kelamin <span class="materialize-red-text">*</span>
                                                 </label><br>
                                                 <label>
-                                                    <input id="gender" name="gender" type="radio" @if(old('gender', $student->gender) == 'l') checked @endif value="l" checked />
+                                                    <input id="gender" name="gender" type="radio" @if(old('gender', $student->gender) == 'l') checked @endif value="l" checked / disabled>
                                                     <span>Laki-Laki</span>
                                                 </label>
                                                 <label>
-                                                    <input id="gender" name="gender" type="radio" @if(old('gender', $student->gender) == 'p') checked @endif value="p" />
+                                                    <input id="gender" name="gender" type="radio" @if(old('gender', $student->gender) == 'p') checked @endif value="p" / disabled>
                                                     <span>Perempuan</span>
                                                 </label>
                                             </p>
@@ -203,28 +205,28 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="child_to" type="text" placeholder="1" name="child_to" value="{{ old('child_to', $student->child_to) }}">
+                                            <input id="child_to" type="text" placeholder="1" name="child_to" value="{{ old('child_to', $student->child_to) }}" disabled>
                                             <label for="child_to">Anak Ke <span class="materialize-red-text">*</span></label>
                                             @error('child_to')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="child_count" type="text" placeholder="3" name="child_count" value="{{ old('child_count', $student->child_count) }}">
+                                            <input id="child_count" type="text" placeholder="3" name="child_count" value="{{ old('child_count', $student->child_count) }}" disabled>
                                             <label for="child_count">Dari <span class="materialize-red-text">*</span></label>
                                             @error('child_count')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="stepbrother_count" type="text" placeholder="0" name="stepbrother_count" value="{{ old('stepbrother_count', $student->stepbrother_count) }}">
+                                            <input id="stepbrother_count" type="text" placeholder="0" name="stepbrother_count" value="@if ($student->stepbrother_count) {{ old('stepbrother_count', $student->stepbrother_count) }} @else {{ old('stepbrother_count', 0) }} @endif" disabled>
                                             <label for="stepbrother_count">Saudara Tiri</label>
                                             @error('stepbrother_count')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="stepsibling_count" type="text" placeholder="0" name="stepsibling_count" value="{{ old('stepsibling_count', $student->stepsibling_count) }}">
+                                            <input id="stepsibling_count" type="text" placeholder="0" name="stepsibling_count" value="@if ($student->stepsibling_count) {{ old('stepsibling_count', $student->stepsibling_count) }} @else {{ old('stepsibling_count', 0) }} @endif" disabled>
                                             <label for="stepsibling_count">Saudara Angkat</label>
                                             @error('stepsibling_count')
                                                 <div class="error">{{ $message }}</div>
@@ -236,21 +238,21 @@
                                     <h6 class="card-title m-t-15">Identitas Ayah</h6><hr>
                                     <div class="row">
                                         <div class="input-field col s6">
-                                            <input id="father_name" type="text" placeholder="Nama Ayah" name="father_name" value="{{ old('father_name', $father->full_name) }}">
+                                            <input id="father_name" type="text" placeholder="Nama Ayah" name="father_name" value="{{ old('father_name', $father->full_name) }}" disabled>
                                             <label for="father_name">Nama Ayah <span class="materialize-red-text">*</span></label>
                                             @error('father_name')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s4">
-                                            <input id="father_birth_place" type="text" placeholder="Tempat Lahir" name="father_birth_place" value="{{ old('father_birth_place', $father->birth_place) }}">
+                                            <input id="father_birth_place" type="text" placeholder="Tempat Lahir" name="father_birth_place" value="{{ old('father_birth_place', $father->birth_place) }}" disabled>
                                             <label for="father_birth_place">Tempat Lahir <span class="materialize-red-text">*</span></label>
                                             @error('father_birth_place')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="father_birth_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="father_birth_date" value="{{ old('father_birth_date', date('d/m/Y', strtotime($father->birth_date))) }}">
+                                            <input id="father_birth_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="father_birth_date" value="{{ old('father_birth_date', date('d/m/Y', strtotime($father->birth_date))) }}" disabled>
                                             <label for="father_birth_date">Tanggal Lahir <span class="materialize-red-text">*</span></label>
                                             @error('father_birth_date')
                                                 <div class="error">{{ $message }}</div>
@@ -261,7 +263,7 @@
                                     {{-- Kontak Ayah --}}
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <textarea placeholder="Alamat" id="father_address" class="materialize-textarea" name="father_address">{{ old('father_address', $father->address) }}</textarea>
+                                            <textarea placeholder="Alamat" id="father_address" class="materialize-textarea" name="father_address" disabled>{{ old('father_address', $father->address) }}</textarea>
                                             <label for="father_address">Alamat <span class="materialize-red-text">*</span></label>
                                             @error('father_address')
                                                 <div class="error">{{ $message }}</div>
@@ -275,11 +277,11 @@
                                                     Jenis Kelamin <span class="materialize-red-text">*</span>
                                                 </label>
                                                 <label>
-                                                    <input id="father_gender" name="father_gender" type="radio" disabled value="l" checked />
+                                                    <input id="father_gender" name="father_gender" type="radio" disabled value="l" checked / disabled>
                                                     <span>Laki-Laki</span>
                                                 </label>
                                                 <label>
-                                                    <input id="father_gender" name="father_gender" type="radio" disabled value="p" />
+                                                    <input id="father_gender" name="father_gender" type="radio" disabled value="p" / disabled>
                                                     <span>Perempuan</span>
                                                 </label>
                                             </p>
@@ -289,14 +291,14 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="father_phone_number" type="text" placeholder="Nomor HP" name="father_phone_number" value="{{ old('father_phone_number', $father->phone_number) }}">
+                                            <input id="father_phone_number" type="text" placeholder="Nomor HP" name="father_phone_number" value="{{ old('father_phone_number', $father->phone_number) }}" disabled>
                                             <label for="father_phone_number">Nomor HP <span class="materialize-red-text">*</span></label>
                                             @error('father_phone_number')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="father_home_number" type="text" placeholder="Nomor Telepon" name="father_home_number" value="{{ old('father_home_number', $father->home_number) }}">
+                                            <input id="father_home_number" type="text" placeholder="Nomor Telepon" name="father_home_number" value="@if ($father->home_number) {{ old('father_home_number', $father->home_number) }} @else {{ old('father_home_number', 0) }} @endif" disabled>
                                             <label for="father_home_number">Nomor Telepon</label>
                                             @error('father_home_number')
                                                 <div class="error">{{ $message }}</div>
@@ -318,7 +320,7 @@
                                     {{-- Pendidikan/Pekerjaan Ayah --}}
                                     <div class="row">
                                         <div class="input-field col s4">
-                                            <input id="father_last_study" type="text" placeholder="S1 Agrobisnis" name="father_last_study" value="{{ old('father_last_study', $father->last_study) }}">
+                                            <input id="father_last_study" type="text" placeholder="S1 Agrobisnis" name="father_last_study" value="{{ old('father_last_study', $father->last_study) }}" disabled>
                                             <label for="father_last_study">Pendidikan Terakhir <span class="materialize-red-text">*</span></label>
                                             @error('father_last_study')
                                                 <div class="error">{{ $message }}</div>
@@ -339,7 +341,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="father_revenue" type="text" placeholder="3.000.000" name="father_revenue" value="{{ old('father_revenue', $father->revenue) }}" data-type="currency">
+                                            <input id="father_revenue" type="text" placeholder="3.000.000" name="father_revenue" value="{{ old('father_revenue', $father->revenue) }}" data-type="currency" disabled>
                                             <label for="father_revenue">Penghasilan <span class="materialize-red-text">*</span></label>
                                             @error('father_revenue')
                                                 <div class="error">{{ $message }}</div>
@@ -361,7 +363,7 @@
                                             <div class="switch">
                                                 <label>
                                                     Meninggal?
-                                                    <input type="checkbox" @if (old('father_died', $father->died) == 1) checked @endif name="father_died" id="father_died" value="1">
+                                                    <input type="checkbox" @if (old('father_died', $father->died) == 1) checked @endif name="father_died" id="father_died" value="1" disabled>
                                                     <span class="lever"></span>
                                                 </label>
                                             </div>
@@ -372,21 +374,21 @@
                                     <h6 class="card-title m-t-15">Identitas Ibu</h6><hr>
                                     <div class="row">
                                         <div class="input-field col s6">
-                                            <input id="mother_name" type="text" placeholder="Nama Ibu" name="mother_name" value="{{ old('mother_name', $mother->full_name) }}">
+                                            <input id="mother_name" type="text" placeholder="Nama Ibu" name="mother_name" value="{{ old('mother_name', $mother->full_name) }}" disabled>
                                             <label for="mother_name">Nama Ibu <span class="materialize-red-text">*</span></label>
                                             @error('mother_name')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s4">
-                                            <input id="mother_birth_place" type="text" placeholder="Tempat Lahir" name="mother_birth_place" value="{{ old('mother_birth_place', $mother->birth_place) }}">
+                                            <input id="mother_birth_place" type="text" placeholder="Tempat Lahir" name="mother_birth_place" value="{{ old('mother_birth_place', $mother->birth_place) }}" disabled>
                                             <label for="mother_birth_place">Tempat Lahir <span class="materialize-red-text">*</span></label>
                                             @error('mother_birth_place')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="mother_birth_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="mother_birth_date" value="{{ old('mother_birth_date', date('d/m/Y', strtotime($mother->birth_place))) }}">
+                                            <input id="mother_birth_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="mother_birth_date" value="{{ old('mother_birth_date', date('d/m/Y', strtotime($mother->birth_place))) }}" disabled>
                                             <label for="mother_birth_date">Tanggal Lahir <span class="materialize-red-text">*</span></label>
                                             @error('mother_birth_date')
                                                 <div class="error">{{ $message }}</div>
@@ -397,7 +399,7 @@
                                     {{-- Kontak Ibu --}}
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <textarea placeholder="Alamat" id="mother_address" class="materialize-textarea" name="mother_address">{{ old('mother_address', $mother->address) }}</textarea>
+                                            <textarea placeholder="Alamat" id="mother_address" class="materialize-textarea" name="mother_address" disabled>{{ old('mother_address', $mother->address) }}</textarea>
                                             <label for="mother_address">Alamat <span class="materialize-red-text">*</span></label>
                                             @error('mother_address')
                                                 <div class="error">{{ $message }}</div>
@@ -411,11 +413,11 @@
                                                     Jenis Kelamin <span class="materialize-red-text">*</span>
                                                 </label>
                                                 <label>
-                                                    <input id="mother_gender" name="mother_gender" type="radio" disabled value="l" />
+                                                    <input id="mother_gender" name="mother_gender" type="radio" disabled value="l" / disabled>
                                                     <span>Laki-Laki</span>
                                                 </label>
                                                 <label>
-                                                    <input id="mother_gender" name="mother_gender" type="radio" disabled value="p" checked />
+                                                    <input id="mother_gender" name="mother_gender" type="radio" disabled value="p" checked / disabled>
                                                     <span>Perempuan</span>
                                                 </label>
                                             </p>
@@ -425,14 +427,14 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="mother_phone_number" type="text" placeholder="Nomor HP" name="mother_phone_number" value="{{ old('mother_phone_number', $mother->phone_number) }}">
+                                            <input id="mother_phone_number" type="text" placeholder="Nomor HP" name="mother_phone_number" value="{{ old('mother_phone_number', $mother->phone_number) }}" disabled>
                                             <label for="mother_phone_number">Nomor HP <span class="materialize-red-text">*</span></label>
                                             @error('mother_phone_number')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="mother_home_number" type="text" placeholder="Nomor Telepon" name="mother_home_number" value="{{ old('mother_home_number', $mother->home_number) }}">
+                                            <input id="mother_home_number" type="text" placeholder="Nomor Telepon" name="mother_home_number" value="@if ($mother->home_number) {{ old('mother_home_number', $mother->home_number) }} @else {{ old('mother_home_number', 0) }} @endif" disabled>
                                             <label for="mother_home_number">Nomor Telepon</label>
                                             @error('mother_home_number')
                                                 <div class="error">{{ $message }}</div>
@@ -454,7 +456,7 @@
                                     {{-- Pendidikan/Pekerjaan Ibu --}}
                                     <div class="row">
                                         <div class="input-field col s4">
-                                            <input id="mother_last_study" type="text" placeholder="S1 Agrobisnis" name="mother_last_study" value="{{ old('mother_last_study', $mother->last_study) }}">
+                                            <input id="mother_last_study" type="text" placeholder="S1 Agrobisnis" name="mother_last_study" value="{{ old('mother_last_study', $mother->last_study) }}" disabled>
                                             <label for="mother_last_study">Pendidikan Terakhir <span class="materialize-red-text">*</span></label>
                                             @error('mother_last_study')
                                                 <div class="error">{{ $message }}</div>
@@ -475,7 +477,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="mother_revenue" type="text" placeholder="3.000.000" name="mother_revenue" value="{{ old('mother_revenue', $mother->revenue) }}" data-type="currency">
+                                            <input id="mother_revenue" type="text" placeholder="3.000.000" name="mother_revenue" value="{{ old('mother_revenue', $mother->revenue) }}" data-type="currency" disabled>
                                             <label for="mother_revenue">Penghasilan <span class="materialize-red-text">*</span></label>
                                             @error('mother_revenue')
                                                 <div class="error">{{ $message }}</div>
@@ -497,7 +499,7 @@
                                             <div class="switch">
                                                 <label>
                                                     Meninggal?
-                                                    <input type="checkbox" @if (old('mother_died', $mother->died) == 1) checked @endif name="mother_died" id="mother_died" value="1">
+                                                    <input type="checkbox" @if (old('mother_died', $mother->died) == 1) checked @endif name="mother_died" id="mother_died" value="1" disabled>
                                                     <span class="lever"></span>
                                                 </label>
                                             </div>
@@ -513,7 +515,7 @@
                                         <div class="col s2 right-align">
                                             <div class="switch">
                                                 <label>
-                                                    <input type="checkbox" @if(old('guardian') == 1 || $guardian) checked @endif value="1" name="guardian" id="sw_guardian">
+                                                    <input type="checkbox" @if(old('guardian') == 1 || $guardian) checked @endif value="1" name="guardian" id="sw_guardian" disabled>
                                                     <span class="lever"></span>
                                                 </label>
                                             </div>
@@ -521,21 +523,21 @@
                                     </div><hr>
                                     <div class="row">
                                         <div class="input-field col s6">
-                                            <input id="guardian" type="text" placeholder="Nama Wali" name="guardian_name" value="@if($guardian) {{ old('guardian_name', $guardian->full_name) }} @else {{ old('guardian_name') }} @endif" @if(!$guardian) disabled @endif>
+                                            <input id="guardian" type="text" placeholder="Nama Wali" name="guardian_name" value="@if($guardian) {{ old('guardian_name', $guardian->full_name) }} @else {{ old('guardian_name') }} @endif" @if(!$guardian) disabled @endif disabled>
                                             <label for="guardian_name">Nama Wali</label>
                                             @error('guardian_name')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s4">
-                                            <input id="guardian" type="text" placeholder="Tempat Lahir" name="guardian_birth_place" value="@if($guardian) {{ old('guardian_birth_place', $guardian->birth_place) }} @else {{ old('guardian_birth_place') }} @endif"  @if(!$guardian) disabled @endif>
+                                            <input id="guardian" type="text" placeholder="Tempat Lahir" name="guardian_birth_place" value="@if($guardian) {{ old('guardian_birth_place', $guardian->birth_place) }} @else {{ old('guardian_birth_place') }} @endif"  @if(!$guardian) disabled @endif disabled>
                                             <label for="guardian_birth_place">Tempat Lahir</label>
                                             @error('guardian_birth_place')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="guardian" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="guardian_birth_date" value="@if($guardian) {{ old('guardian_birth_date', date('d/m/Y', strtotime($guardian->birth_date))) }} @else {{ old('guardian_birth_date') }} @endif"  @if(!$guardian) disabled @endif>
+                                            <input id="guardian" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="guardian_birth_date" value="@if($guardian) {{ old('guardian_birth_date', date('d/m/Y', strtotime($guardian->birth_date))) }} @else {{ old('guardian_birth_date') }} @endif"  @if(!$guardian) disabled @endif disabled>
                                             <label for="guardian_birth_date">Tanggal Lahir</label>
                                             @error('guardian_birth_date')
                                                 <div class="error">{{ $message }}</div>
@@ -546,7 +548,7 @@
                                     {{-- Kontak Wali --}}
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <textarea placeholder="Alamat" id="guardian" class="materialize-textarea" name="guardian_address"  @if(!$guardian) disabled @endif>@if($guardian) {{ old('guardian_address', $guardian->address) }} @else {{ old('guardian_address') }} @endif</textarea>
+                                            <textarea placeholder="Alamat" id="guardian" class="materialize-textarea" name="guardian_address"  @if(!$guardian) disabled @endif disabled>@if($guardian) {{ old('guardian_address', $guardian->address) }} @else {{ old('guardian_address') }} @endif</textarea>
                                             <label for="guardian_address">Alamat</label>
                                             @error('guardian_address')
                                                 <div class="error">{{ $message }}</div>
@@ -560,11 +562,11 @@
                                                     Jenis Kelamin <span class="materialize-red-text">*</span>
                                                 </label>
                                                 <label>
-                                                    <input id="guardian" name="guardian_gender" type="radio" @if($guardian) @if(old('guardian_gender', $guardian->gender) == 'l') checked @endif @else @if(old('guardian_gender') == 'l') checked @endif @endif value="l"  @if(!$guardian) disabled @endif />
+                                                    <input id="guardian" name="guardian_gender" type="radio" @if($guardian) @if(old('guardian_gender', $guardian->gender) == 'l') checked @endif @else @if(old('guardian_gender') == 'l') checked @endif @endif value="l"  @if(!$guardian) disabled @endif / disabled>
                                                     <span>Laki-Laki</span>
                                                 </label>
                                                 <label>
-                                                    <input id="guardian" name="guardian_gender" type="radio" @if($guardian) @if(old('guardian_gender', $guardian->gender) == 'p') checked @endif @else @if(old('guardian_gender') == 'p') checked @endif @endif value="p" checked  @if(!$guardian) disabled @endif />
+                                                    <input id="guardian" name="guardian_gender" type="radio" @if($guardian) @if(old('guardian_gender', $guardian->gender) == 'p') checked @endif @else @if(old('guardian_gender') == 'p') checked @endif @endif value="p" checked  @if(!$guardian) disabled @endif / disabled>
                                                     <span>Perempuan</span>
                                                 </label>
                                             </p>
@@ -574,14 +576,14 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="guardian" type="text" placeholder="Nomor HP" name="guardian_phone_number" value="@if($guardian) {{ old('guardian_phone_number', $guardian->phone_number) }} @else {{ old('guardian_phone_number') }} @endif"  @if(!$guardian) disabled @endif>
+                                            <input id="guardian" type="text" placeholder="Nomor HP" name="guardian_phone_number" value="@if($guardian) {{ old('guardian_phone_number', $guardian->phone_number) }} @else {{ old('guardian_phone_number') }} @endif"  @if(!$guardian) disabled @endif disabled>
                                             <label for="guardian_phone_number">Nomor HP <span class="materialize-red-text">*</span></label>
                                             @error('guardian_phone_number')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="guardian" type="text" placeholder="Nomor Telepon" name="guardian_home_number" value="@if($guardian) {{ old('guardian_home_number', $guardian->home_number) }} @else {{ old('guardian_home_number') }} @endif"  @if(!$guardian) disabled @endif>
+                                            <input id="guardian" type="text" placeholder="Nomor Telepon" name="guardian_home_number" value="@if($guardian) @if ($guardian->home_number) {{ old('guardian_home_number', $guardian->home_number) }} @else {{ old('guardian_home_number', 0) }} @endif @else {{ old('guardian_home_number', 0) }} @endif"  @if(!$guardian) disabled @endif disabled>
                                             <label for="guardian_home_number">Nomor Telepon</label>
                                             @error('guardian_home_number')
                                                 <div class="error">{{ $message }}</div>
@@ -603,7 +605,7 @@
                                     {{-- Pendidikan/Pekerjaan Wali --}}
                                     <div class="row">
                                         <div class="input-field col s4">
-                                            <input id="guardian" type="text" placeholder="S1 Agrobisnis" name="guardian_last_study" value="@if($guardian) {{ old('guardian_last_study', $guardian->last_study) }} @else {{ old('guardian_last_study') }} @endif"  @if(!$guardian) disabled @endif>
+                                            <input id="guardian" type="text" placeholder="S1 Agrobisnis" name="guardian_last_study" value="@if($guardian) {{ old('guardian_last_study', $guardian->last_study) }} @else {{ old('guardian_last_study') }} @endif"  @if(!$guardian) disabled @endif disabled>
                                             <label for="guardian_last_study">Pendidikan Terakhir</label>
                                             @error('guardian_last_study')
                                                 <div class="error">{{ $message }}</div>
@@ -624,7 +626,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="guardian" type="text" placeholder="3.000.000" name="guardian_revenue" value="@if($guardian) {{ old('guardian_revenue', $guardian->revenue) }} @else {{ old('guardian_revenue') }} @endif"  @if(!$guardian) disabled @endif data-type="currency">
+                                            <input id="guardian" type="text" placeholder="3.000.000" name="guardian_revenue" value="@if($guardian) {{ old('guardian_revenue', $guardian->revenue) }} @else {{ old('guardian_revenue') }} @endif"  @if(!$guardian) disabled @endif data-type="currency" disabled>
                                             <label for="guardian_revenue">Penghasilan</label>
                                             @error('guardian_revenue')
                                                 <div class="error">{{ $message }}</div>
@@ -646,7 +648,7 @@
                                             <div class="switch">
                                                 <label>
                                                     Meninggal?
-                                                    <input type="checkbox" @if($guardian) @if(old('guardian_died', $guardian->died) == 1) checked @endif @else @if(old('guardian_died') == 1) selected @endif @endif name="guardian_died" id="guardian"  @if(!$guardian) disabled @endif value="1">
+                                                    <input type="checkbox" @if($guardian) @if(old('guardian_died', $guardian->died) == 1) checked @endif @else @if(old('guardian_died') == 1) selected @endif @endif name="guardian_died" id="guardian"  @if(!$guardian) disabled @endif value="1" disabled>
                                                     <span class="lever"></span>
                                                 </label>
                                             </div>
@@ -657,7 +659,7 @@
                                     {{-- Kontak --}}
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <textarea placeholder="Alamat" id="address" class="materialize-textarea" name="address">{{ old('address', $student->address) }}</textarea>
+                                            <textarea placeholder="Alamat" id="address" class="materialize-textarea" name="address" disabled>{{ old('address', $student->address) }}</textarea>
                                             <label for="address">Alamat <span class="materialize-red-text">*</span></label>
                                             @error('address')
                                                 <div class="error">{{ $message }}</div>
@@ -666,21 +668,21 @@
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s2">
-                                            <input id="distance" type="text" placeholder="10" name="distance" value="{{ old('distance', $student->distance) }}">
+                                            <input id="distance" type="text" placeholder="10" name="distance" value="{{ old('distance', $student->distance) }}" disabled>
                                             <label for="distance">Jarak Tempuh (km) <span class="materialize-red-text">*</span></label>
                                             @error('distance')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s5">
-                                            <input id="phone_number" type="text" placeholder="Nomor HP" name="phone_number" value="{{ old('phone_number', $student->phone_number) }}">
+                                            <input id="phone_number" type="text" placeholder="Nomor HP" name="phone_number" value="{{ old('phone_number', $student->phone_number) }}" disabled>
                                             <label for="phone_number">Nomor HP <span class="materialize-red-text">*</span></label>
                                             @error('phone_number')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s5">
-                                            <input id="home_number" type="text" placeholder="Nomor Telepon" name="home_number" value="{{ old('home_number', $student->home_number) }}">
+                                            <input id="home_number" type="text" placeholder="Nomor Telepon" name="home_number" value="@if ($student->home_number) {{ old('home_number', $student->home_number) }} @else {{ old('home_number', 0) }} @endif" disabled>
                                             <label for="home_number">Nomor Telepon</label>
                                             @error('home_number')
                                                 <div class="error">{{ $message }}</div>
@@ -692,21 +694,21 @@
                                     {{-- Studi/Pelajaran --}}
                                     <div class="row">
                                         <div class="input-field col s1">
-                                            <input id="level" type="text" placeholder="Tingkat" name="level" value="{{ old('level', $student->level) }}">
+                                            <input id="level" type="text" placeholder="Tingkat" name="level" value="{{ old('level', $student->level) }}" disabled>
                                             <label for="level">Tingkat <span class="materialize-red-text">*</span></label>
                                             @error('level')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="group" type="text" placeholder="Kelompok" name="group" value="{{ old('group', $student->group) }}">
+                                            <input id="group" type="text" placeholder="Kelompok" name="group" value="{{ old('group', $student->group) }}" disabled>
                                             <label for="group">Kelompok <span class="materialize-red-text">*</span></label>
                                             @error('group')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="start_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="start_date" value="{{ old('start_date', date('d/m/Y', strtotime($student->start_date))) }}">
+                                            <input id="start_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="start_date" value="{{ old('start_date', date('d/m/Y', strtotime($student->start_date))) }}" disabled>
                                             <label for="start_date">Tanggal Mulai <span class="materialize-red-text">*</span></label>
                                             @error('start_date')
                                                 <div class="error">{{ $message }}</div>
@@ -745,35 +747,35 @@
                                     {{-- Pendidikan Terakhir --}}
                                     <div class="row">
                                         <div class="input-field col s2">
-                                            <input id="sttb_no" type="text" placeholder="No STTB" name="sttb_no" value="{{ old('sttb_no', $student->sttb_no) }}">
+                                            <input id="sttb_no" type="text" placeholder="No STTB" name="sttb_no" value="{{ old('sttb_no', $student->sttb_no) }}" disabled>
                                             <label for="sttb_no">No STTB <span class="materialize-red-text">*</span></label>
                                             @error('sttb_no')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="first_study" type="text" placeholder="Pendidikan Pertama" name="first_study" value="{{ old('first_study', $student->first_study) }}">
+                                            <input id="first_study" type="text" placeholder="Pendidikan Pertama" name="first_study" value="{{ old('first_study', $student->first_study) }}" disabled>
                                             <label for="first_study">Pendidikan Pertama <span class="materialize-red-text">*</span></label>
                                             @error('first_study')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="major" type="text" placeholder="Jurusan" name="major" value="{{ old('major', $student->major) }}">
+                                            <input id="major" type="text" placeholder="Jurusan" name="major" value="{{ old('major', $student->major) }}" disabled>
                                             <label for="major">Jurusan</label>
                                             @error('major')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="from_study_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="from_study_date" value="{{ old('from_study_date', date('d/m/Y', strtotime($student->from_study_date))) }}">
+                                            <input id="from_study_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="from_study_date" value="{{ old('from_study_date', date('d/m/Y', strtotime($student->from_study_date))) }}" disabled>
                                             <label for="from_study_date">Dari Tanggal <span class="materialize-red-text">*</span></label>
                                             @error('from_study_date')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="to_study_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="to_study_date" value="{{ old('to_study_date', date('d/m/Y', strtotime($student->to_study_date))) }}">
+                                            <input id="to_study_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="to_study_date" value="{{ old('to_study_date', date('d/m/Y', strtotime($student->to_study_date))) }}" disabled>
                                             <label for="to_study_date">Sampai Tanggal <span class="materialize-red-text">*</span></label>
                                             @error('to_study_date')
                                                 <div class="error">{{ $message }}</div>
@@ -784,14 +786,14 @@
                                     {{-- Pindah dari Sekolah Lain --}}
                                     <div class="row">
                                         <div class="input-field col s6">
-                                            <input id="move_from" type="text" placeholder="SMP Negeri 6 Bekasi" name="move_from" value="{{ old('move_from', $student->move_from) }}">
+                                            <input id="move_from" type="text" placeholder="SMP Negeri 6 Bekasi" name="move_from" value="{{ old('move_from', $student->move_from) }}" disabled>
                                             <label for="move_from">Pindah Dari</label>
                                             @error('move_from')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s6">
-                                            <input id="move_reason" type="text" placeholder="Orang tua pindah kerja" name="move_reason" value="{{ old('move_reason', $student->move_reason) }}">
+                                            <input id="move_reason" type="text" placeholder="Orang tua pindah kerja" name="move_reason" value="{{ old('move_reason', $student->move_reason) }}" disabled>
                                             <label for="move_reason">Alasan Pindah</label>
                                             @error('move_reason')
                                                 <div class="error">{{ $message }}</div>
@@ -808,7 +810,9 @@
                             <div class="row">
                                 <div class="col s12" style="text-align: right">
                                     <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}">KEMBALI</a>
-                                    <button class="waves-effect waves-light btn btn-round green strong" type="submit">SIMPAN</button>
+                                    <button id="btn_edit" class="waves-effect waves-light btn btn-round warning strong" type="button">UBAH</button>
+                                    <button id="btn_cancel" class="waves-effect waves-light btn btn-round red strong" type="button" style="display: none">BATAL</button>
+                                    <button id="btn_save" class="waves-effect waves-light btn btn-round green strong" type="submit" style="display: none">SIMPAN</button>
                                 </div>
                             </div>
                         </form>

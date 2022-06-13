@@ -6,6 +6,7 @@ use App\Models\Studies\{
     ClassModel,
     Lesson,
     Schedule,
+    ReportScore,
 };
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Seeder;
@@ -25,6 +26,7 @@ class StudySeeder extends Seeder
         ClassModel::truncate();
         Lesson::truncate();
         Schedule::truncate();
+        ReportScore::truncate();
         Schema::enableForeignKeyConstraints();
         Schema::enableForeignKeyConstraints();
 
@@ -74,5 +76,8 @@ class StudySeeder extends Seeder
                 'clock_out'         => date('H:i', strtotime('14:30')),
             ])->create();
         }
+
+        // Nilai Siswa
+        ReportScore::factory()->count(450)->create();
     }
 }

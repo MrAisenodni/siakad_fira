@@ -48,7 +48,7 @@ class StudentController extends Controller
             'students'      => $this->students->select('id', 'nis', 'nisn', 'full_name', 'phone_number', 'home_number')->where('disabled', 0)->orderBy('nis')->get(),
         ];
         
-        if (session()->get('srole') == 'admin' || session()->get('srole') == 'teacher') {
+        if (session()->get('srole') == 'admin') {
             return view('studies.student.index', $data);
         } elseif (session()->get('srole') == 'teacher') {
             return view('teachers.student.index', $data);

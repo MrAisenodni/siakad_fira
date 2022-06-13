@@ -84,4 +84,23 @@ $(function() {
         car_pos = updated_len - original_len + car_pos
         input[0].setSelectionRange(car_pos, car_pos)
     }
+    // ============================================================== 
+    // button disabled/enabled
+    // ============================================================== 
+    $('#btn_edit').click(function () {
+        $(this).hide()
+        $('#btn_cancel').show()
+        $('#btn_save').show()
+        $('input').not('#guardian').prop('disabled', false)
+        $('select').not('#guardian').prop('disabled', false)
+        $('textarea').not('#guardian').prop('disabled', false)
+    })
+    $('#btn_cancel').click(function () {
+        $(this).hide()
+        $('#btn_save').hide()
+        $('#btn_edit').show()
+        $('input').not('#guardian').prop('disabled', true)
+        $('select').not('#guardian').prop('disabled', true)
+        $('textarea').not('#guardian').prop('disabled', true)
+    })
 });

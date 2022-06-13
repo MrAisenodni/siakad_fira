@@ -36,6 +36,7 @@
                                         <li class="tab col s3"><a href="#contact">Kontak</a></li>
                                         <li class="tab col s3"><a href="#family">Keluarga</a></li>
                                         <li class="tab col s3"><a href="#study">Pendidikan</a></li>
+                                        <li class="tab col s3"><a href="#score">Nilai</a></li>
                                     </ul>
                                 </div>
                                 <div id="personal" class="col s12"><hr>
@@ -374,12 +375,53 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div id="score" class="col s12"><hr>
+                                    {{-- Nilai Rapot --}}
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <ul class="tabs">
+                                                <li class="tab col s3"><a class="active" href="#uh1">Bulan 1</a></li>
+                                                <li class="tab col s3"><a href="#uh2">Bulan 2</a></li>
+                                                <li class="tab col s3"><a href="#uh3">Bulan 3</a></li>
+                                                <li class="tab col s3"><a href="#uh4">Bulan 4</a></li>
+                                                <li class="tab col s3"><a href="#uts">UTS</a></li>
+                                                <li class="tab col s3"><a href="#uas">UAS</a></li>
+                                            </ul>
+                                        </div>
+                                        <div id="study" class="col s12"><hr>
+                                            {{-- Studi/Pelajaran --}}
+                                            <div class="row">
+                                                <div class="input-field col s1">
+                                                    <input id="level" type="text" name="level" value="{{ $student->level }}" disabled>
+                                                    <label for="level">Tingkat</label>
+                                                </div>
+                                                <div class="input-field col s2">
+                                                    <input id="group" type="text" name="group" value="{{ $student->group }}" disabled>
+                                                    <label for="group">Kelompok</label>
+                                                </div>
+                                                <div class="input-field col s3">
+                                                    <input id="start_date" class="datepicker" type="text" name="start_date" value="{{ date('d/m/Y', strtotime($student->start_date)) }}" disabled>
+                                                    <label for="start_date">Tanggal Mulai</label>
+                                                </div>
+                                                <div class="input-field col s3">
+                                                    <input id="extracurricular" type="text" name="extracurricular" value="{{ $student->extracurricular->name }}" disabled>
+                                                    <label for="extracurricular">Ekstrakurikuler</label>
+                                                </div>
+                                                <div class="input-field col s3">
+                                                    <input id="study_year" type="text" name="study_year" value="{{ $student->study_year->name }}" disabled>
+                                                    <label for="study_year">Tahun Pelajaran</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <hr>
                             <div class="row">
                                 <div class="col s12" style="text-align: right">
                                     <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}">KEMBALI</a>
+                                    <button class="waves-effect waves-light btn btn-round green strong" type="submit" style="display: none">SIMPAN</button>
                                 </div>
                             </div>
                         </form>
