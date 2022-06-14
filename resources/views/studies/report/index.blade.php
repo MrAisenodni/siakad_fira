@@ -41,7 +41,7 @@
                             <tbody>
                                 @if ($students)
                                     @foreach ($students as $student)
-                                        <tr id="data" data-id="{{ $student->id }}">
+                                        <tr id="show" data-id="{{ $student->id }}">
                                             <td>{{ $student->nis }}</td>
                                             <td>{{ $student->nisn }}</td>
                                             <td>{{ $student->full_name }}</td>

@@ -68,11 +68,14 @@ Route::middleware('authcheck')->group(function() {
     Route::resource('/studi/jadwal-pembelajaran', ScheduleController::class);
     Route::resource('/studi/kelas', StdClassController::class);
     Route::resource('/studi/mata-pelajaran', StdLessonController::class);
+    Route::resource('/studi/nilai-siswa', ReportScoreController::class);
+    Route::get('/studi/nilai-siswa/{id}/{ids}/edit', [ReportScoreController::class, 'edit']);
+    Route::put('/studi/nilai-siswa/{id}/{ids}', [ReportScoreController::class, 'update']);
+    Route::get('/studi/nilai-siswa/{id}/create', [ReportScoreController::class, 'create']);
     Route::resource('/studi/orang-tua', ParentController::class);
     Route::resource('/studi/presensi', PresentController::class);
     Route::resource('/studi/profil', ProfileController::class);
     Route::resource('/studi/siswa', StudentController::class);
     Route::resource('/studi/spp', StdPaymentController::class);
-    Route::resource('/studi/nilai-siswa', ReportScoreController::class);
     Route::post('/what', [StdPaymentController::class, 'test']);
 });

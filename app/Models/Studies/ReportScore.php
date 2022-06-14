@@ -2,7 +2,11 @@
 
 namespace App\Models\Studies;
 
-use App\Models\Masters\Lesson;
+use App\Models\Masters\{
+    ClassModel,
+    Lesson,
+};
+use App\Models\Studies\Student;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +19,11 @@ class ReportScore extends Model
     public function lesson()
     {
         return $this->belongsTo(Lesson::class)->where('disabled', 0);
+    }
+
+    public function class()
+    {
+        return $this->belongsTo(ClassModel::class)->where('disabled', 0);
     }
 
     public function std_score_detail()

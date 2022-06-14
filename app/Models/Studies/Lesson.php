@@ -31,8 +31,14 @@ class Lesson extends Model
     {
         return $this->belongsTo(ClassModel::class)->select('id', 'name')->where('disabled', 0);
     }
+
     public function lesson()
     {
         return $this->belongsTo(MstLesson::class)->select('id', 'name')->where('disabled', 0);
+    }
+
+    public function score()
+    {
+        return $this->belongsTo(ReportScore::class, 'lesson_id', 'lesson_id')->where('disabled', 0);
     }
 }

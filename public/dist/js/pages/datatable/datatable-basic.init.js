@@ -48,7 +48,7 @@ $('#zero_config').DataTable({
         $('tr#data').click(function () {
             var id = $(this).attr('data-id')
 
-            if (bool) location = path+'/'+id+'/edit'
+            if (bool) location = path+'/'+id+'/edit' 
             bool = 1
         })
 

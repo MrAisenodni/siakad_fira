@@ -230,6 +230,7 @@ return [
         'phone_number'          => 'Nomor HP',
         'picture'               => 'Foto/Gambar',
         'religion'              => 'Agama',
+        'score'                 => 'Nilai',
         'semester'              => 'Semester',
         'start_date'            => 'Tangga Mulai',
         'stepbrother_count'     => 'Jumlah Saudara Tiri',
