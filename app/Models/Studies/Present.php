@@ -34,8 +34,8 @@ class Present extends Model
         return $this->belongsTo(Lesson::class)->select('id', 'name')->where('disabled', 0);
     }
 
-    public function reason()
+    public function mst_reason()
     {
-        return $this->belongsTo(Reason::class)->select('id', 'name')->where('disabled', 0);
+        return $this->belongsTo(Reason::class, 'reason_id', 'id')->select('id', 'name')->where('disabled', 0);
     }
 }

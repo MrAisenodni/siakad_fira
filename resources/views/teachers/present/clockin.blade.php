@@ -20,13 +20,13 @@
             <div class="col s12">
                 <div class="card">
                     <div class="card-content">
-                        <h5 class="card-title">Tambah {{ $menu->title }}</h5>
-                        <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">
+                        <h5 class="card-title">{{ $menu->title }} Masuk</h5>
+                        <form method="POST" action="{{ str_replace("/clockin", "", $menu->url) }}">
                             @csrf
                             <input type="hidden" name="user_id" value="{{ $user_id }}">
                             <input type="hidden" name="role" value="{{ $role }}">
                             <div class="row">
-                                <div class="input-field col s4">
+                                <div class="input-field col s6">
                                     <select id="lesson" name="lesson" class="">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($lessons)
@@ -40,36 +40,24 @@
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="input-field col s2">
-                                    <select id="reason" name="reason" class="">
-                                        <option value="" selected>--- PILIH ---</option>
-                                        @if ($reasons)
-                                            @foreach ($reasons as $reason)
-                                                <option @if(old('reason') == $reason->id) selected @endif value="{{ $reason->id }}">{{ $reason->name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                    <label for="reason">Alasan Absen</label>
-                                    @error('reason')
-                                        <div class="error">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col s2">
+                                <div class="col s3">
                                     <label for="date_in" class="m-t-20">Jadwal</label>
                                     <input id="date_in" type="hidden" name="date_in" value="{{ old('date_in', date('Y-m-d ', strtotime(now()))) }}">
                                     <div class="input-fleid">
-                                        <input id="date_in" type="text" name="date_in" class="timepicker" value="{{ old('date_in', date('d/m/Y', strtotime(now()))) }}" disabled>
+                                        <input id="date_in" type="hidden" name="date_in" value="{{ old('date_in', date('Y-m-d', strtotime(now()))) }}">
+                                        <input id="date_in" type="text" value="{{ old('date_in', date('d/m/Y', strtotime(now()))) }}" disabled>
                                     </div>
                                     @error('date_in')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col s4">
-                                    <label for="other_reason" class="m-t-20">Alasan Lain</label>
+                                <div class="col s3">
+                                    <label for="clock_in" class="m-t-20">Masuk</label>
                                     <div class="input-fleid">
-                                        <input id="other_reason" type="text" name="other_reason" placeholder="Acara keluarga" value="{{ old('other_reason') }}">
+                                        <input id="clock_in" type="hidden" name="clock_in" value="{{ old('clock_in', date('H:i', strtotime(now()))) }}">
+                                        <input id="clock_in" type="text" value="{{ old('clock_in', date('H:i', strtotime(now()))) }}" disabled>
                                     </div>
-                                    @error('other_reason')
+                                    @error('clock_in')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>

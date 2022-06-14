@@ -26,17 +26,7 @@
                             <input type="hidden" name="user_id" value="{{ $user_id }}">
                             <input type="hidden" name="role" value="{{ $role }}">
                             <div class="row">
-                                <div class="input-field col s2">
-                                    <select id="role" name="role" class="role_present" disabled>
-                                        <option @error(old('role', $role) == 'student') selected @enderror value="student" selected>Siswa</option>
-                                        <option @error(old('role', $role) == 'teacher') selected @enderror value="teacher">Guru</option>
-                                    </select>
-                                    <label for="role">Posisi</label>
-                                    @error('role')
-                                        <div class="error">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="input-field col s7">
+                                <div class="input-field col s4">
                                     <select id="lesson" name="lesson" class="">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($lessons)
@@ -50,7 +40,7 @@
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="input-field col s3">
+                                <div class="input-field col s2">
                                     <select id="reason" name="reason" class="">
                                         <option value="" selected>--- PILIH ---</option>
                                         @if ($reasons)
@@ -64,9 +54,6 @@
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
-
-                            <div class="row">
                                 <div class="col s2">
                                     <label for="date_in" class="m-t-20">Jadwal</label>
                                     <input id="date_in" type="hidden" name="date_in" value="{{ old('date_in', date('Y-m-d ', strtotime(now()))) }}">
@@ -77,30 +64,12 @@
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col s6">
+                                <div class="col s4">
                                     <label for="other_reason" class="m-t-20">Alasan Lain</label>
                                     <div class="input-fleid">
                                         <input id="other_reason" type="text" name="other_reason" placeholder="Acara keluarga" value="{{ old('other_reason') }}">
                                     </div>
                                     @error('other_reason')
-                                        <div class="error">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col s2">
-                                    <label for="clock_in" class="m-t-20">Masuk <span class="materialize-red-text">*</span></label>
-                                    <div class="input-fleid">
-                                        <input id="clock_in" type="text" name="clock_in" placeholder="13/01/2022 07:00" class="timepicker" value="{{ old('clock_in', date('H:i', strtotime(now()))) }}">
-                                    </div>
-                                    @error('clock_in')
-                                        <div class="error">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col s2">
-                                    <label for="clock_out" class="m-t-20">Keluar <span class="materialize-red-text">*</span></label>
-                                    <div class="input-fleid">
-                                        <input id="clock_out" type="text" name="clock_out" placeholder="13/01/2022 14:30" class="timepicker" value="{{ old('clock_out', date('H:i', strtotime(now()))) }}">
-                                    </div>
-                                    @error('clock_out')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>

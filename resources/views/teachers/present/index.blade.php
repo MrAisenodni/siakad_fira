@@ -18,11 +18,13 @@
                 <div class="card">
                     <div class="card-content">
                         <div class="row">
-                            <div class="col s10">
+                            <div class="col s8">
                                 <h5 class="card-title">Kelola {{ $menu->title }}</h5>
                             </div>
-                            <div class="col s2 right-align">
-                                <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create" @if ($check) disabled @endif>TAMBAH</a>
+                            <div class="col s4 right-align">
+                                <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/clockin" @if ($checkin || $checkabs) disabled @endif>Clock In</a>
+                                <a class="waves-effect waves-light btn btn-round warning strong" href="{{ $menu->url }}/clockout" @if ($checkout || $checkabs) disabled @endif>Clock Out</a>
+                                <a class="waves-effect waves-light btn btn-round red strong" href="{{ $menu->url }}/create" @if ($checkin || $checkabs) disabled @endif>Absen</a>
                             </div>
                             @if (session('status'))
                                 <div class="col s12">
@@ -44,11 +46,11 @@
                             <tbody>
                                 @if ($presents)
                                     @foreach ($presents as $present)
-                                        <tr id="data" data-id="{{ $present->id }}">
+                                        <tr id="show" data-id="{{ $present->id }}">
                                             <td>{{ $present->lesson->name }}</td>
-                                            <td>{{ date('H:i', strtotime($present->clock_in)) }}</td>
-                                            <td>{{ date('H:i', strtotime($present->clock_out)) }}</td>
-                                            <td>{{ $present->reason }}</td>
+                                            <td>@if ($present->clock_in) {{ date('H:i', strtotime($present->clock_in)) }} @else - @endif</td>
+                                            <td>@if ($present->clock_out) {{ date('H:i', strtotime($present->clock_out)) }} @else - @endif</td>
+                                            <td @if ($present->reason_id) style="color: red" @endif>@if ($present->reason_id) [{{ $present->mst_reason->name }}] {{ $present->reason }} @else - @endif</td>
                                         </tr>
                                     @endforeach
                                 @endif

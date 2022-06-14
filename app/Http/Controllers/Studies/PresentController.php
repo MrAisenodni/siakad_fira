@@ -31,35 +31,32 @@ class PresentController extends Controller
     public function index(Request $request)
     {
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'LIKE', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
+            'checkin'       => $this->presents->select('id')->where('clock_in', 'LIKE', '%'.date('Y-m-d', strtotime(now())).'%')->where('user_id', session()->get('suser_id'))->where('role', session()->get('srole'))->first(),
+            'checkout'      => $this->presents->select('id')->where('clock_out', 'LIKE', '%'.date('Y-m-d', strtotime(now())).'%')->where('user_id', session()->get('suser_id'))->where('role', session()->get('srole'))->first(),
+            'checkabs'      => $this->presents->select('id')->whereNull('clock_out')->whereNull('clock_in')->where('user_id', session()->get('suser_id'))->where('role', session()->get('srole'))->first(),
         ];
 
         if (session()->get('srole') == 'admin') {
-            $data['presents'] = $this->presents->select('id', 'clock_in', 'clock_out', 'reason_id', 'reason', 'user_id', 'lesson_id', 'role')->where('disabled', 0)->get();
+            $data['presents'] = $this->presents->select('id', 'clock_in', 'clock_out', 'reason_id', 'reason', 'user_id', 'lesson_id', 'role')
+                                    ->where('disabled', 0)->get();
             
             return view('studies.present.index', $data);
-        } elseif (session()->get('srole') == 'teacher') {
-            $data += [
-                'check'         => $this->presents->select('id')->where('clock_in', 'like', '%'.date('Y-m-d', strtotime(now())).'%')->where('user_id', session()->get('suser_id'))->where('role', 'teacher')->first(),
-                'presents'      => $this->presents->select('id', 'clock_in', 'clock_out', 'reason_id', 'reason', 'user_id', 'lesson_id', 'role')->where('role', 'teacher')->where('user_id', session()->get('suser_id'))->where('disabled', 0)->get(),
-            ];
-
-            return view('teachers.present.index', $data);
         } else {
-            $data += [
-                'check'         => $this->presents->select('id')->where('clock_in', 'like', '%'.date('Y-m-d', strtotime(now())).'%')->where('user_id', session()->get('suser_id'))->where('role', 'teacher')->first(),
-                'presents'      => $this->presents->select('id', 'clock_in', 'clock_out', 'reason_id', 'reason', 'user_id', 'lesson_id', 'role')->where('role', 'student')->where('user_id', session()->get('suser_id'))->where('disabled', 0)->get(),
-            ];
+            $data['presents'] = $this->presents->select('id', 'clock_in', 'clock_out', 'reason_id', 'reason', 'user_id', 'lesson_id', 'role')
+                                    ->where('role', session()->get('srole'))->where('user_id', session()->get('suser_id'))
+                                    ->where('disabled', 0)->get();
 
-            return view('students.present.index', $data);
-        }
+            if (session()->get('srole') == 'teacher') return view('teachers.present.index', $data);
+            if (session()->get('srole') == 'student') return view('students.present.index', $data);
+        } 
     }
 
     public function create(Request $request)
     {
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'LIKE', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'lessons'           => $this->lessons->select('id', 'name')->where('disabled', 0)->get(),
             'reasons'           => $this->reasons->select('id', 'name')->where('disabled', 0)->get(),
@@ -89,54 +86,117 @@ class PresentController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        $data = [
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'LIKE', '%'.session()->get('srole').'%')->get(),
+            'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
+            'present'           => $this->presents->where('id', $id)->first(),
+        ];
+
+        if (session()->get('srole') == 'student' || session()->get('srole') == 'parent') return view('students.present.show', $data);
+        if (session()->get('srole') == 'teacher') return view('teachers.present.show', $data);
+        abort(403);
+    }
+
+    public function clockin(Request $request)
+    {
+        $data = [
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'LIKE', '%'.session()->get('srole').'%')->get(),
+            'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
+            'lessons'           => $this->lessons->select('id', 'name')->where('disabled', 0)->get(),
+            'reasons'           => $this->reasons->select('id', 'name')->where('disabled', 0)->get(),
+        ];
+
+        if (session()->get('srole') == 'teacher') {
+            $data += [
+                'role'      => 'teacher',
+                'user_id'   => session()->get('suser_id'),
+            ];
+
+            return view('teachers.present.clockin', $data);
+        } elseif (session()->get('srole') == 'student') {
+            $data += [
+                'role'      => 'student',
+                'user_id'   => session()->get('suser_id'),
+            ];
+
+            return view('students.present.clockin', $data);
+        } else {
+            abort(403);
+        }
+    }
+
+    public function clockout(Request $request)
+    {
+        $data = [
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'LIKE', '%'.session()->get('srole').'%')->get(),
+            'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
+            'lessons'           => $this->lessons->select('id', 'name')->where('disabled', 0)->get(),
+            'reasons'           => $this->reasons->select('id', 'name')->where('disabled', 0)->get(),
+        ];
+
+        if (session()->get('srole') == 'teacher') {
+            $data += [
+                'role'      => 'teacher',
+                'user_id'   => session()->get('suser_id'),
+            ];
+
+            return view('teachers.present.clockout', $data);
+        } elseif (session()->get('srole') == 'student') {
+            $data += [
+                'role'      => 'student',
+                'user_id'   => session()->get('suser_id'),
+            ];
+
+            return view('students.present.clockout', $data);
+        } else {
+            abort(403);
+        }
+    }
+
     public function store(Request $request)
     {
         $reason = $request->reason;
         $other_reason = $request->other_reason;
+        $clock_in = $request->clock_in;
+        $clock_out = $request->clock_out;
         $input = $request->all();
+        $check = $this->presents->select('id')->where('clock_in', 'LIKE', '%'.date('Y-m-d', strtotime(now())).'%')
+                    ->where('user_id', session()->get('suser_id'))->where('role', session()->get('srole'))->first();
 
         $validated = $request->validate([
-            'clock_in'  => 'required',
-            'clock_out' => 'required|after:clock_in',
             'lesson'    => 'required',
         ]);
 
         $data = [
-            'lesson_id'         => $input['lesson'],
-            'reason_id'         => $input['reason'],
-            'reason'            => $input['other_reason'],
             'role'              => $input['role'],
+            'user_id'           => $input['user_id'],
+            'lesson_id'         => $input['lesson'],
+            'reason_id'         => $reason,
+            'reason'            => $other_reason,
             'created_by'        => session()->get('sname'),
             'created_at'        => now(),
         ];
 
         if (session()->get('srole') == 'admin') {
-            if ($input['role'] == 'student') {
-                $validated = $request->validate(['student' => 'required']);
-    
-                $data += [ 
-                    'user_id'       => $input['student'],
-                ];
-            } else { 
-                $validated = $request->validate(['teacher' => 'required']);
-    
-                $data['user_id'] = $input['teacher'];
-            }
+            if ($input['role'] == 'student') $data['user_id'] = $input['student'];
+            if ($input['role'] == 'teacher') $data['user_id'] = $input['teacher'];
 
             $data += [
                 'clock_in'          => date('Y-m-d H:i', strtotime($input['clock_in'])),
                 'clock_out'         => date('Y-m-d H:i', strtotime($input['clock_out'])),
             ];
         } else {
-            $data += [
-                'role'              => $input['role'],
-                'user_id'           => $input['user_id'],
-                'clock_in'          => $input['date_in'].' '.date('H:i', strtotime($input['clock_in'])),
-                'clock_out'         => $input['date_in'].' '.date('H:i', strtotime($input['clock_out'])),
-            ];
+            if ($clock_out) $data['clock_out'] = $input['date_in'].' '.$clock_out;
+            if ($clock_in) $data['clock_in'] = $input['date_in'].' '.$clock_in;
         } 
 
-        $this->presents->insert($data);
+        if ($clock_out) {
+            $this->presents->where('id', $check->id)->update($data);
+        } else {
+            $this->presents->insert($data);
+        }
 
         return redirect($this->url)->with('status', 'Data berhasil ditambahkan.');
     }
@@ -144,7 +204,7 @@ class PresentController extends Controller
     public function edit(Request $request, $id)
     {
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'LIKE', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'lessons'           => $this->lessons->select('id', 'name')->where('disabled', 0)->get(),
             'reasons'           => $this->reasons->select('id', 'name')->where('disabled', 0)->get(),

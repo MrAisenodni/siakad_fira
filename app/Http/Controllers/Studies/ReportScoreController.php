@@ -116,12 +116,20 @@ class ReportScoreController extends Controller
             'created_at'    => now(),
         ];
 
-        if ($input['type'] == 'uh1') $data['score_1'] = $input['score'];
-        if ($input['type'] == 'uh2') $data['score_2'] = $input['score'];
-        if ($input['type'] == 'uh3') $data['score_3'] = $input['score'];
-        if ($input['type'] == 'uh4') $data['score_4'] = $input['score'];
-        if ($input['type'] == 'uts') $data['score_uts'] = $input['score'];
-        if ($input['type'] == 'uas') $data['score_uas'] = $input['score'];
+        $rdetail = $this->report_details->where('score_id', $ids)->where('type', $input['type'])->where('disabled', 0)->get();
+
+        if ($input['type'] == 'uh1') $rdetail->sum('score') != 0 ? $data['score_1'] = $rdetail->sum('score')/$rdetail->count() : $data['score_1'] = 0;
+        if ($input['type'] == 'uh2') $rdetail->sum('score') != 0 ? $data['score_2'] = $rdetail->sum('score')/$rdetail->count() : $data['score_2'] = 0;
+        if ($input['type'] == 'uh3') $rdetail->sum('score') != 0 ? $data['score_3'] = $rdetail->sum('score')/$rdetail->count() : $data['score_3'] = 0;
+        if ($input['type'] == 'uh4') $rdetail->sum('score') != 0 ? $data['score_4'] = $rdetail->sum('score')/$rdetail->count() : $data['score_4'] = 0;
+        if ($input['type'] == 'uts') $rdetail->sum('score') != 0 ? $data['score_uts'] = $rdetail->sum('score')/$rdetail->count() : $data['score_uts'] = 0;
+        if ($input['type'] == 'uas') $rdetail->sum('score') != 0 ? $data['score_uas'] = $rdetail->sum('score')/$rdetail->count() : $data['score_uas'] = 0;
+
+        $rdetail = $this->report_details->where('score_id', $ids)->where('disabled', 0)->get();
+        $data += [
+            'score_na'      => $rdetail->sum('score')/$rdetail->count(),
+            'score_avg'     => $rdetail->sum('score')/$rdetail->count(),
+        ];
 
         $check ? $this->reports->where('id', $check->id)->update($data) : $this->reports->where('id', $id)->update($data);
 
@@ -195,14 +203,20 @@ class ReportScoreController extends Controller
         ];
 
         $check = $this->reports->where('id', $ids)->where('disabled', 0)->first();
-        $rdetail = $this->report_details->where('score_id', $ids)->where('disabled', 0)->get();
+        $rdetail = $this->report_details->where('score_id', $ids)->where('type', $input['type'])->where('disabled', 0)->get();
 
-        if ($input['type'] == 'uh1') $data['score_1'] = $rdetail->sum('score')/$rdetail->count();
-        if ($input['type'] == 'uh2') $data['score_2'] = $rdetail->sum('score')/$rdetail->count();
-        if ($input['type'] == 'uh3') $data['score_3'] = $rdetail->sum('score')/$rdetail->count();
-        if ($input['type'] == 'uh4') $data['score_4'] = $rdetail->sum('score')/$rdetail->count();
-        if ($input['type'] == 'uts') $data['score_uts'] = $rdetail->sum('score')/$rdetail->count();
-        if ($input['type'] == 'uas') $data['score_uas'] = $rdetail->sum('score')/$rdetail->count();
+        if ($input['type'] == 'uh1') $rdetail->sum('score') != 0 ? $data['score_1'] = $rdetail->sum('score')/$rdetail->count() : $data['score_1'] = 0;
+        if ($input['type'] == 'uh2') $rdetail->sum('score') != 0 ? $data['score_2'] = $rdetail->sum('score')/$rdetail->count() : $data['score_2'] = 0;
+        if ($input['type'] == 'uh3') $rdetail->sum('score') != 0 ? $data['score_3'] = $rdetail->sum('score')/$rdetail->count() : $data['score_3'] = 0;
+        if ($input['type'] == 'uh4') $rdetail->sum('score') != 0 ? $data['score_4'] = $rdetail->sum('score')/$rdetail->count() : $data['score_4'] = 0;
+        if ($input['type'] == 'uts') $rdetail->sum('score') != 0 ? $data['score_uts'] = $rdetail->sum('score')/$rdetail->count() : $data['score_uts'] = 0;
+        if ($input['type'] == 'uas') $rdetail->sum('score') != 0 ? $data['score_uas'] = $rdetail->sum('score')/$rdetail->count() : $data['score_uas'] = 0;
+
+        $rdetail = $this->report_details->where('score_id', $ids)->where('disabled', 0)->get();
+        $data += [
+            'score_na'      => $rdetail->sum('score')/$rdetail->count(),
+            'score_avg'     => $rdetail->sum('score')/$rdetail->count(),
+        ];
 
         $this->reports->where('id', $ids)->update($data);
 
@@ -221,19 +235,25 @@ class ReportScoreController extends Controller
 
         $this->report_details->where('id', $id)->update($data);
 
-        $rdetail = $this->report_details->where('score_id', $input['report'])->where('disabled', 0)->get();
-
         $data = [
             'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 
-        if ($input['type'] == 'uh1') $data['score_1'] = $rdetail->sum('score')/$rdetail->count();
-        if ($input['type'] == 'uh2') $data['score_2'] = $rdetail->sum('score')/$rdetail->count();
-        if ($input['type'] == 'uh3') $data['score_3'] = $rdetail->sum('score')/$rdetail->count();
-        if ($input['type'] == 'uh4') $data['score_4'] = $rdetail->sum('score')/$rdetail->count();
-        if ($input['type'] == 'uts') $data['score_uts'] = $rdetail->sum('score')/$rdetail->count();
-        if ($input['type'] == 'uas') $data['score_uas'] = $rdetail->sum('score')/$rdetail->count();
+        $rdetail = $this->report_details->where('score_id', $input['report'])->where('type', $input['type'])->where('disabled', 0)->get();
+
+        if ($input['type'] == 'uh1') $rdetail->sum('score') != 0 ? $data['score_1'] = $rdetail->sum('score')/$rdetail->count() : $data['score_1'] = 0;
+        if ($input['type'] == 'uh2') $rdetail->sum('score') != 0 ? $data['score_2'] = $rdetail->sum('score')/$rdetail->count() : $data['score_2'] = 0;
+        if ($input['type'] == 'uh3') $rdetail->sum('score') != 0 ? $data['score_3'] = $rdetail->sum('score')/$rdetail->count() : $data['score_3'] = 0;
+        if ($input['type'] == 'uh4') $rdetail->sum('score') != 0 ? $data['score_4'] = $rdetail->sum('score')/$rdetail->count() : $data['score_4'] = 0;
+        if ($input['type'] == 'uts') $rdetail->sum('score') != 0 ? $data['score_uts'] = $rdetail->sum('score')/$rdetail->count() : $data['score_uts'] = 0;
+        if ($input['type'] == 'uas') $rdetail->sum('score') != 0 ? $data['score_uas'] = $rdetail->sum('score')/$rdetail->count() : $data['score_uas'] = 0;
+
+        $rdetail = $this->report_details->where('score_id', $input['report'])->where('disabled', 0)->get();
+        $data += [
+            'score_na'      => $rdetail->sum('score')/$rdetail->count(),
+            'score_avg'     => $rdetail->sum('score')/$rdetail->count(),
+        ];
 
         $this->reports->where('id', $input['report'])->update($data);
 
