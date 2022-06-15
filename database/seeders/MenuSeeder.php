@@ -204,6 +204,20 @@ class MenuSeeder extends Seeder
                 'menu_id'       => 13,
                 'role'          => 'admin',
             ],
+            [
+                'title'         => 'Kategori',
+                'url'           => '/master/kategori',
+                'icon'          => 'art_track',
+                'menu_id'       => 13,
+                'role'          => 'admin',
+            ],
+            [
+                'title'         => 'Tags',
+                'url'           => '/master/tag',
+                'icon'          => 'bookmark',
+                'menu_id'       => 13,
+                'role'          => 'admin',
+            ],
         ]);
     }
 }

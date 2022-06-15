@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\Studies\{
+    ArticleController,
     ClassController as StdClassController,
     LessonController as StdLessonController,
     ParentController,
@@ -15,6 +16,7 @@ use App\Http\Controllers\Studies\{
 };
 use App\Http\Controllers\Masters\{
     BloodTypeController,
+    CategoryController,
     ClassController,
     ExtracurricularController,
     FamilyStatusController,
@@ -26,6 +28,7 @@ use App\Http\Controllers\Masters\{
     ReasonController,
     ReligionController,
     StudyYearController,
+    TagController,
 };
 use App\Http\Middleware\AuthCheck;
 use Illuminate\Support\Facades\Auth;
@@ -56,14 +59,17 @@ Route::middleware('authcheck')->group(function() {
     Route::resource('/master/ekstrakurikuler', ExtracurricularController::class);
     Route::resource('/master/golongan-darah', BloodTypeController::class);
     Route::resource('/master/kelas', ClassController::class);
+    Route::resource('/master/kategori', CategoryController::class);
     Route::resource('/master/login', LoginController::class);
     Route::resource('/master/mata-pelajaran', LessonController::class);
     Route::resource('/master/pekerjaan', OccupationController::class);
     Route::resource('/master/spp', PaymentController::class);
     Route::resource('/master/status-keluarga', FamilyStatusController::class);
+    Route::resource('/master/tag', TagController::class);
     Route::resource('/master/tahun-pelajaran', StudyYearController::class);
     
     // Route Studi
+    Route::resource('/studi/pengumuman', ArticleController::class);
     Route::resource('/studi/guru', TeacherController::class);
     Route::resource('/studi/jadwal-pembelajaran', ScheduleController::class);
     Route::resource('/studi/kelas', StdClassController::class);

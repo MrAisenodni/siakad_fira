@@ -58,7 +58,7 @@
                                     <label for="date_in" class="m-t-20">Jadwal</label>
                                     <input id="date_in" type="hidden" name="date_in" value="{{ old('date_in', date('Y-m-d ', strtotime(now()))) }}">
                                     <div class="input-fleid">
-                                        <input id="date_in" type="text" name="date_in" class="timepicker" value="{{ old('date_in', date('d/m/Y', strtotime(now()))) }}" disabled>
+                                        <input id="date_in" type="text" class="timepicker" value="{{ old('date_in', date('d/m/Y', strtotime(now()))) }}" disabled>
                                     </div>
                                     @error('date_in')
                                         <div class="error">{{ $message }}</div>

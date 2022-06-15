@@ -159,11 +159,13 @@ return [
     */
 
     'attributes' => [
-        'amount'                => 'Nominal',
         'address'               => 'Alamat',
+        'amount'                => 'Nominal',
+        'author'                => 'Penulis',
         'birth_date'            => 'Tanggal Lahir',
         'birth_place'           => 'Tempat Lahir',
         'blood_type'            => 'Golongan Darah',
+        'category'              => 'Kategori',
         'child_to'              => 'Anak Ke',
         'child_count'           => 'Jumlah Saudara',
         'citizen'               => 'Kewarganegaraan',
@@ -171,6 +173,7 @@ return [
         'clock_in'              => 'Jam Masuk',
         'clock_out'             => 'Jam Keluar',
         'code'                  => 'Kode',
+        'description'           => 'Deskripsi',
         'diagnose'              => 'Penyakit',
         'distance'              => 'Jarak Tempuh',
         'extracurricular'       => 'Ekstrakurikuler',
@@ -229,6 +232,7 @@ return [
         'password'              => 'Kata Sandi',
         'phone_number'          => 'Nomor HP',
         'picture'               => 'Foto/Gambar',
+        'photo'                 => 'Foto/Gambar',
         'religion'              => 'Agama',
         'score'                 => 'Nilai',
         'semester'              => 'Semester',
@@ -241,6 +245,7 @@ return [
         'study_year'            => 'Tahun Pelajaran',
         'to_study_date'         => 'Sampai Tanggal',
         'username'              => 'Nama Pengguna',
+        'title'                 => 'Judul',
         'teacher'               => 'Guru',
         'value'                 => 'Nominal',
         'weight'                => 'Berat',

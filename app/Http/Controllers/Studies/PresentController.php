@@ -35,7 +35,7 @@ class PresentController extends Controller
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'checkin'       => $this->presents->select('id')->where('clock_in', 'LIKE', '%'.date('Y-m-d', strtotime(now())).'%')->where('user_id', session()->get('suser_id'))->where('role', session()->get('srole'))->first(),
             'checkout'      => $this->presents->select('id')->where('clock_out', 'LIKE', '%'.date('Y-m-d', strtotime(now())).'%')->where('user_id', session()->get('suser_id'))->where('role', session()->get('srole'))->first(),
-            'checkabs'      => $this->presents->select('id')->whereNull('clock_out')->whereNull('clock_in')->where('user_id', session()->get('suser_id'))->where('role', session()->get('srole'))->first(),
+            'checkabs'      => $this->presents->select('id')->whereNull('clock_out')->whereNotNull('reason_id')->where('user_id', session()->get('suser_id'))->where('role', session()->get('srole'))->first(),
         ];
 
         if (session()->get('srole') == 'admin') {
@@ -189,7 +189,11 @@ class PresentController extends Controller
             ];
         } else {
             if ($clock_out) $data['clock_out'] = $input['date_in'].' '.$clock_out;
-            if ($clock_in) $data['clock_in'] = $input['date_in'].' '.$clock_in;
+            if ($clock_in) {
+                $data['clock_in'] = $input['date_in'].' '.$clock_in;
+            } else {
+                $data['clock_in'] = $input['date_in'];
+            }  
         } 
 
         if ($clock_out) {
@@ -213,7 +217,8 @@ class PresentController extends Controller
             'present'           => $this->presents->where('id', $id)->first(),
         ];
         
-        return view('studies.present.edit', $data);
+        if (session()->get('srole') == 'admin') return view('studies.present.edit', $data);
+        abort(403);
     }
 
     public function update(Request $request, $id)

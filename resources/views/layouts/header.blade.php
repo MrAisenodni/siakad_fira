@@ -42,52 +42,38 @@
                 <!-- ============================================================== -->
                 <!-- Notification icon scss in header.scss -->
                 <!-- ============================================================== -->
-                <li><a class="dropdown-trigger" href="javascript: void(0);" data-target="noti_dropdown"><i class="material-icons">notifications</i></a>
+                <li><a class="dropdown-trigger" href="javascript: void(0);" data-target="noti_dropdown">
+                    @if ($harticles->count() != null) <i class="material-icons materialize-red-text">notifications_active</i>
+                    @else <i class="material-icons">notifications</i>
+                    @endif
+                    </a>
                     <ul id="noti_dropdown" class="mailbox dropdown-content">
                         <li>
-                            <div class="drop-title">Notifications</div>
+                            <div class="drop-title">Notifikasi @if ($harticles->count() != null) <span class="new badge red">{{ $harticles->count() }}</span> @endif</div>
                         </li>
                         <li>
                             <div class="message-center">
                                 <!-- Message -->
-                                <a href="#">
-                                        <span class="btn-floating btn-large red"><i class="material-icons">link</i></span>
-                                        <span class="mail-contnet">
-                                            <h5>Launch Admin</h5>
-                                            <span class="mail-desc">Just see the my new admin!</span> <span class="time">9:30 AM</span>
-                                        </span>
-                                    </a>
-                                <!-- Message -->
-                                <a href="#">
-                                        <span class="btn-floating btn-large blue"><i class="material-icons">date_range</i></span>
-                                        <span class="mail-contnet">
-                                            <h5>Event today</h5>
-                                            <span class="mail-desc">Just a reminder that you have event</span>
-                                            <span class="time">9:10 AM</span>
-                                        </span>
-                                    </a>
-                                <!-- Message -->
-                                <a href="#">
-                                        <span class="btn-floating btn-large cyan"><i class="material-icons">settings</i></span>
-                                        <span class="mail-contnet">
-                                            <h5>Settings</h5>
-                                            <span class="mail-desc">You can customize this template as you want</span>
-                                            <span class="time">9:08 AM</span>
-                                        </span>
-                                    </a>
-                                <!-- Message -->
-                                <a href="#">
-                                        <span class="btn-floating btn-large green"><i class="material-icons">face</i></span>
-                                        <span class="mail-contnet">
-                                            <h5>Lily Jordan</h5>
-                                            <span class="mail-desc">Just see the my admin!</span>
-                                            <span class="time">9:02 AM</span>
-                                        </span>
-                                    </a>
+                                @if ($harticles)
+                                    @foreach ($harticles as $article)
+                                        <a href="/studi/pengumuman/{{ $article->id }}">
+                                            <span class="btn-floating btn-large red"><i class="material-icons">date_range</i></span>
+                                            <span class="mail-contnet">
+                                                <h5>{{ $article->title }}</h5>
+                                                <span class="mail-desc">{{ $article->author }}</span> <span class="time">
+                                                    @if (date('d/m/Y', strtotime($article->created_at)) == date('d/m/Y', strtotime(now()))) Hari Ini, {{ date('H:i', strtotime($article->created_at)) }} WIB
+                                                    @else {{ date('d/m/Y, H:i', strtotime($article->created_at)) }} WIB
+                                                    @endif
+                                                </span>
+                                            </span>
+                                        </a>
+                                        
+                                    @endforeach
+                                @endif
                             </div>
                         </li>
                         <li>
-                            <a class="center-align" href="javascript:void(0);"> <strong>Check all notifications</strong> </a>
+                            <a class="center-align" href="/studi/pengumuman"> <strong>Semua Notifikasi</strong> </a>
                         </li>
                     </ul>
                 </li>
