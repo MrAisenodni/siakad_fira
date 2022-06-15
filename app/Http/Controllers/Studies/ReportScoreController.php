@@ -49,7 +49,9 @@ class ReportScoreController extends Controller
         } elseif (session()->get('srole') == 'teacher') {
             return view('teachers.report.index', $data);
         } else {
-            abort(403);
+            $data['classes'] = $this->classes->select('id', 'student_id', 'class_id')->where('student_id', session()->get('suser_id'))->get();
+
+            return view('students.report.index', $data);
         }
     }
 
@@ -116,7 +118,8 @@ class ReportScoreController extends Controller
             'created_at'    => now(),
         ];
 
-        $rdetail = $this->report_details->where('score_id', $ids)->where('type', $input['type'])->where('disabled', 0)->get();
+        $check ? $rdetail = $this->report_details->where('score_id', $check->id)->where('type', $input['type'])->where('disabled', 0)->get()
+            : $rdetail = $this->report_details->where('score_id', $id)->where('type', $input['type'])->where('disabled', 0)->get();
 
         if ($input['type'] == 'uh1') $rdetail->sum('score') != 0 ? $data['score_1'] = $rdetail->sum('score')/$rdetail->count() : $data['score_1'] = 0;
         if ($input['type'] == 'uh2') $rdetail->sum('score') != 0 ? $data['score_2'] = $rdetail->sum('score')/$rdetail->count() : $data['score_2'] = 0;
@@ -125,7 +128,8 @@ class ReportScoreController extends Controller
         if ($input['type'] == 'uts') $rdetail->sum('score') != 0 ? $data['score_uts'] = $rdetail->sum('score')/$rdetail->count() : $data['score_uts'] = 0;
         if ($input['type'] == 'uas') $rdetail->sum('score') != 0 ? $data['score_uas'] = $rdetail->sum('score')/$rdetail->count() : $data['score_uas'] = 0;
 
-        $rdetail = $this->report_details->where('score_id', $ids)->where('disabled', 0)->get();
+        $check ? $rdetail = $this->report_details->where('score_id', $check->id)->where('disabled', 0)->get()
+            : $rdetail = $this->report_details->where('score_id', $id)->where('disabled', 0)->get();
         $data += [
             'score_na'      => $rdetail->sum('score')/$rdetail->count(),
             'score_avg'     => $rdetail->sum('score')/$rdetail->count(),
@@ -147,13 +151,12 @@ class ReportScoreController extends Controller
             'student'           => $this->students->select('id', 'nis', 'nisn', 'full_name')->where('id', $id)->first(),
         ];
 
-        if (session()->get('srole') == 'admin') {
-            return view('studies.report.show', $data);
-        } elseif (session()->get('srole') == 'teacher') {
-            return view('teachers.report.show', $data);
-        } else {
-            abort(403);
-        }
+        if (session()->get('srole') == 'admin') return view('studies.report.show', $data);
+        if (session()->get('srole') == 'teacher') return view('teachers.report.show', $data);
+
+        $data['reports'] = $this->reports->where('student_id', session()->get('suser_id'))->where('class_id', $id)->where('disabled', 0)->get();
+
+        return view('students.report.show', $data);
     }
 
     public function edit($id, $ids)

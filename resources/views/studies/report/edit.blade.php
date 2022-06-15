@@ -91,7 +91,7 @@
 
                                     <div class="row">
                                         <div class="col s12" style="text-align: right">
-                                            <a class="waves-effect waves-light btn btn-round blue strong" href="{{ url()->previous() }}">KEMBALI</a>
+                                            <a class="waves-effect waves-light btn btn-round blue strong" href="{{ str_replace('/'.$report->id.'/edit', '', url()->previous()) }}">KEMBALI</a>
                                             <button class="waves-effect waves-light btn btn-round green strong" type="submit">SIMPAN</button>
                                         </div>
                                     </div>
@@ -139,7 +139,7 @@
 
                         <div class="row m-t-10">
                             <div class="col s12" style="text-align: right">
-                                <a class="waves-effect waves-light btn btn-round blue strong" href="{{ url()->previous() }}">KEMBALI</a>
+                                <a class="waves-effect waves-light btn btn-round blue strong" href="{{ str_replace('/'.$report->id.'/edit', '', url()->previous()) }}">KEMBALI</a>
                             </div>
                         </div>
                     </div>

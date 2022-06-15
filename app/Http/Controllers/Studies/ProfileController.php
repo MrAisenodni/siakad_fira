@@ -19,6 +19,7 @@ use App\Models\Settings\{
 use App\Models\Studies\{
     Student,
     ParentModel,
+    ReportScore,
     Teacher,
 };
 use Illuminate\Http\Request;
@@ -37,6 +38,7 @@ class ProfileController extends Controller
         $this->occupations = new Occupation();
         $this->parents = new ParentModel();
         $this->religions = new Religion();
+        $this->reports = new ReportScore();
         $this->students = new Student();
         $this->studies = new StudyYear();
         $this->teachers = new Teacher();
@@ -63,6 +65,7 @@ class ProfileController extends Controller
                 'father'            => $this->parents->where('student_id', session()->get('suser_id'))->where('gender', 'l')->where('parent', 1)->where('disabled', 0)->first(),
                 'mother'            => $this->parents->where('student_id', session()->get('suser_id'))->where('gender', 'p')->where('parent', 1)->where('disabled', 0)->first(),
                 'guardian'          => $this->parents->where('student_id', session()->get('suser_id'))->where('parent', 0)->where('disabled', 0)->first(),
+                'reports'           => $this->reports->where('student_id', session()->get('suser_id'))->where('disabled', 0)->get(),
             ];
 
             return view('students.profile.index', $data);

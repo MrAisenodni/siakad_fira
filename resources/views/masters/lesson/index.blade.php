@@ -5,9 +5,6 @@
 @section('styles')
     {{-- Data Tables --}}
     <link href="{{ asset('/dist/css/pages/data-table.css') }}" rel="stylesheet">
-
-    {{-- Sweet Alert --}}
-    <link href="{{ asset('/libs/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet" type="text/css">
 @endsection
 
 @section('content')
@@ -71,8 +68,4 @@
     {{-- Data Tables --}}
     <script src="{{ asset('/extra-libs/Datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
-
-    {{-- Sweet Alert --}}
-    <script src="{{ asset('/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
-    <script src="{{ asset('/libs/sweetalert2/sweet-alert.init.js') }}"></script>
 @endsection

@@ -11,6 +11,9 @@
     
     {{-- Datepicker --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('/libs/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css') }}">
+    
+    {{-- Data Tables --}}
+    <link href="{{ asset('/dist/css/pages/data-table.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -802,7 +805,39 @@
                                     </div>
                                 </div>
                                 <div id="report" class="col s12">
-                                    <p>Nilai Siswa</p>
+                                    <h5 class="card-title">@if (session()->get('srole') == 'student') @endif</h5>
+                                    <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
+                                        <thead>
+                                            <tr>
+                                                <th>Mata Pelajaran</th>
+                                                <th>Bulan 1</th>
+                                                <th>Bulan 2</th>
+                                                <th>Bulan 3</th>
+                                                <th>Bulan 4</th>
+                                                <th>UTS</th>
+                                                <th>UAS</th>
+                                                <th>Nilai Akhir</th>
+                                                <th>Nilai Rata-Rata</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if ($reports)
+                                                @foreach ($reports as $report)
+                                                    <tr>
+                                                        <td>{{ $report->lesson->name }}</td>
+                                                        <td>{{ $report->score_1 }}</td>
+                                                        <td>{{ $report->score_2 }}</td>
+                                                        <td>{{ $report->score_3 }}</td>
+                                                        <td>{{ $report->score_4 }}</td>
+                                                        <td>{{ $report->score_uts }}</td>
+                                                        <td>{{ $report->score_uas }}</td>
+                                                        <td>{{ $report->score_na }}</td>
+                                                        <td>{{ $report->score_avg }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
 
@@ -824,6 +859,10 @@
 @endsection
 
 @section('scripts')
+    {{-- Data Tables --}}
+    <script src="{{ asset('/extra-libs/Datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
+    
     {{-- Prism --}}
     <script src="{{ asset('/extra-libs/prism/prism.js') }}"></script>
     
