@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Studies;
 
 use App\Http\Controllers\Controller;
-use App\Models\Masters\Payment as MstPayment;
+use App\Models\Masters\{
+    Month,
+    Payment as MstPayment,
+};
 use App\Models\Settings\Menu;
 use App\Models\Studies\{
     Student,
@@ -18,6 +21,7 @@ class PaymentController extends Controller
     {
         $this->url = '/studi/spp';
         $this->menus = new Menu();
+        $this->months = new Month();
         $this->mst_payments = new MstPayment();
         $this->students = new Student();
         $this->payments = new Payment();
@@ -28,7 +32,7 @@ class PaymentController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'payments'      => $this->payments->select('id', 'student_id', 'status')->where('disabled', 0)->get(),
+            'payments'      => $this->payments->selectRaw('MAX(id) AS id, student_id, status')->where('disabled', 0)->groupByRaw('student_id, status')->get(),
         ];
 
         if (session()->get('srole') == 'admin') return view('studies.payment.index', $data);
@@ -37,11 +41,14 @@ class PaymentController extends Controller
 
     public function create(Request $request)
     {
+        $student = $this->payments->select('student_id')->where('disabled', 0)->get();
+
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
+            'months'        => $this->months->select('id', 'name')->where('disabled', 0)->get(),
             'payments'      => $this->mst_payments->select('id', 'year', 'amount')->where('disabled', 0)->get(),
-            'students'      => $this->students->select('id', 'full_name', 'nis')->where('disabled', 0)->get(),
+            'students'      => $this->students->select('id', 'full_name', 'nis')->where('disabled', 0)->whereNotIn('id', $student)->get(),
         ];
 
         if (session()->get('srole') == 'admin') return view('studies.payment.create', $data);
@@ -50,28 +57,56 @@ class PaymentController extends Controller
 
     public function store(Request $request)
     {
+        $modal = $request->mod_student;
         $input = $request->all();
 
-        $validated = $request->validate([
-            'student'       => 'required',
-            'payment'       => 'required',
-            'month'         => 'required',
-            'amount'        => 'required',
-        ]);
+        if ($modal) {
+            $check = $this->payments->where('disabled', 0)->where('student_id', $input['mod_student'])->where('month', $input['mod_month'])->where('payment_id', $input['mod_payment'])->first();
 
-        $data = [
-            'year'          => $input['year'],
-            'month'         => (string) $input['month'],
-            'student_id'    => $input['student'],
-            'payment_id'    => $input['payment'],
-            'amount'        => str_replace(',', '.',str_replace('.', '', trim($input['amount'], 'Rp'))),
-            'status'        => 'lunas',
-            'created_by'    => session()->get('sname'),
-            'created_at'    => now(),
-        ];
+            $validated = $request->validate([
+                'mod_student'   => 'required',
+                'mod_payment'   => 'required',
+                'mod_month'     => 'required',
+                'mod_amount'    => 'required',
+            ]);
+
+            $data = [
+                'year'          => $input['mod_year'],
+                'month'         => (string) $input['mod_month'],
+                'student_id'    => $input['mod_student'],
+                'payment_id'    => $input['mod_payment'],
+                'amount'        => str_replace(',', '.',str_replace('.', '', trim($input['mod_amount'], 'Rp'))),
+                'status'        => 'lunas',
+                'created_by'    => session()->get('sname'),
+                'created_at'    => now(),
+            ];
+        } else {
+            $check = $this->payments->where('disabled', 0)->where('student_id', $input['student'])->where('month', $input['month'])->where('payment_id', $input['payment'])->first();
+
+            $validated = $request->validate([
+                'student'       => 'required',
+                'payment'       => 'required',
+                'month'         => 'required',
+                'amount'        => 'required',
+            ]);
+
+            $data = [
+                'year'          => $input['year'],
+                'month'         => (string) $input['month'],
+                'student_id'    => $input['student'],
+                'payment_id'    => $input['payment'],
+                'amount'        => str_replace(',', '.',str_replace('.', '', trim($input['amount'], 'Rp'))),
+                'status'        => 'lunas',
+                'created_by'    => session()->get('sname'),
+                'created_at'    => now(),
+            ];
+        }
+
+        if ($check) return redirect(url()->previous())->with('error', 'Data sudah terdaftar.');
 
         $this->payments->insert($data);
 
+        if ($modal) return redirect(url()->previous())->with('status', 'Data berhasil ditambahkan.');
         return redirect($this->url)->with('status', 'Data berhasil ditambahkan.');
     }
 
@@ -82,10 +117,11 @@ class PaymentController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
+            'months'        => $this->months->select('id', 'name')->where('disabled', 0)->get(),
             'payments'      => $this->mst_payments->select('id', 'year', 'amount')->where('disabled', 0)->get(),
             'students'      => $this->students->select('id', 'full_name', 'nis')->where('disabled', 0)->get(),
-            'paystuds'      => $this->payments->select('id', 'year', 'amount', 'month', 'student_id', 'payment_id')->where('student_id', $payment->student_id)->where('disabled', 0)->get(),
-            'payment'       => $this->payments->select('id', 'student_id', 'payment_id')->where('id', $id)->first(),
+            'paystuds'      => $this->payments->select('id', 'year', 'amount', 'month', 'student_id', 'payment_id', 'status')->where('student_id', $payment->student_id)->where('disabled', 0)->orderByRaw('year, month')->get(),
+            'payment'       => $this->payments->select('id', 'student_id', 'payment_id', 'month')->where('id', $id)->first(),
         ];
 
         if (session()->get('srole') == 'admin') return view('studies.payment.edit', $data);
@@ -95,6 +131,7 @@ class PaymentController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
+        $check = $this->payments->where('disabled', 0)->where('student_id', $input['student'])->where('month', $input['month'])->where('payment_id', $input['payment'])->first();
 
         $validated = $request->validate([
             'student'       => 'required',
@@ -113,13 +150,20 @@ class PaymentController extends Controller
             'updated_at'    => now(),
         ];
 
+        if ($check) return redirect(url()->previous())->with('error', 'Data sudah terdaftar.')->withInput();
+
         $this->payments->where('id', $id)->update($data);
 
-        return redirect($this->url)->with('status', 'Data berhasil diubah.');
+        return redirect(url()->previous())->with('status', 'Data berhasil diubah.');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $student = $this->payments->select('id')->where('student_id', $request->student)->where('id', '!=', $id)->where('disabled', 0)->first();
+        $uid = '';
+        
+        if ($student) $uid = $student->id;
+
         $data = [
             'disabled'      => 1,
             'updated_by'    => session()->get('sname'),
@@ -128,6 +172,8 @@ class PaymentController extends Controller
 
         $this->payments->where('id', $id)->update($data);
 
+        if ($uid) return redirect($this->url.'/'.$uid.'/edit')->with('status', 'Data berhasil dihapus.');
+        if ($student) return redirect(url()->previous())->with('status', 'Data berhasil dihapus.');
         return redirect($this->url)->with('status', 'Data berhasil dihapus.');
     }
 

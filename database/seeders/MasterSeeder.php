@@ -19,6 +19,7 @@ class MasterSeeder extends Seeder
     {
         // Truncate All Table Master
         Schema::disableForeignKeyConstraints();
+        DB::table('mst_month')->truncate();
         DB::table('mst_religion')->truncate();
         DB::table('mst_family_status')->truncate();
         DB::table('mst_occupation')->truncate();
@@ -31,6 +32,58 @@ class MasterSeeder extends Seeder
         DB::table('mst_study_year')->truncate();
         DB::table('mst_payment')->truncate();
         Schema::enableForeignKeyConstraints();
+
+        // Master Bulan (12)
+        DB::table('mst_month')->insert([
+            [
+                'name'          => 'Januari',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Februari',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Maret',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'April',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Mei',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Juni',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Juli',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Agustus',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'September',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Oktober',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'November',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'name'          => 'Desember',
+                'created_by'    => 'Migrasi',
+            ],
+        ]);
 
         // Master Agama (5)
         DB::table('mst_religion')->insert([

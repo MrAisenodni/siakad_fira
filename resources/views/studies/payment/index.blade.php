@@ -35,7 +35,6 @@
                                     <th>NIS</th>
                                     <th>Nama Lengkap</th>
                                     <th>Status</th>
-                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -50,13 +49,6 @@
                                                 @else
                                                     <button class="waves-effect waves-light btn btn-round red strong" type="button">BELUM LUNAS</button>
                                                 @endif
-                                            </td>
-                                            <td id="no-data" class="text-center" style="width: 5%">
-                                                <form action="{{ $menu->url }}/{{ $payment->id }}" method="POST" class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>
-                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

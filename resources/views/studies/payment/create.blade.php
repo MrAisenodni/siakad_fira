@@ -88,19 +88,12 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s12">
-                                    <select id="month" name="month" class="auto_fill">
-                                        <option @if(old('month') == 1) selected @endif value="1" selected>Januari</option>
-                                        <option @if(old('month') == 2) selected @endif value="2">Februari</option>
-                                        <option @if(old('month') == 3) selected @endif value="3">Maret</option>
-                                        <option @if(old('month') == 4) selected @endif value="4">April</option>
-                                        <option @if(old('month') == 5) selected @endif value="5">Mei</option>
-                                        <option @if(old('month') == 6) selected @endif value="6">Juni</option>
-                                        <option @if(old('month') == 7) selected @endif value="7">Juli</option>
-                                        <option @if(old('month') == 8) selected @endif value="8">Agustus</option>
-                                        <option @if(old('month') == 9) selected @endif value="9">September</option>
-                                        <option @if(old('month') == 10) selected @endif value="10">Oktober</option>
-                                        <option @if(old('month') == 11) selected @endif value="11">November</option>
-                                        <option @if(old('month') == 12) selected @endif value="12">Desember</option>
+                                    <select id="month" name="month">
+                                        @if ($months)
+                                            @foreach ($months as $month)
+                                                <option @if(old('month') == $month->id) selected @endif value="{{ $month->id }}">{{ $month->name }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                     <label for="month">Bulan</label>
                                     @error('month')

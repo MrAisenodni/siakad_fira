@@ -23,22 +23,28 @@ $('#zero_config').DataTable({
 
         $('tbody>tr').hover(function () {
             var id = $(this).attr('data-id')
+            var uid = $('#url_id').val()
             var select = $(this).attr('data-select')
             
             $('form>button', this).addClass('white-text').removeClass('materialize-red-text')
             $(this).addClass('blue white-text')
             
-            if (select == id) 
+            if (select == id || id == uid) {
+                $('form>button', this).addClass('white-text').removeClass('materialize-red-text')
                 $(this).addClass('blue white-text')
+            }
         }, function () {
             var id = $(this).attr('data-id')
+            var uid = $('#url_id').val()
             var select = $(this).attr('data-select')
 
             $('form>button', this).addClass('materialize-red-text').removeClass('white-text')
             $(this).removeClass('blue white-text')
-
-            if (select == id) 
+            
+            if (select == id || id == uid) {
+                $('form>button', this).addClass('white-text').removeClass('materialize-red-text')
                 $(this).addClass('blue white-text')
+            }
         })
 
         $('td#no-data').on('click', function() {
@@ -47,8 +53,15 @@ $('#zero_config').DataTable({
 
         $('tr#data').click(function () {
             var id = $(this).attr('data-id')
+            var url = $(this).attr('data-url')
 
-            if (bool) location = path+'/'+id+'/edit' 
+            if (bool) {
+                if (url) {
+                    location = url
+                } else {
+                    location = path+'/'+id+'/edit'
+                }
+            } 
             bool = 1
         })
 
@@ -79,8 +92,10 @@ $('#zero_config').DataTable({
                 }
             })
 
+            $('form>button', this).addClass('materialize-red-text').removeClass('white-text')
             $('tbody>tr').removeClass('blue white-text')
             if (select == id) {
+                $('form>button', this).addClass('white-text').removeClass('materialize-red-text')
                 $(this).addClass('blue white-text')
             } 
         })

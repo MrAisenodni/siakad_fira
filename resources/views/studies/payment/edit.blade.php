@@ -3,6 +3,9 @@
 @section('title', $menu->title)
 
 @section('styles')
+    {{-- Prism --}}
+    <link href="{{ asset('/extra-libs/prism/prism.css') }}" rel="stylesheet">
+    
     {{-- Select2 --}}
     <link href="{{ asset('/libs/select2/dist/css/select2.css') }}" rel="stylesheet">
 
@@ -17,35 +20,78 @@
             <div class="col s8">
                 <div class="card">
                     <div class="card-content">
-                        <h5 class="card-title">History Pembayaran SPP</h5>
-                        <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
-                            <thead>
-                                <tr>
-                                    <th>Tahun</th>
-                                    <th>Bulan</th>
-                                    <th>Nominal</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if ($paystuds)
-                                    @foreach ($paystuds as $pay)
-                                        <tr id="data_select" data-id="{{ $pay->id }}" @if($payment->id == $pay->id) data-select="{{ $pay->id }}" class="blue white-text" @endif>
-                                            <td>{{ $pay->year }}</td>
-                                            <td>{{ $pay->month }}</td>
-                                            <td>{{ 'Rp '.number_format($pay->amount, 0, ',', '.') }}</td>
-                                            <td>
-                                                @if ($pay->status == 'lunas')
-                                                    <button class="waves-effect waves-light btn btn-round green strong" type="button">LUNAS</button>
-                                                @else
-                                                    <button class="waves-effect waves-light btn btn-round red strong" type="button">BELUM LUNAS</button>
-                                                @endif    
-                                            </td>
+                        <div class="row">
+                            <div class="col s6">
+                                <h5 class="card-title">History {{ $menu->title }}</h5>
+                            </div>
+                            <div class="col s6 right-align">
+                                <a class="waves-effect waves-light btn btn-round green strong btn modal-trigger" href="#create">TAMBAH</a>
+                                {{-- <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a> --}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            @if (session('status'))
+                                <div class="col s12">
+                                    <div class="success-alert-bar p-15 m-t-10 green white-text" style="display: block">
+                                        {{ session('status') }}
+                                    </div>
+                                </div>
+                            @endif
+                            @if (session('error'))
+                                <div class="col s12">
+                                    <div class="success-alert-bar p-15 m-t-10 red white-text" style="display: block">
+                                        {{ session('error') }}
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="col s12">
+                                <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
+                                    <thead>
+                                        <tr>
+                                            <th>Tahun</th>
+                                            <th>Bulan</th>
+                                            <th>Nominal</th>
+                                            <th>Status</th>
+                                            <th>Aksi</th>
                                         </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
+                                    </thead>
+                                    <tbody>
+                                        @if ($paystuds)
+                                            @foreach ($paystuds as $pay)
+                                                <tr id="data" data-url="{{ $menu->url }}/{{ $pay->id }}/edit" data-id="{{ $pay->id }}" @if($payment->id == $pay->id) class="blue white-text" @endif>
+                                                    <td>{{ $pay->year }}</td>
+                                                    <td>
+                                                        @if ($months)
+                                                            @foreach ($months as $month)
+                                                                @if ($pay->month == $month->id)
+                                                                    {{ $month->name }}
+                                                                @endif
+                                                            @endforeach
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ 'Rp '.number_format($pay->amount, 0, ',', '.') }}</td>
+                                                    <td>
+                                                        @if ($pay->status == 'lunas')
+                                                            <button class="waves-effect waves-light btn btn-round green strong" type="button">LUNAS</button>
+                                                        @else
+                                                            <button class="waves-effect waves-light btn btn-round red strong" type="button">BELUM LUNAS</button>
+                                                        @endif    
+                                                    </td>
+                                                    <td id="no-data" class="text-center" style="width: 5%">
+                                                        <form action="{{ $menu->url }}/{{ $pay->id }}" method="POST" class="d-inline">
+                                                            @method('delete')
+                                                            @csrf
+                                                            <input type="hidden" name="student" value="{{ $pay->student_id }}">
+                                                            <button type="submit" class="transparent fas fa-trash @if($payment->id == $pay->id) white-text @else materialize-red-text @endif" style="border: 0px"></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -55,23 +101,10 @@
                     <div class="card-content">
                         <h5 class="card-title">Ubah {{ $menu->title }}</h5>
                         <form method="POST" action="{{ str_replace("/edit", "", url()->current()) }}">
+                            @method('put')
                             @csrf
                             <div class="row">
-                                <div class="input-field col s12">
-                                    <input id="student" type="hidden" name="student" value="{{ old('student', $payment->student->id) }}" readonly>
-                                    <input id="nis" type="text" placeholder="0" name="nis" value="{{ old('nis', $payment->student->nis) }}" readonly>
-                                    <label for="nis">NIS</label>
-                                    @error('nis')
-                                        <div class="error">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="input-field col s12">
-                                    <input id="full_name" type="text" placeholder="Nama" name="full_name" value="{{ old('full_name', $payment->student->full_name) }}" readonly>
-                                    <label for="full_name">Nama Siswa</label>
-                                    @error('full_name')
-                                        <div class="error">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                <input type="hidden" name="student" value="{{ $payment->student_id }}">
                                 <div class="input-field col s12">
                                     <input id="clas" type="text" placeholder="10" name="clas" value="{{ old('clas', $payment->student->class->class->name) }}" readonly>
                                     <label for="clas">Kelas</label>
@@ -96,19 +129,12 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s12">
-                                    <select id="month" name="month" class="auto_fill">
-                                        <option @if(old('month', $payment->month) == 1) selected @endif value="1" selected>Januari</option>
-                                        <option @if(old('month', $payment->month) == 2) selected @endif value="2">Februari</option>
-                                        <option @if(old('month', $payment->month) == 3) selected @endif value="3">Maret</option>
-                                        <option @if(old('month', $payment->month) == 4) selected @endif value="4">April</option>
-                                        <option @if(old('month', $payment->month) == 5) selected @endif value="5">Mei</option>
-                                        <option @if(old('month', $payment->month) == 6) selected @endif value="6">Juni</option>
-                                        <option @if(old('month', $payment->month) == 7) selected @endif value="7">Juli</option>
-                                        <option @if(old('month', $payment->month) == 8) selected @endif value="8">Agustus</option>
-                                        <option @if(old('month', $payment->month) == 9) selected @endif value="9">September</option>
-                                        <option @if(old('month', $payment->month) == 10) selected @endif value="10">Oktober</option>
-                                        <option @if(old('month', $payment->month) == 11) selected @endif value="11">November</option>
-                                        <option @if(old('month', $payment->month) == 12) selected @endif value="12">Desember</option>
+                                    <select id="month" name="month">
+                                        @if ($months)
+                                            @foreach ($months as $month)
+                                                <option @if(old('month', $payment->month) == $month->id) selected @endif value="{{ $month->id }}">{{ $month->name }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                     <label for="month">Bulan</label>
                                     @error('month')
@@ -116,8 +142,8 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s12">
-                                    <input id="year" type="hidden" name="year" value="{{ old('year', $payment->year) }}" readonly>
-                                    <input id="amount" type="text" name="amount" value="{{ old('amount', 'Rp '.number_format($payment->amount, 0, ',', '.')) }}" readonly>
+                                    <input id="year" type="hidden" name="year" value="{{ old('year', $payment->payment->year) }}" readonly>
+                                    <input id="amount" type="text" name="amount" value="{{ old('amount', 'Rp '.number_format($payment->payment->amount, 0, ',', '.')) }}" readonly>
                                     <label for="amount">Nominal</label>
                                     @error('amount')
                                         <div class="error">{{ $message }}</div>
@@ -146,11 +172,80 @@
                     </div>
                 </div>
             </div>
+            <div id="create" class="modal">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col s12">
+                                <h5 class="card-title">Tambah {{ $menu->title }}</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12">
+                                <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">
+                                    @csrf
+                                    <div class="row">
+                                        <input type="hidden" name="uid" id="url_id" value="{{ $payment->id }}">
+                                        <input type="hidden" name="mod_student" id="mod_student" value="{{ $payment->student_id }}">
+                                        <div class="input-field col s12">
+                                            <select id="mod_payment" name="mod_payment" class="modal_auto_fill">
+                                                <option value="" selected>--- SILAHKAN PILIH ---</option>
+                                                @if ($payments)
+                                                    @foreach ($payments as $payment)
+                                                        <option @if(old('mod_payment') == $payment->id) selected @endif value="{{ $payment->id }}">{{ $payment->year }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                            <label for="mod_payment">Tahun</label>
+                                            @error('mod_payment')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <select id="mod_month" name="mod_month">
+                                                @if ($months)
+                                                    @foreach ($months as $month)
+                                                        <option @if(old('mod_month') == $month->id) selected @endif value="{{ $month->id }}">{{ $month->name }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                            <label for="mod_month">Bulan</label>
+                                            @error('mod_month')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <input id="mod_year" type="hidden" name="mod_year" value="{{ old('mod_year') }}" readonly>
+                                            <input id="mod_amount" type="text" placeholder="Rp 2.000.000" name="mod_amount" value="{{ old('mod_amount') }}" readonly>
+                                            <label for="mod_amount">Nominal</label>
+                                            @error('mod_amount')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                        
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col s12" style="text-align: right">
+                                            <a href="#!" class="modal-action modal-close btn btn-round blue strong">TUTUP</a>
+                                            {{-- <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}">TUTUP</a> --}}
+                                            <button class="waves-effect waves-light btn btn-round green strong" type="submit">BAYAR</button>
+                                        </div>
+                                    </div>
+                                </form>                        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
 
 @section('scripts')
+    {{-- Prism --}}
+    <script src="{{ asset('/extra-libs/prism/prism.js') }}"></script>
+
     {{-- Select2 --}}
     <script src="{{ asset('/libs/select2/dist/js/select2.min.js') }}"></script>
 
