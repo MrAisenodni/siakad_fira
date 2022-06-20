@@ -6,11 +6,8 @@
     {{-- Prism --}}
     <link href="{{ asset('/extra-libs/prism/prism.css') }}" rel="stylesheet">
     
-    {{-- Select2 --}}
-    <link href="{{ asset('/libs/select2/dist/css/select2.css') }}" rel="stylesheet">
-
-    {{-- Datepicker --}}
-    <link rel="stylesheet" type="text/css" href="{{ asset('/libs/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css') }}">
+    {{-- Data Tables --}}
+    <link href="{{ asset('/dist/css/pages/data-table.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -20,61 +17,114 @@
             <div class="col s12">
                 <div class="card">
                     <div class="card-content">
-                        <h5 class="card-title">Tambah {{ $menu->title }}</h5>
-                        <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">
+                        <h5 class="card-title">{{ $menu->title }} Siswa</h5>
+                        <form method="GET" action="{{ url()->current() }}/cari">
                             @csrf
-                            <input type="hidden" name="user_id" value="{{ $user_id }}">
-                            <input type="hidden" name="role" value="{{ $role }}">
+                            <input type="hidden" name="month_id" value="@if ($inp_month) {{ $inp_month }} @else {{ $present->month_id }} @endif">
+                            <input type="hidden" name="clazz_id" value="{{ $present->id }}">
                             <div class="row">
                                 <div class="input-field col s4">
-                                    <select id="lesson" name="lesson" class="">
-                                        <option value="" selected>--- SILAHKAN PILIH ---</option>
-                                        @if ($lessons)
-                                            @foreach ($lessons as $lesson)
-                                                <option @if(old('lesson') == $lesson->id) selected @endif value="{{ $lesson->id }}">{{ $lesson->name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                    <label for="lesson">Mata Pelajaran <span class="materialize-red-text">*</span></label>
-                                    @error('lesson')
-                                        <div class="error">{{ $message }}</div>
-                                    @enderror
+                                    <label for="month">Bulan</label>
+                                    @if ($months)
+                                        @foreach ($months as $month)
+                                            @if ($month->id == $inp_month)
+                                                <input id="month" type="text" name="month" value="{{ $month->name }}" disabled>
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 </div>
-                                <div class="input-field col s2">
-                                    <select id="reason" name="reason" class="">
-                                        <option value="" selected>--- PILIH ---</option>
-                                        @if ($reasons)
-                                            @foreach ($reasons as $reason)
-                                                <option @if(old('reason') == $reason->id) selected @endif value="{{ $reason->id }}">{{ $reason->name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                    <label for="reason">Alasan Absen</label>
-                                    @error('reason')
-                                        <div class="error">{{ $message }}</div>
-                                    @enderror
+                                <div class="input-field col s4">
+                                    <label for="clazz">Kelas</label>
+                                    <input id="clazz" type="text" name="clazz" value="{{ $present->class->name }}" disabled>
                                 </div>
-                                <div class="col s2">
-                                    <label for="date_in" class="m-t-20">Jadwal</label>
-                                    <input id="date_in" type="hidden" name="date_in" value="{{ old('date_in', date('Y-m-d ', strtotime(now()))) }}">
-                                    <div class="input-fleid">
-                                        <input id="date_in" type="text" name="date_in" class="timepicker" value="{{ old('date_in', date('d/m/Y', strtotime(now()))) }}" disabled>
-                                    </div>
-                                    @error('date_in')
-                                        <div class="error">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col s4">
-                                    <label for="other_reason" class="m-t-20">Alasan Lain</label>
-                                    <div class="input-fleid">
-                                        <input id="other_reason" type="text" name="other_reason" placeholder="Acara keluarga" value="{{ old('other_reason') }}">
-                                    </div>
-                                    @error('other_reason')
-                                        <div class="error">{{ $message }}</div>
-                                    @enderror
+                                <div class="input-field col s4">
+                                    <label for="study_year">Tahun Pelajaran</label>
+                                    <input id="study_year" type="text" name="study_year" value="{{ $present->study_year->name }}" disabled>
                                 </div>
                             </div>
 
+                            <hr>
+                            <div class="row">
+                                <div class="col s12" style="text-align: right">
+                                    <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}">KEMBALI</a>
+                                    <button class="waves-effect waves-light btn btn-round green strong" type="submit">CARI</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <form action="{{ url()->current() }}" method="POST">
+                            @method('put')
+                            @csrf
+                            <div class="row">
+                                <div class="col s8">
+                                    <h5 class="card-title">Daftar Siswa</h5>
+                                </div>
+                                <div class="col s4" style="text-align: right">
+                                    <button class="waves-effect waves-light btn btn-round green strong" type="submit">SIMPAN</button>
+                                </div>
+                            </div>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col s12">
+                                    <table id="complex_header" class="responsive-table display" style="width:100%; border: 1px solid black; border-collapse: collapse;" onload="message()">
+                                        <thead>
+                                            <tr style="font-size: 8pt">
+                                                <th rowspan="2" style="text-align: center; padding: 2px 0px">No</th>
+                                                <th rowspan="2" style="text-align: center; padding: 2px 0px">Nama Siswa</th>
+                                                <th colspan="31" style="text-align: center; padding: 2px 0px">Hari</th>
+                                                <th colspan="3" style="text-align: center; padding: 2px 0px">Keterangan</th>
+                                            </tr>
+                                            <tr style="font-size: 8pt">
+                                                @for ($i = 1; $i <= 31; $i++)
+                                                    <th style="text-align: center; padding: 2px 0px" width="2%">{{ $i }}</th>
+                                                @endfor
+                                                <th style="text-align: center; padding: 2px 0px">Izin</th>
+                                                <th style="text-align: center; padding: 2px 0px">Sakit</th>
+                                                <th style="text-align: center; padding: 2px 0px">Absen</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if ($students)
+                                                @foreach ($students as $student)
+                                                    <tr style="font-size: 8pt">
+                                                        <input type="hidden" name="present{{ $student->id }}" value="">
+                                                        <td style="padding: 2px 2px">{{ $loop->iteration }}</td>
+                                                        <td  style="padding: 2px 2px">{{ $student->full_name }}</td>
+                                                        @for ($i = 1; $i <= 31; $i++)
+                                                            <td  style="padding: 2px 2px">
+                                                                <label>
+                                                                    <input class="present" type="checkbox" style="opacity: 100; pointer-events: visible" />
+                                                                </label>
+                                                            </td>
+                                                        @endfor
+                                                        <td  style="padding: 2px 2px">
+                                                            <div class="input-field" style="margin: 0rem">
+                                                                <input id="permit" type="number" name="permit" value="{{ old('permit', 0) }}" style="font-size: 8pt; text-align: center;">
+                                                            </div>
+                                                        </td>
+                                                        <td  style="padding: 2px 2px">
+                                                            <div class="input-field" style="margin: 0rem">
+                                                                <input id="sick" type="number" name="sick" value="{{ old('sick', 0) }}" style="font-size: 8pt; text-align: center;">
+                                                            </div>                                                            
+                                                        </td>
+                                                        <td  style="padding: 2px 2px">
+                                                            <div class="input-field" style="margin: 0rem">
+                                                                <input id="absent" type="number" name="absent" value="{{ old('absent', 0) }}" style="font-size: 8pt; text-align: center;">
+                                                            </div>                                                            
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
                             <hr>
                             <div class="row">
                                 <div class="col s12" style="text-align: right">
@@ -94,15 +144,10 @@
     {{-- Prism --}}
     <script src="{{ asset('/extra-libs/prism/prism.js') }}"></script>
     
-    {{-- Select2 --}}
-    <script src="{{ asset('/libs/select2/dist/js/select2.min.js') }}"></script>
-
-    {{-- Datepicker --}}
-    <script src="{{ asset('/libs/moment/moment.js') }}"></script>
-    <script src="{{ asset('/libs/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker-custom.js') }}"></script>
+    {{-- Data Tables --}}
+    <script src="{{ asset('/extra-libs/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
 
     {{-- Form --}}
     <script src="{{ asset('/dist/js/form.js') }}"></script>
-    @include('scripts.datepicker')
-    @include('scripts.select2')
 @endsection

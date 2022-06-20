@@ -170,6 +170,7 @@ return [
         'child_count'           => 'Jumlah Saudara',
         'citizen'               => 'Kewarganegaraan',
         'class'                 => 'Kelas',
+        'clazz'                 => 'Kelas',
         'clock_in'              => 'Jam Masuk',
         'clock_out'             => 'Jam Keluar',
         'code'                  => 'Kode',

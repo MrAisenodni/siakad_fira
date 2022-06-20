@@ -79,6 +79,6 @@
 
 @section('scripts')
     {{-- Data Tables --}}
-    <script src="{{ asset('/extra-libs/Datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('/extra-libs/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
 @endsection

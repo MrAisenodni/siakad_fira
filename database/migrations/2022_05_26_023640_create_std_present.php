@@ -15,13 +15,13 @@ class CreateStdPresent extends Migration
     {
         Schema::create('std_present', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('clock_in')->nullable();
-            $table->dateTime('clock_out')->nullable();
-            $table->unsignedInteger('reason_id')->nullable();
-            $table->string('reason')->nullable();
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('lesson_id')->nullable();
-            $table->enum('role', ['student', 'teacher']);
+            $table->year('year');
+            $table->unsignedInteger('month_id')->nullable();
+            $table->unsignedInteger('class_id')->nullable();
+            $table->string('present')->nullable();
+            $table->integer('absent')->nullable();
+            $table->integer('sick')->nullable();
+            $table->integer('permit')->nullable();
                                     
             // Struktur Baku
             $table->boolean('disabled')->default(0);

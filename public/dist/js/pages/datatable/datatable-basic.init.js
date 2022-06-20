@@ -13,6 +13,7 @@ $('#zero_config').DataTable({
         "orderable": false,
         "targets": -1
     }],
+    "pageLength": 25,
     "processing": true,
     "serverside": true,
     // "lengthChange": false,
@@ -130,7 +131,19 @@ $('#multi_col_order').DataTable({
 /****************************************
  *       Complex header Table          *
  ****************************************/
-$('#complex_header').DataTable();
+$('#complex_header').DataTable({
+    "sort": false,
+    "pageLength": 50,
+    "drawCallback": function () {
+        $('#present:checkbox').click(function() {
+            var input = 0
+
+            if ($(this) == 'checked') input = 1
+
+            console.log(input)
+        })
+    }
+});
 
 /****************************************
  *       DOM positioning Table         *
@@ -164,10 +177,13 @@ $('#scroll_ver_dynamic_hei').DataTable({
     paging: false
 });
 
-/****************************************
- *     horizontal scroll Table    *
- ****************************************/
-$('#scroll_hor').DataTable({
+/*****************************************
+ *     Data Table for Student Present    *
+ *****************************************/
+$('#student_present').DataTable({
+    "pageLength": 50,
+    "sort": false,
+    "order": false,
     "scrollX": true
 });
 
