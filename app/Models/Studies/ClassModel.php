@@ -12,6 +12,7 @@ use App\Models\Studies\{
 };
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class ClassModel extends Model
 {
@@ -37,5 +38,14 @@ class ClassModel extends Model
     public function class()
     {
         return $this->belongsTo(MstClass::class)->select('id', 'name')->where('disabled', 0);
+    }
+
+    public function get_present($class_id, $study_year_id)
+    {
+        return DB::table('std_present AS a')->selectRaw('a.id, c.full_name, b.class_id, b.study_year_id, SUM(a.present) AS present, SUM(a.sick) AS sick, SUM(a.permit) AS permit, SUM(a.absent) AS absent')
+            ->rightJoin('std_class AS b', 'b.id', '=', 'a.class_id', 'a.disabled = 0')
+            ->join('mst_student AS c', 'c.id', '=', 'b.student_id')
+            ->where('b.disabled', 0)->where('b.class_id', $class_id)->where('b.study_year_id', $study_year_id)
+            ->groupByRaw('a.id, c.full_name, b.class_id, b.study_year_id')->orderBy('c.full_name')->get();
     }
 }

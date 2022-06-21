@@ -55,6 +55,11 @@ class Student extends Model
 
     public function class()
     {
-        return $this->belongsTo(ClassModel::class, 'id', 'student_id')->select('id', 'student_id', 'class_id')->where('disabled', 0);
+        return $this->belongsTo(ClassModel::class, 'id', 'student_id')->select('id', 'student_id', 'class_id', 'study_year_id')->where('disabled', 0);
+    }
+
+    public function present()
+    {
+        return $this->hasMany(Present::class)->selectRaw('COUNT(present) AS present, COUNT(sick) AS sick, COUNT(permit) AS permit, COUNT (absent) AS absent')->where('disabled', 0);
     }
 }

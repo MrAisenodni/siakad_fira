@@ -21,32 +21,24 @@
                 <div class="card">
                     <div class="card-content">
                         <h5 class="card-title">{{ $menu->title }} Siswa</h5>
-                        <form method="GET" action="{{ url()->current() }}/cari">
+                        <form method="POST" action="{{ $menu->url }}">
                             @csrf
-                            <input type="hidden" name="clazz_id" value="{{ $present->class_id }}">
-                            <input type="hidden" name="study_year_id" value="{{ $present->study_year_id }}">
+                            <input type="hidden" name="clazz_id" value="{{ $clazz->id }}">
                             <div class="row">
-                                <div class="input-field col s4">
-                                    <select id="month" name="month" class="">
-                                        <option value="" selected>--- SILAHKAN PILIH ---</option>
-                                        @if ($months)
-                                            @foreach ($months as $month)
-                                                <option @if(old('month') == $month->id) selected @endif value="{{ $month->id }}">{{ $month->name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                    <label for="month">Bulan <span class="materialize-red-text">*</span></label>
-                                    @error('month')
+                                <div class="input-field col s5">
+                                    <input id="study_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="study_date" value="{{ old('study_date') }}" required>
+                                    <label for="study_date">Tanggal</label>
+                                    @error('study_date')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="input-field col s4">
+                                <div class="input-field col s3">
                                     <label for="clazz">Kelas</label>
-                                    <input id="clazz" type="text" name="clazz" value="{{ $present->class->name }}" disabled>
+                                    <input id="clazz" type="text" name="clazz" value="{{ $clazz->class->name }}" disabled>
                                 </div>
                                 <div class="input-field col s4">
                                     <label for="study_year">Tahun Pelajaran</label>
-                                    <input id="study_year" type="text" name="study_year" value="{{ $present->study_year->name }}" disabled>
+                                    <input id="study_year" type="text" name="study_year" value="{{ $clazz->study_year->name }}" disabled>
                                 </div>
                             </div>
 
@@ -54,35 +46,85 @@
                             <div class="row">
                                 <div class="col s12" style="text-align: right">
                                     <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}">KEMBALI</a>
-                                    <button class="waves-effect waves-light btn btn-round green strong" type="submit">CARI</button>
+                                    <button class="waves-effect waves-light btn btn-round green strong" type="submit">TAMBAH</button>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
 
-                @if ($month)
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            @if (session('status'))
                                 <div class="col s12">
-                                    <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
-                                        <thead>
-                                            <tr>
-                                                <th>Nama Siswa</th>
-                                                <th>Hari</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <td>Muhammad Fiqri Alfayed</td>
-                                            <td>1</td>
-                                        </tbody>
-                                    </table>
+                                    <div class="success-alert-bar p-15 m-t-10 green white-text" style="display: block">
+                                        {{ session('status') }}
+                                    </div>
                                 </div>
+                            @endif
+                            @if (session('error'))
+                                <div class="col s12">
+                                    <div class="success-alert-bar p-15 m-t-10 red white-text" style="display: block">
+                                        {{ session('error') }}
+                                    </div>
+                                </div>
+                            @endif
+                            <div class="col s12">
+                                <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nama Siswa</th>
+                                            <th>Hadir</th>
+                                            <th>Sakit</th>
+                                            <th>Izin</th>
+                                            <th>Absen</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if ($classes)
+                                            @foreach ($classes as $claz)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $claz->full_name }}</td>
+                                                    <td>
+                                                        @if ($claz->present)
+                                                            {{ $claz->present }}
+                                                        @else
+                                                            0
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($claz->sick)
+                                                            {{ $claz->sick }}
+                                                        @else
+                                                            0
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($claz->permit)
+                                                            {{ $claz->permit }}
+                                                        @else
+                                                            0
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($claz->absent)
+                                                            {{ $claz->absent }}
+                                                        @else
+                                                            0
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-                @endif
+                </div>
             </div>
         </div>
     </div>

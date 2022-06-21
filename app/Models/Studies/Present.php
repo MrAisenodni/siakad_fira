@@ -14,14 +14,4 @@ class Present extends Model
     use HasFactory;
 
     protected $table = 'std_present';
-
-    public function month()
-    {
-        return $this->belongsTo(Month::class)->select('id', 'name')->where('disabled', 0);
-    }
-
-    public function class()
-    {
-        return $this->belongsTo(ClassModel::class)->select('id', 'name')->where('disabled', 0);
-    }
 }

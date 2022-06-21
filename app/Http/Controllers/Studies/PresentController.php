@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Studies;
 
 use App\Http\Controllers\Controller;
 use App\Models\Masters\{
+    ClassModel as MstClass,
     Lesson,
     Month,
     Reason,
+    StudyYear,
 };
 use App\Models\Settings\Menu;
 use App\Models\Studies\{
@@ -25,10 +27,12 @@ class PresentController extends Controller
         $this->menus = new Menu();
         $this->classes = new ClassModel();
         $this->months = new Month();
+        $this->mst_classes = new MstClass();
         $this->presents = new Present();
         $this->reasons = new Reason();
         $this->lessons = new Lesson();
         $this->students = new Student();
+        $this->study_years = new StudyYear();
         $this->teachers = new Teacher();
     }
     
@@ -37,7 +41,7 @@ class PresentController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'LIKE', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'classes'       => $this->classes->selectRaw('MAX(id) AS id, class_id, study_year_id')->where('disabled', 0)->groupByRaw('class_id, study_year_id')->get(),
+            'classes'       => $this->classes->selectRaw('MAX(id) AS id, COUNT(student_id) AS student, class_id, study_year_id')->where('disabled', 0)->groupByRaw('class_id, study_year_id')->get(),
         ];
 
         if (session()->get('srole') == 'admin') {
@@ -52,46 +56,44 @@ class PresentController extends Controller
         abort(403);
     }
 
+    public function store(Request $request)
+    {
+        $input = $request->all();
+        
+        $validated = $request->validate([
+            'study_date'    => 'required',
+        ]);
+
+        $check = $this->classes->select('id', 'class_id', 'study_year_id')->where('id', $input['clazz_id'])->first();
+
+        $data['classes'] = $this->classes->select('id', 'class_id', 'study_year_id', 'student_id')
+                    ->where('class_id', $check->class_id)->where('study_year_id', $check->study_year_id)
+                    ->where('disabled', 0)->get();
+
+        $data += [
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'LIKE', '%'.session()->get('srole').'%')->get(),
+            'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
+            'clazz'         => $check,
+            'study_date'    => $input['study_date'],
+        ];
+
+        return view('teachers.present.create', $data);
+    }
+
     public function show($id)
     {
+        $check = $this->classes->select('id', 'class_id', 'study_year_id')->where('id', $id)->first();
+
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'LIKE', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'months'        => $this->months->select('id', 'name')->where('disabled', 0)->get(),
-            'present'       => $this->classes->select('id', 'class_id', 'study_year_id')->where('id', $id)->first(),
+            'classes'       => $this->classes->get_present($check->class_id, $check->study_year_id),
+            'clazz'         => $check,
         ];
 
         if (session()->get('srole') == 'admin') return view('studies.present.show', $data);
         if (session()->get('srole') == 'teacher') return view('teachers.present.show', $data);
         abort(403);
-    }
-
-    public function search(Request $request, $id)
-    {
-        $input = $request->all();
-        $inp_month = $request->month;
-        $student = $this->classes->select('student_id')->where('class_id', $input['clazz_id'])->where('study_year_id', $input['study_year_id'])->where('disabled', 0)->get();
-        $month = $this->presents->where('month_id', $inp_month)->where('class_id', $id)->where('disabled', 0)->first();
-
-        $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'LIKE', '%'.session()->get('srole').'%')->get(),
-            'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'months'        => $this->months->select('id', 'name')->where('disabled', 0)->get(),
-        ];
-
-        if (!$month) {
-            $data += [
-                'inp_month'     => $inp_month, 
-                'present'       => $this->classes->select('id', 'class_id', 'study_year_id')->where('id', $id)->first(),
-            ];
-
-        } else {
-            $data['present'] = $month;
-        }
-        $data['students'] = $this->students->whereIn('id', $student)->where('disabled', 0)->get();
-        // dd($data);
-        
-        return view('teachers.present.create', $data);
     }
 
     public function edit(Request $request, $id)
@@ -112,9 +114,8 @@ class PresentController extends Controller
 
     public function update(Request $request, $id)
     {
-        $reason = $request->reason;
-        $other_reason = $request->other_reason;
         $input = $request->all();
+        dd($input);
 
         $validated = $request->validate([
             'clock_in'  => 'required',
