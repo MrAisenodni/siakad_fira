@@ -149,6 +149,16 @@
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <div class="input-field col s12">
+                                    <select id="status" name="status">
+                                        <option @if(old('status', $payment->status) == 'lunas') selected @endif value="lunas">Lunas</option>
+                                        <option @if(old('status', $payment->status) == 'belum') selected @endif value="belum">Belum Linas</option>
+                                    </select>
+                                    <label for="status">Status</label>
+                                    @error('status')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
                             <hr>
@@ -156,16 +166,12 @@
                                 <div class="col s12" style="text-align: right">
                                     <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}">KEMBALI</a>
                                     <button class="waves-effect waves-light btn btn-round green strong" type="submit">BAYAR</button>
-                                </div>
-                            </div>
-                        </form>
-                        {{-- Testing Whatsapp --}}
-                        <div class="row mt-4">
-                            <div class="col s12" style="text-align: right">
-                                <form action="/what" method="POST">
+                                </form>
+                                {{-- Testing Whatsapp --}}
+                                <form action="/what" method="POST" style="display: none">
                                     @csrf
                                     <input type="hidden" name="phone_number" value="{{ $payment->student->phone_number }}">
-                                    <button class="waves-effect waves-light btn btn-round green strong" type="submit">PUSH</button>
+                                    <button class="waves-effect waves-light btn btn-round primary strong" type="submit">PUSH</button>
                                 </form>
                             </div>
                         </div>

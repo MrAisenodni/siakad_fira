@@ -104,7 +104,7 @@ $('#zero_config').DataTable({
 });
 
 /****************************************
- *       Presnt Config Data Tables      *
+ *       Present Config Data Tables      *
  ****************************************/
 $('#present_config').DataTable({
     "pageLength": 25,
@@ -117,6 +117,52 @@ $('#present_config').DataTable({
         }, function () {
             $('form>button', this).addClass('materialize-red-text').removeClass('white-text')
             $(this).removeClass('blue white-text')
+        })
+    }
+});
+
+/****************************************
+ *       Payment Config Data Tables      *
+ ****************************************/
+$('#payment_config').DataTable({
+    "pageLength": 25,
+    "processing": true,
+    "serverside": true,
+    "drawCallback": function() {
+        var bool = 1
+        var path = location.pathname
+
+        $('tbody>tr').hover(function () {
+            $('form>button', this).addClass('white-text').removeClass('materialize-red-text')
+            $(this).addClass('blue white-text')
+        }, function () {
+            $('form>button', this).addClass('materialize-red-text').removeClass('white-text')
+            $(this).removeClass('blue white-text')
+        })
+
+        $('td#no-data').on('click', function() {
+            bool = 0
+        })
+        
+        $('tr#data').click(function () {
+            var id = $(this).attr('data-id')
+            var url = $(this).attr('data-url')
+
+            if (bool) {
+                if (url) {
+                    location = url
+                } else {
+                    location = path+'/'+id+'/edit'
+                }
+            } 
+            bool = 1
+        })
+
+        $('tr#show').click(function () {
+            var id = $(this).attr('data-id')
+
+            if (bool) location = path+'/'+id
+            bool = 1
         })
     }
 });

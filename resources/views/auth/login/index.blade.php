@@ -3,6 +3,12 @@
 @section('title', $menu->title)
 
 @section('styles')
+    {{-- Prism --}}
+    <link href="{{ asset('/extra-libs/prism/prism.css') }}" rel="stylesheet">
+
+    {{-- Select2 --}}
+    <link href="{{ asset('/libs/select2/dist/css/select2.css') }}" rel="stylesheet">
+
     {{-- Data Tables --}}
     <link href="{{ asset('/dist/css/pages/data-table.css') }}" rel="stylesheet">
 @endsection

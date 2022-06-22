@@ -859,6 +859,12 @@
 @endsection
 
 @section('scripts')
+    {{-- Prism --}}
+    <script src="{{ asset('/extra-libs/prism/prism.js') }}"></script>
+
+    {{-- Select2 --}}
+    <script src="{{ asset('/libs/select2/dist/js/select2.min.js') }}"></script>
+
     {{-- Data Tables --}}
     <script src="{{ asset('/extra-libs/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>

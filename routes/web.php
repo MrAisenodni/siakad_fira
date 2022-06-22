@@ -83,6 +83,8 @@ Route::middleware('authcheck')->group(function() {
     Route::resource('/studi/presensi', PresentController::class);
     Route::resource('/studi/profil', ProfileController::class);
     Route::resource('/studi/siswa', StudentController::class);
+    Route::get('/studi/spp/create-tagihan', [StdPaymentController::class, 'create_payment']);
+    Route::post('/studi/spp/create-tagihan', [StdPaymentController::class, 'store_payment']);
     Route::resource('/studi/spp', StdPaymentController::class);
     Route::post('/what', [StdPaymentController::class, 'test']);
 });

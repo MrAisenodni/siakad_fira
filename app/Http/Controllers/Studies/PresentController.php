@@ -72,10 +72,13 @@ class PresentController extends Controller
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'classes'       => $this->classes->get_present($check->class_id, $check->study_year_id),
             'months'        => $this->months->select('id', 'name')->where('disabled', 0)->get(),
+            'inp_month'     => $month,
+            'inp_year'      => $year,
             'clazz'         => $check,
         ];
 
-        if ($month && $year) $data['classes'] = $this->classes->filter_present($check->class_id, $check->study_year_id, $month, $year);
+        if ($month || $year) $data['classes'] = $this->classes->filter_present($check->class_id, $check->study_year_id, $month, $year);
+        // dd($data);
 
         if (session()->get('srole') == 'admin') return view('studies.present.show', $data);
         if (session()->get('srole') == 'teacher') return view('teachers.present.show', $data);

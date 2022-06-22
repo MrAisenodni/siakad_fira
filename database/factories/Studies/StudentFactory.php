@@ -34,7 +34,7 @@ class StudentFactory extends Factory
             'phone_number'      => trim($this->faker->e164PhoneNumber(), "+"),
             'level'             => $this->faker->randomElement(['10', '11', '12']),
             'group'             => $this->faker->randomElement(['Unggulan', 'Biasa', 'Superior']),
-            'start_date'        => $this->faker->date(),
+            'start_date'        => '2019-06-07',
             'extracurricular_id'=> $this->faker->numberBetween(1, 10),
             'study_year_id'     => 1,
             'sttb_no'           => $this->faker->numerify('############'),

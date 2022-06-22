@@ -6,6 +6,11 @@ use App\Models\Settings\{
     Login,
     Menu,
 };
+use App\Models\Studies\{
+    Payment,
+    Student,
+    Teacher,
+};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{ Auth, Hash };
 
@@ -15,6 +20,9 @@ class PagesController extends Controller
     {
         $this->login = new Login();
         $this->menus = new Menu();
+        $this->students = new Student();
+        $this->teachers = new Teacher();
+        $this->payments = new Payment();
     }
 
     public function dashboard()
@@ -22,6 +30,16 @@ class PagesController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title')->where('url', '/')->first(),
+            'cf_student'    => $this->students->select('id')->where('gender', 'p')->where('disabled', 0)->count(),
+            'cm_student'    => $this->students->select('id')->where('gender', 'l')->where('disabled', 0)->count(),
+            'c_student'     => $this->students->select('id')->where('disabled', 0)->count(),
+            'cf_teacher'    => $this->teachers->select('id')->where('gender', 'p')->where('disabled', 0)->count(),
+            'cm_teacher'    => $this->teachers->select('id')->where('gender', 'l')->where('disabled', 0)->count(),
+            'c_teacher'     => $this->teachers->select('id')->where('disabled', 0)->count(),
+            'c_blunas'      => $this->payments->select('id')->where('status', 'belum')->where('disabled', 0)->count(),
+            'c_lunas'       => $this->payments->select('id')->where('status', 'lunas')->where('disabled', 0)->count(),
+            'c_payment'     => $this->payments->select('id')->where('disabled', 0)->count(),
+            's_lunas'       => $this->payments->selectRaw('SUM(amount) AS total')->where('disabled', 0)->where('status', 'lunas')->first(),
         ];
 
         return view('index', $data);

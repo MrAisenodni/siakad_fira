@@ -29,17 +29,28 @@ class PaymentController extends Controller
     
     public function index(Request $request)
     {
+        $month = $request->month;
+        $year = $request->year;
+
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'payments'      => $this->payments->selectRaw('MAX(id) AS id, student_id, status')->where('disabled', 0)->groupByRaw('student_id, status')->get(),
+            'months'        => $this->months->select('id', 'name')->where('disabled', 0)->get(),
+            'inp_year'      => $year,
+            'inp_month'     => $month,
+            'students'      => $this->payments->total_payment(),
+            'payments'      => $this->payments->selectRaw('MAX(id) AS id, student_id, year, month, push_wa, status')->where('disabled', 0)->groupByRaw('student_id, year, month, push_wa, status')->get(),
         ];
+        // dd($data['payments'][0]->mst_month->name);
+        if ($month || $year) $data['payments'] = $this->payments->selectRaw('MAX(id) AS id, student_id, status')
+                ->where('month', $month)->where('year', $year)
+                ->where('disabled', 0)->groupByRaw('student_id, status')->get();
 
         if (session()->get('srole') == 'admin') return view('studies.payment.index', $data);
         abort(403);
     }
 
-    public function create(Request $request)
+    public function create()
     {
         $student = $this->payments->select('student_id')->where('disabled', 0)->get();
 
@@ -53,6 +64,60 @@ class PaymentController extends Controller
 
         if (session()->get('srole') == 'admin') return view('studies.payment.create', $data);
         abort(403);
+    }
+
+    public function create_payment()
+    {
+        $student = $this->payments->select('student_id')->where('disabled', 0)->get();
+
+        $data = [
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
+            'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
+            'months'        => $this->months->select('id', 'name')->where('disabled', 0)->get(),
+            'payments'      => $this->mst_payments->select('id', 'year')->where('disabled', 0)->get(),
+        ];
+
+        if (session()->get('srole') == 'admin') return view('studies.payment.create_payment', $data);
+        abort(403);
+    }
+
+    public function store_payment(Request $request)
+    {
+        $input = $request->all();
+
+        $validated = [
+            'month'     => 'required',
+            'year'      => 'required',
+        ];
+
+        $check = $this->payments->select('student_id')->where('disabled', 0)->where('month', $input['month'])->where('year', $input['year'])->get();
+        $mst_payment = $this->mst_payments->select('id', 'year', 'amount')->where('disabled', 0)->where('id', $input['year'])->first();
+        $month = $this->months->select('name')->where('id', $input['month'])->first();
+        $student = $this->students->select('id')->where('disabled', 0)->get();
+        $data = [
+            'month'         => $input['month'],
+            'payment_id'    => $mst_payment->id,
+            'year'          => $mst_payment->year,
+            'amount'        => $mst_payment->amount,
+            'status'        => 'belum',
+            'created_by'    => session()->get('sname'),
+            'created_at'    => now(),
+        ];
+
+        for ($i = 0; $i < $student->count(); $i++) {
+            $data['student_id'] = $student[$i]->id;
+
+            $this->payments->insert($data);
+        }
+
+        $payment = $this->payments->selectRaw('MAX(id) AS id')->where('disabled', 0)
+            ->whereIn('student_id', $check)->where('month', $input['month'])
+                ->where('payment_id', $input['year'])->get();
+        $this->payments->whereIn('id', $payment)->update([
+            'disabled' => 1
+        ]);
+
+        return redirect($this->url)->with('status', 'Tagihan SPP Bulan '.$month->name.' '.$mst_payment->year.' berhasil digenerate.');
     }
 
     public function store(Request $request)
@@ -179,24 +244,26 @@ class PaymentController extends Controller
 
     public function test(Request $request)
     {
-        $phone = $request->phone_number;
+        $input = $request->all();
 
-        $this->whatsappNotification($phone);
+        $this->payments->where('id', $input['payment_id'])->update([
+            'push_wa' => 1,
+        ]);
+        $body = "Siswa bernama ".$input['full_name']." belum melunasi SPP pada Bulan ".$input['month']." ".$input['year'];
+
+        $this->whatsappNotification($input['phone_number'], $body);
 
         return redirect($this->url)->with('status', 'Notifikasi Terkirim.');
     }
 
-    private function whatsappNotification(string $recipient)
+    private function whatsappNotification(string $recipient, $body)
     {
         $sid = getenv("TWILIO_AUTH_SID");
         $token = getenv("TWILIO_AUTH_TOKEN");
         $wa_from = getenv("TWILIO_WHATSAPP_FROM");
         $twilio = new Client($sid, $token);
-        // dd($sid, $token, $wa_from, $recipient, $twilio);
 
-        $body = "Sisa tagihanmu tinggal Rp 150.000";
-
-        return $twilio->messages->create("whatsapp:$recipient", [
+        return $twilio->messages->create("whatsapp:+$recipient", [
             "from"      => "whatsapp:".$wa_from,
             "body"      => $body,
         ]);

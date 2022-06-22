@@ -66,7 +66,12 @@
                                         <option value="" selected>SEMUA</option>
                                         @if ($months)
                                             @foreach ($months as $month)
-                                                <option @if(old('month') == $month->id) selected @endif value="{{ $month->id }}">{{ $month->name }}</option>
+                                                <option 
+                                                    @if ($inp_month) 
+                                                        @if(old('month', $inp_month) == $month->id) selected @endif 
+                                                    @else 
+                                                        @if(old('month') == $month->id) selected @endif 
+                                                    @endif value="{{ $month->id }}">{{ $month->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -79,7 +84,12 @@
                                     <select id="year" name="year" class="">
                                         <option value="" selected>SEMUA</option>
                                         @for ($i = date('Y', strtotime(now())); $i >= 1700; $i--)
-                                            <option @if(old('year') == $i) selected @endif value="{{ $i }}">{{ $i }}</option>
+                                            <option 
+                                                @if ($inp_year) 
+                                                    @if(old('year', $inp_year) == $i) selected @endif 
+                                                @else 
+                                                    @if(old('year') == $i) selected @endif 
+                                                @endif value="{{ $i }}">{{ $i }}</option>
                                         @endfor
                                     </select>
                                     <label for="year">Tahun</label>

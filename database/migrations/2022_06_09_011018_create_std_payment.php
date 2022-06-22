@@ -21,6 +21,7 @@ class CreateStdPayment extends Migration
             $table->year('year');
             $table->double('amount');
             $table->enum('status', ['lunas', 'belum', 'cicil']);
+            $table->boolean('push_wa')->default(0);
             $table->double('installment_amount')->nullable();
 
             // Struktur Baku
