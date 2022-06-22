@@ -14,12 +14,12 @@
             <div class="col s12">
                 <div class="card">
                     <div class="card-content">
-                        <div class="row">
-                            <div class="col s10">
-                                <h5 class="card-title">Kelola {{ $menu->title }}</h5>
+                        <div class="row" style="margin-bottom: 5px">
+                            <div class="col s8">
+                                <h5 class="card-title">{{ $menu->title }} Siswa</h5>
                             </div>
-                            <div class="col s2 right-align">
-                                <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a>
+                            <div class="col s4 right-align">
+                                {{-- <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">Tambah</a> --}}
                             </div>
                             @if (session('status'))
                                 <div class="col s12">
@@ -29,52 +29,32 @@
                                 </div>
                             @endif
                         </div>
-                        <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
-                            <thead>
-                                <tr>
-                                    <th>Mata Pelajaran</th>
-                                    <th>Masuk</th>
-                                    <th>Keluar</th>
-                                    <th>Alasan Absen</th>
-                                    <th>Nama</th>
-                                    <th>Posisi</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if ($presents)
-                                    @foreach ($presents as $present)
-                                        <tr id="data" data-id="{{ $present->id }}">
-                                            <td>{{ $present->lesson->name }}</td>
-                                            <td>{{ date('H:i', strtotime($present->clock_in)) }}</td>
-                                            <td>{{ date('H:i', strtotime($present->clock_out)) }}</td>
-                                            <td>{{ $present->reason }}</td>
-                                            <td>
-                                                @if ($present->role == 'student')
-                                                    [{{ $present->student->nis }}] {{ $present->student->full_name }}
-                                                @else
-                                                    [{{ $present->teacher->nis }}] {{ $present->teacher->full_name }}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($present->role == 'student')
-                                                    Siswa
-                                                @else
-                                                    Guru
-                                                @endif
-                                            </td>
-                                            <td id="no-data" class="text-center" style="width: 5%">
-                                                <form action="{{ $menu->url }}/{{ $present->id }}" method="POST" class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>
-                                                </form>
-                                            </td>
+                        <div class="row">
+                            <div class="col s12">
+                                <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kelas</th>
+                                            <th>Tahun Pelajaran</th>
+                                            <th>Jumlah Siswa</th>
                                         </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
+                                    </thead>
+                                    <tbody>
+                                        @if ($classes)
+                                            @foreach ($classes as $clazz)
+                                                <tr id="show" data-id="{{ $clazz->id }}">
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $clazz->class->name }}</td>
+                                                    <td>{{ $clazz->study_year->name }}</td>
+                                                    <td>{{ $clazz->student }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

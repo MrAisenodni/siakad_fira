@@ -160,7 +160,7 @@
                             </div>
                         </form>
                         {{-- Testing Whatsapp --}}
-                        {{-- <div class="row mt-4">
+                        <div class="row mt-4">
                             <div class="col s12" style="text-align: right">
                                 <form action="/what" method="POST">
                                     @csrf
@@ -168,7 +168,7 @@
                                     <button class="waves-effect waves-light btn btn-round green strong" type="submit">PUSH</button>
                                 </form>
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
             </div>

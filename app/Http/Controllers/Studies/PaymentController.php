@@ -192,11 +192,12 @@ class PaymentController extends Controller
         $token = getenv("TWILIO_AUTH_TOKEN");
         $wa_from = getenv("TWILIO_WHATSAPP_FROM");
         $twilio = new Client($sid, $token);
+        // dd($sid, $token, $wa_from, $recipient, $twilio);
 
         $body = "Sisa tagihanmu tinggal Rp 150.000";
 
         return $twilio->messages->create("whatsapp:$recipient", [
-            "from"      => "whatsapp:$wa_from",
+            "from"      => "whatsapp:".$wa_from,
             "body"      => $body,
         ]);
     }

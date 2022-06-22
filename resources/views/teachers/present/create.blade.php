@@ -84,9 +84,11 @@
                             <input type="hidden" name="study_date" value="{{ old('study_date', $study_date) }}">
                             <input type="hidden" name="c_student" value="{{ $classes->count() }}">
                             @if ($classes)
-                                @foreach ($classes as $claz)
+                            @foreach ($classes as $claz)
+                                <input type="hidden" name="student{{ $loop->iteration }}" value="{{ $claz->student_id }}">
+                                <input type="hidden" name="clazz{{ $loop->iteration }}" value="{{ $claz->id }}">
                                     <div class="row">
-                                        <div class="input-field col s8">
+                                        <div class="input-field col s7">
                                             <label for="full_name">Nama Siswa</label>
                                             <input id="full_name" type="text" name="full_name" value="{{ $claz->student->full_name }}" disabled>
                                         </div>
@@ -114,6 +116,7 @@
                                                 <span>Absen</span>
                                             </label>
                                         </div>
+                                        <div class="col s1"></div>
                                     </div>
                                 @endforeach
                             @endif

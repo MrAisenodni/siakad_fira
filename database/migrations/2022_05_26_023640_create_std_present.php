@@ -18,10 +18,10 @@ class CreateStdPresent extends Migration
             $table->date('study_date')->nullable();
             $table->unsignedInteger('student_id')->nullable();
             $table->unsignedInteger('class_id')->nullable();
-            $table->boolean('present')->default(0);
-            $table->boolean('absent')->default(0);
-            $table->boolean('sick')->default(0);
-            $table->boolean('permit')->default(0);
+            $table->integer('present')->default(0);
+            $table->integer('absent')->default(0);
+            $table->integer('sick')->default(0);
+            $table->integer('permit')->default(0);
                                     
             // Struktur Baku
             $table->boolean('disabled')->default(0);

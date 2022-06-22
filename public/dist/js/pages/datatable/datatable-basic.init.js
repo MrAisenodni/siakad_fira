@@ -104,12 +104,21 @@ $('#zero_config').DataTable({
 });
 
 /****************************************
- *       Default Order Table           *
+ *       Presnt Config Data Tables      *
  ****************************************/
-$('#default_order').DataTable({
-    "order": [
-        [3, "desc"]
-    ]
+$('#present_config').DataTable({
+    "pageLength": 25,
+    "processing": true,
+    "serverside": true,
+    "drawCallback": function() {
+        $('tbody>tr').hover(function () {
+            $('form>button', this).addClass('white-text').removeClass('materialize-red-text')
+            $(this).addClass('blue white-text')
+        }, function () {
+            $('form>button', this).addClass('materialize-red-text').removeClass('white-text')
+            $(this).removeClass('blue white-text')
+        })
+    }
 });
 
 /****************************************
