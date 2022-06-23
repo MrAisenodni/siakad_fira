@@ -51,142 +51,169 @@
                                 <div id="personal" class="col s12"><hr>
                                     {{-- Personal --}}
                                     <div class="row">
-                                        <div class="input-field col s3">
-                                            <input id="nik" type="text" placeholder="NIK" name="nik" value="{{ old('nik', $student->nik) }}" disabled>
-                                            <label for="nik">NIK <span class="materialize-red-text">*</span></label>
-                                            @error('nik')
-                                                <div class="error">{{ $message }}</div>
-                                            @enderror
+                                        <input type="hidden" name="old_photo" value="{{ $student->picture }}">
+                                        <div class="col s4">
+                                            <div class="row">
+                                                <div class="col s12" style="text-align: center">
+                                                    <img class="img-preview img-fluid" alt="Foto Profil" style="max-width: 300px; max-height: 400px" @if ($student->picture) src="/download?file={{ $student->picture }}" @else src="/download/?file=/photos/blank-profile.jpeg" @endif>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="file-field input-field col s12">
+                                                    <div class="btn">
+                                                        <span>Unggah Foto</span>
+                                                        <input type="file" name="photo" id="photo" value="{{ old('photo', $student->picture) }}">
+                                                    </div>
+                                                    <div class="file-path-wrapper">
+                                                        <input class="file-path validate" type="text">
+                                                    </div>
+                                                    @error('photo')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="input-field col s2">
-                                            <input id="nis" type="text" placeholder="NIS" name="nis" value="{{ old('nis', $student->nis) }}" disabled>
-                                            <label for="nis">NIS <span class="materialize-red-text">*</span></label>
-                                            @error('nis')
-                                                <div class="error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="input-field col s2">
-                                            <input id="nisn" type="text" placeholder="NISN" name="nisn" value="{{ old('nisn', $student->nisn) }}" disabled>
-                                            <label for="nisn">NISN <span class="materialize-red-text">*</span></label>
-                                            @error('nisn')
-                                                <div class="error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="input-field col s5">
-                                            <input id="full_name" type="text" placeholder="Nama Lengkap" name="full_name" value="{{ old('full_name', $student->full_name) }}" disabled>
-                                            <label for="full_name">Nama Lengkap <span class="materialize-red-text">*</span></label>
-                                            @error('full_name')
-                                                <div class="error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="input-field col s3">
-                                            <input id="birth_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="birth_date" value="{{ old('birth_date', date('d/m/Y', strtotime($student->birth_date))) }}" disabled>
-                                            <label for="birth_date">Tanggal Lahir <span class="materialize-red-text">*</span></label>
-                                            @error('birth_date')
-                                                <div class="error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="input-field col s5">
-                                            <input id="birth_place" type="text" placeholder="Tempat Lahir" name="birth_place" value="{{ old('birth_place', $student->birth_place) }}" disabled>
-                                            <label for="birth_place">Tempat Lahir <span class="materialize-red-text">*</span></label>
-                                            @error('birth_place')
-                                                <div class="error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="input-field col s2">
-                                            <input id="height" type="text" placeholder="143" name="height" value="{{ old('height', $student->height) }}" disabled>
-                                            <label for="height">Tinggi Badan (cm) <span class="materialize-red-text">*</span></label>
-                                            @error('height')
-                                                <div class="error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="input-field col s2">
-                                            <input id="weight" type="text" placeholder="55" name="weight" value="{{ old('weight', $student->weight) }}" disabled>
-                                            <label for="weight">Berat Badan (kg) <span class="materialize-red-text">*</span></label>
-                                            @error('weight')
-                                                <div class="error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="input-field col s4">
-                                            <p>
-                                                <label for="gender">
-                                                    Jenis Kelamin <span class="materialize-red-text">*</span>
-                                                </label><br>
-                                                <label>
-                                                    <input id="gender" name="gender" type="radio" @if(old('gender', $student->gender) == 'l') checked @endif value="l" checked / disabled>
-                                                    <span>Laki-Laki</span>
-                                                </label>
-                                                <label>
-                                                    <input id="gender" name="gender" type="radio" @if(old('gender', $student->gender) == 'p') checked @endif value="p" / disabled>
-                                                    <span>Perempuan</span>
-                                                </label>
-                                            </p>
-                                            <label for="gender"></label>
-                                            @error('gender')
-                                                <div class="error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="input-field col s8">
-                                            <select id="religion" name="religion" class="">
-                                                <option value="" selected>--- SILAHKAN PILIH ---</option>
-                                                @if ($religions)
-                                                    @foreach ($religions as $religion)
-                                                        <option @if(old('religion', $student->religion_id) == $religion->id) selected @endif value="{{ $religion->id }}">{{ $religion->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
-                                            <label for="religion">Agama <span class="materialize-red-text">*</span></label>
-                                            @error('religion')
-                                                <div class="error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="input-field col s4">
-                                            <select id="citizen" name="citizen" class="">
-                                                <option value="" selected>--- SILAHKAN PILIH ---</option>
-                                                <option @if(old('citizen', $student->citizen) == 'wni') selected @endif value="wni">Warga Negara Indonesia</option>
-                                                <option @if(old('citizen', $student->citizen) == 'wna') selected @endif value="wna">Warga Negara Asing</option>
-                                            </select>
-                                            <label for="citizen">Kewarganegaraan <span class="materialize-red-text">*</span></label>
-                                            @error('citizen')
-                                                <div class="error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="input-field col s4">
-                                            <select id="language" name="language" class="">
-                                                <option value="" selected>--- SILAHKAN PILIH ---</option>
-                                                @if ($languages)
-                                                    @foreach ($languages as $language)
-                                                        <option @if(old('language', $student->language_id) == $language->id) selected @endif value="{{ $language->id }}">{{ $language->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
-                                            <label for="language">Bahasa <span class="materialize-red-text">*</span></label>
-                                            @error('language')
-                                                <div class="error">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="input-field col s4">
-                                            <select id="blood_type" name="blood_type" class="">
-                                                <option value="" selected>--- SILAHKAN PILIH ---</option>
-                                                @if ($blood_types)
-                                                    @foreach ($blood_types as $blood_type)
-                                                        <option @if(old('blood_type', $student->blood_type_id) == $blood_type->id) selected @endif value="{{ $blood_type->id }}">{{ $blood_type->name }}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
-                                            <label for="blood_type">Golongan Darah</label>
-                                            @error('blood_type')
-                                                <div class="error">{{ $message }}</div>
-                                            @enderror
+                                        <div class="col s8">
+                                            <div class="row">
+                                                <div class="input-field col s6">
+                                                    <input id="nik" type="text" placeholder="NIK" name="nik" value="{{ old('nik', $student->nik) }}">
+                                                    <label for="nik">NIK <span class="materialize-red-text">*</span></label>
+                                                    @error('nik')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="input-field col s6">
+                                                    <input id="nisn" type="text" placeholder="NISN" name="nisn" value="{{ old('nisn', $student->nisn) }}">
+                                                    <label for="nisn">NISN <span class="materialize-red-text">*</span></label>
+                                                    @error('nisn')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s3">
+                                                    <input id="nis" type="text" placeholder="NIS" name="nis" value="{{ old('nis', $student->nis) }}">
+                                                    <label for="nis">NIS <span class="materialize-red-text">*</span></label>
+                                                    @error('nis')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="input-field col s9">
+                                                    <input id="full_name" type="text" placeholder="Nama Lengkap" name="full_name" value="{{ old('full_name', $student->full_name) }}">
+                                                    <label for="full_name">Nama Lengkap <span class="materialize-red-text">*</span></label>
+                                                    @error('full_name')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s4">
+                                                    <input id="birth_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="birth_date" value="{{ old('birth_date', date('d/m/Y', strtotime($student->birth_date))) }}">
+                                                    <label for="birth_date">Tanggal Lahir <span class="materialize-red-text">*</span></label>
+                                                    @error('birth_date')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="input-field col s8">
+                                                    <input id="birth_place" type="text" placeholder="Tempat Lahir" name="birth_place" value="{{ old('birth_place', $student->birth_place) }}">
+                                                    <label for="birth_place">Tempat Lahir <span class="materialize-red-text">*</span></label>
+                                                    @error('birth_place')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s3">
+                                                    <input id="height" type="text" placeholder="143" name="height" value="{{ old('height', $student->height) }}">
+                                                    <label for="height">Tinggi Badan (cm) <span class="materialize-red-text">*</span></label>
+                                                    @error('height')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="input-field col s3">
+                                                    <input id="weight" type="text" placeholder="55" name="weight" value="{{ old('weight', $student->weight) }}">
+                                                    <label for="weight">Berat Badan (kg) <span class="materialize-red-text">*</span></label>
+                                                    @error('weight')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="input-field col s6">
+                                                    <p>
+                                                        <label for="gender">
+                                                            Jenis Kelamin <span class="materialize-red-text">*</span>
+                                                        </label><br>
+                                                        <label>
+                                                            <input id="gender" name="gender" type="radio" @if(old('gender', $student->gender) == 'l') checked @endif value="l" checked />
+                                                            <span>Laki-Laki</span>
+                                                        </label>
+                                                        <label>
+                                                            <input id="gender" name="gender" type="radio" @if(old('gender', $student->gender) == 'p') checked @endif value="p" />
+                                                            <span>Perempuan</span>
+                                                        </label>
+                                                    </p>
+                                                    <label for="gender"></label>
+                                                    @error('gender')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s6">
+                                                    <select id="religion" name="religion" class="">
+                                                        <option value="" selected>--- SILAHKAN PILIH ---</option>
+                                                        @if ($religions)
+                                                            @foreach ($religions as $religion)
+                                                                <option @if(old('religion', $student->religion_id) == $religion->id) selected @endif value="{{ $religion->id }}">{{ $religion->name }}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
+                                                    <label for="religion">Agama <span class="materialize-red-text">*</span></label>
+                                                    @error('religion')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="input-field col s6">
+                                                    <select id="citizen" name="citizen" class="">
+                                                        <option value="" selected>--- SILAHKAN PILIH ---</option>
+                                                        <option @if(old('citizen', $student->citizen) == 'wni') selected @endif value="wni">Warga Negara Indonesia</option>
+                                                        <option @if(old('citizen', $student->citizen) == 'wna') selected @endif value="wna">Warga Negara Asing</option>
+                                                    </select>
+                                                    <label for="citizen">Kewarganegaraan <span class="materialize-red-text">*</span></label>
+                                                    @error('citizen')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s6">
+                                                    <select id="language" name="language" class="">
+                                                        <option value="" selected>--- SILAHKAN PILIH ---</option>
+                                                        @if ($languages)
+                                                            @foreach ($languages as $language)
+                                                                <option @if(old('language', $student->language_id) == $language->id) selected @endif value="{{ $language->id }}">{{ $language->name }}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
+                                                    <label for="language">Bahasa <span class="materialize-red-text">*</span></label>
+                                                    @error('language')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                                <div class="input-field col s6">
+                                                    <select id="blood_type" name="blood_type" class="">
+                                                        <option value="" selected>--- SILAHKAN PILIH ---</option>
+                                                        @if ($blood_types)
+                                                            @foreach ($blood_types as $blood_type)
+                                                                <option @if(old('blood_type', $student->blood_type_id) == $blood_type->id) selected @endif value="{{ $blood_type->id }}">{{ $blood_type->name }}</option>
+                                                            @endforeach
+                                                        @endif
+                                                    </select>
+                                                    <label for="blood_type">Golongan Darah</label>
+                                                    @error('blood_type')
+                                                        <div class="error">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

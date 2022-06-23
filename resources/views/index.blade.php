@@ -19,6 +19,7 @@
         <!-- ============================================================== -->
         <!-- Family School Summery -->
         <!-- ============================================================== -->
+        @if (session()->get('srole') == 'teacher' || session()->get('srole') == 'admin')
         <div class="row">
             <div class="col l3 m6 s12">
                 <div class="card danger-gradient card-hover">
@@ -106,6 +107,7 @@
                 </div>
             </div>
         </div>
+        @endif
         
         <!-- ============================================================== -->
         <!-- Payment Student Summery -->
@@ -120,7 +122,11 @@
                                     @if ($c_blunas)
                                         {{ $c_blunas }}/{{ $c_payment }}
                                     @else
-                                        0/{{ $c_payment }}
+                                        @if ($c_payment)
+                                            0/{{ $c_payment }}
+                                        @else
+                                            0/0
+                                        @endif
                                     @endif
                                 </h2>
                                 <h6 class="white-text op-5 light-blue-text">SPP Belum Lunas</h6>
@@ -141,7 +147,11 @@
                                     @if ($c_lunas)
                                         {{ $c_lunas }}/{{ $c_payment }}
                                     @else
-                                        0/{{ $c_payment }}
+                                        @if ($c_payment)
+                                            0/{{ $c_payment }}
+                                        @else
+                                            0/0
+                                        @endif
                                     @endif
                                 </h2>
                                 <h6 class="white-text op-5">SPP Lunas</h6>
@@ -166,7 +176,11 @@
                                         Rp 0,-
                                     @endif
                                 </h2>
-                                <h6 class="white-text op-5 text-darken-2">Total Pemasukan SPP</h6>
+                                @if (session()->get('srole') == 'teacher' || session()->get('srole') == 'admin')
+                                    <h6 class="white-text op-5 text-darken-2">Total Pemasukan SPP</h6>
+                                @else
+                                    <h6 class="white-text op-5 text-darken-2">Total SPP Belum Lunas</h6>
+                                @endif
                             </div>
                             <div class="ml-auto">
                                 <span class="white-text display-6"><i class="material-icons">receipt</i></span>

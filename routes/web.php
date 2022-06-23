@@ -88,3 +88,5 @@ Route::middleware('authcheck')->group(function() {
     Route::resource('/studi/spp', StdPaymentController::class);
     Route::post('/what', [StdPaymentController::class, 'test']);
 });
+
+Route::get('/download', [ArticleController::class, 'download']);

@@ -37,6 +37,22 @@ $(function() {
         }
     })
     // ============================================================== 
+    // function to preview image
+    // ============================================================== 
+    $('#photo').change(function () {
+        const image = $(this)
+        const imgPreview = $('.img-preview')
+
+        imgPreview.style.display = 'block'
+
+        const ofReader = new FileReader()
+        ofReader.readAsDataURL(image.files[0])
+
+        ofReader.onload = function (oFREvent) {
+            imgPreview.src = oFREvent.target.result
+        }
+    })
+    // ============================================================== 
     // auto currency
     // ============================================================== 
     // formatCurrency($('input[data-type="currency"]'))

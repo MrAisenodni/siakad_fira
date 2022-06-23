@@ -41,7 +41,7 @@ return [
     'different' => 'The :attribute and :other must be different.',
     'digits' => ':attribute harus :digits digit.',
     'digits_between' => ':attribute minimal :min dan maksimal :max digit.',
-    'dimensions' => 'The :attribute has invalid image dimensions.',
+    'dimensions' => ':attribute dimensi tidak valid.',
     'distinct' => 'The :attribute field has a duplicate value.',
     'email' => 'The :attribute must be a valid email address.',
     'ends_with' => 'The :attribute must end with one of the following: :values.',

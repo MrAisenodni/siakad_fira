@@ -159,6 +159,6 @@ class ArticleController extends Controller
 
     public function download(Request $request)
     {
-        return response()->file(public_path().'/pengumuman/'.$request->file);
+        return response()->file(public_path().'/storage/'.$request->file);
     }
 }

@@ -99,7 +99,7 @@ class StudentController extends Controller
             'language'      => 'required',
             'height'        => 'required|numeric',
             'weight'        => 'required|numeric',
-            'picture'       => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048',
+            'photo'         => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048|dimensions:max_width=300px,max_height=400px',
             
             // Validasi Keluarga
             'family_status'     => 'required',
@@ -150,6 +150,8 @@ class StudentController extends Controller
             'mother_revenue'        => 'required',
         ]);
 
+        $photo_path = $request->photo->storeAs('students', strtotime(now()).'_'.$request->nis.'_'.$request->full_name.'.png', 'public');
+
         if ($input['child_to'] >= $input['child_count']) return redirect($this->url.'/create')->with('status', 'Anak Dari tidak boleh lebih besar dari Jumlah Saudara.')->withInput();
         if ($input['from_study_date'] > $input['to_study_date']) return redirect($this->url.'/create')->with('status', 'Tanggal Dari tidak boleh lebih besar dari Tanggal Sampai.')->withInput();
 
@@ -167,6 +169,8 @@ class StudentController extends Controller
                 'nisn'      => $input['nisn'],
             ];
         }
+
+        if ($request->photo) $data['picture'] = $photo_path;
 
         $data += [
             'full_name'             => $input['full_name'],
@@ -345,6 +349,8 @@ class StudentController extends Controller
         $father_died = $request->father_died;
         $mother_died = $request->mother_died;
         $guardian_died = $request->guardian_died;
+        $guardian = $request->guardian;
+        $photo_path = $request->old_photo;
         $input = $request->all();
         $check = $this->students
                         ->where('nik', $input['nik'])
@@ -364,7 +370,7 @@ class StudentController extends Controller
             'language'      => 'required',
             'height'        => 'required|numeric',
             'weight'        => 'required|numeric',
-            'picture'       => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048',
+            'photo'         => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048|dimensions:max_width=300px,max_height=400px',
             
             // Validasi Keluarga
             'family_status'     => 'required',
@@ -418,6 +424,11 @@ class StudentController extends Controller
         if ($input['child_to'] >= $input['child_count']) return redirect($this->url.'/'.$id.'/edit')->with('status', 'Anak Dari tidak boleh lebih besar dari Jumlah Saudara.')->withInput();
         if ($input['from_study_date'] > $input['to_study_date']) return redirect($this->url.'/'.$id.'/edit')->with('status', 'Tanggal Dari tidak boleh lebih besar dari Tanggal Sampai.')->withInput();
 
+        if ($request->photo) {
+            if ($request->old_photo) File::delete(public_path().'/storage/'.$request->old_photo);
+            $photo_path = $request->photo->storeAs('students', strtotime(now()).'_'.$request->nis.'_'.$request->full_name.'.png', 'public');
+        }
+
         $data = [
             'nik'                   => $input['nik'],
             'nis'                   => $input['nis'],
@@ -434,7 +445,7 @@ class StudentController extends Controller
             // 'physical_disorder'     => $input['physical_disorder'],
             'height'                => $input['height'],
             'weight'                => $input['weight'],
-            // 'picture'     => $input['picture'],
+            'picture'               => $photo_path,
             'family_status_id'      => $input['family_status'],
             'child_to'              => $input['child_to'],
             'child_count'           => $input['child_count'],
@@ -494,7 +505,7 @@ class StudentController extends Controller
             'updated_by'        => session()->get('sname'),
         ];
 
-        if ($input['guardian']) 
+        if ($guardian) {
             $validated = $request->validate([        
                 // Validasi Wali
                 'guardian_name'           => 'required',
@@ -508,25 +519,46 @@ class StudentController extends Controller
                 'guardian_occupation'     => 'required',
                 'guardian_revenue'        => 'required',
             ]);
+
+            $guardian = [
+                'full_name'         => $input['guardian_name'],
+                'birth_date'        => date('Y-m-d', strtotime(str_replace('/', '-', $input['guardian_birth_date']))),
+                'birth_place'       => $input['guardian_birth_place'],
+                'gender'            => $input['guardian_gender'],
+                'citizen'           => $input['guardian_citizen'],
+                'address'           => $input['guardian_address'],
+                'phone_number'      => $input['guardian_phone_number'],
+                'home_number'       => $input['guardian_home_number'],
+                'last_study'        => $input['guardian_last_study'],
+                'occupation_id'     => $input['guardian_occupation'],
+                'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['guardian_revenue'], "Rp"))),
+                'revenue_type'      => $input['guardian_revenue_type'],
+                'parent'            => 0,
+            ];
+            ($guardian_died) ? $guardian['died'] = $guardian_died : $guardian['died'] = 0;
+            
+            $c_guardian = $this->parents->where('student_id', $id)->where('parent', 0)->first();
+
+            if($c_guardian) { 
+                $guardian += [
+                    'updated_at'        => now(),
+                    'updated_by'        => session()->get('sname'),
+                ];
+    
+                $this->parents->where('id', $c_guardian['id'])->update($guardian);
+            } else {
+                $guardian += [
+                    'student_id'        => $id,
+                    'created_at'        => now(),
+                    'created_by'        => session()->get('sname'),
+                ];
+    
+                $this->parents->insert($guardian);
+            }
+        }
+
         ($father_died) ? $father['died'] = $father_died : $father['died'] = 0;
         ($mother_died) ? $mother['died'] = $mother_died : $mother['died'] = 0;
-
-        $guardian = [
-            'full_name'         => $input['guardian_name'],
-            'birth_date'        => date('Y-m-d', strtotime(str_replace('/', '-', $input['guardian_birth_date']))),
-            'birth_place'       => $input['guardian_birth_place'],
-            'gender'            => $input['guardian_gender'],
-            'citizen'           => $input['guardian_citizen'],
-            'address'           => $input['guardian_address'],
-            'phone_number'      => $input['guardian_phone_number'],
-            'home_number'       => $input['guardian_home_number'],
-            'last_study'        => $input['guardian_last_study'],
-            'occupation_id'     => $input['guardian_occupation'],
-            'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['guardian_revenue'], "Rp"))),
-            'revenue_type'      => $input['guardian_revenue_type'],
-            'parent'            => 0,
-        ];
-        ($guardian_died) ? $guardian['died'] = $guardian_died : $guardian['died'] = 0;
 
         if ($check) $this->students->where('id', $check['id'])->delete();
 
@@ -534,27 +566,10 @@ class StudentController extends Controller
 
         $c_father = $this->parents->where('student_id', $id)->where('parent', 1)->where('gender', 'l')->first();
         $c_mother = $this->parents->where('student_id', $id)->where('parent', 1)->where('gender', 'p')->first();
-        $c_guardian = $this->parents->where('student_id', $id)->where('parent', 0)->first();
 
         // update parents
         $this->parents->where('id', $c_father['id'])->update($father);
         $this->parents->where('id', $c_mother['id'])->update($mother);
-        if($c_guardian) { 
-            $guardian += [
-                'updated_at'        => now(),
-                'updated_by'        => session()->get('sname'),
-            ];
-
-            $this->parents->where('id', $c_guardian['id'])->update($guardian);
-        } else {
-            $guardian += [
-                'student_id'        => $id,
-                'created_at'        => now(),
-                'created_by'        => session()->get('sname'),
-            ];
-
-            $this->parents->insert($guardian);
-        }
 
         return redirect($this->url)->with('status', 'Data berhasil diubah.');
     }

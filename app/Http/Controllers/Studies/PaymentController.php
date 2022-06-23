@@ -38,7 +38,6 @@ class PaymentController extends Controller
             'months'        => $this->months->select('id', 'name')->where('disabled', 0)->get(),
             'inp_year'      => $year,
             'inp_month'     => $month,
-            'students'      => $this->payments->total_payment(),
             'payments'      => $this->payments->selectRaw('MAX(id) AS id, student_id, year, month, push_wa, status')->where('disabled', 0)->groupByRaw('student_id, year, month, push_wa, status')->get(),
         ];
         // dd($data['payments'][0]->mst_month->name);
@@ -47,6 +46,16 @@ class PaymentController extends Controller
                 ->where('disabled', 0)->groupByRaw('student_id, status')->get();
 
         if (session()->get('srole') == 'admin') return view('studies.payment.index', $data);
+        if (session()->get('srole') == 'student' || session()->get('srole') == 'parent') {
+            $data['payments'] = $this->payments->selectRaw('MAX(id) AS id, year, month, status')
+                ->where('disabled', 0)->where('student_id', session()->get('suser_id'))->groupByRaw('year, month, status')->get();
+
+            if ($month || $year) $data['payments'] = $this->payments->selectRaw('MAX(id) AS id, year, month, status')
+                ->where('disabled', 0)->where('student_id', session()->get('suser_id'))
+                ->where('month', $month)->where('year', $year)->groupByRaw('year, month, status')->get();
+                
+            return view('students.payment.index', $data);
+        } 
         abort(403);
     }
 
@@ -211,11 +220,12 @@ class PaymentController extends Controller
             'student_id'    => $input['student'],
             'payment_id'    => $input['payment'],
             'amount'        => str_replace(',', '.',str_replace('.', '', trim($input['amount'], 'Rp'))),
+            'status'        => $input['status'],
             'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 
-        if ($check) return redirect(url()->previous())->with('error', 'Data sudah terdaftar.')->withInput();
+        // if ($check) return redirect(url()->previous())->with('error', 'Data sudah terdaftar.')->withInput();
 
         $this->payments->where('id', $id)->update($data);
 

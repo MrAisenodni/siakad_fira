@@ -36,11 +36,23 @@ class PagesController extends Controller
             'cf_teacher'    => $this->teachers->select('id')->where('gender', 'p')->where('disabled', 0)->count(),
             'cm_teacher'    => $this->teachers->select('id')->where('gender', 'l')->where('disabled', 0)->count(),
             'c_teacher'     => $this->teachers->select('id')->where('disabled', 0)->count(),
-            'c_blunas'      => $this->payments->select('id')->where('status', 'belum')->where('disabled', 0)->count(),
-            'c_lunas'       => $this->payments->select('id')->where('status', 'lunas')->where('disabled', 0)->count(),
-            'c_payment'     => $this->payments->select('id')->where('disabled', 0)->count(),
-            's_lunas'       => $this->payments->selectRaw('SUM(amount) AS total')->where('disabled', 0)->where('status', 'lunas')->first(),
         ];
+
+        if (session()->get('srole') == 'student' || session()->get('srole') == 'parent') {
+            $data += [
+                'c_blunas'      => $this->payments->select('id')->where('status', 'belum')->where('student_id', session()->get('suser_id'))->where('disabled', 0)->count(),
+                'c_lunas'       => $this->payments->select('id')->where('status', 'lunas')->where('student_id', session()->get('suser_id'))->where('disabled', 0)->count(),
+                'c_payment'     => $this->payments->select('id')->where('student_id', session()->get('suser_id'))->where('disabled', 0)->count(),
+                's_lunas'       => $this->payments->selectRaw('SUM(amount) AS total')->where('student_id', session()->get('suser_id'))->where('disabled', 0)->where('status', 'belum')->first(),
+            ];
+        } else {
+            $data += [
+                'c_blunas'      => $this->payments->select('id')->where('status', 'belum')->where('disabled', 0)->count(),
+                'c_lunas'       => $this->payments->select('id')->where('status', 'lunas')->where('disabled', 0)->count(),
+                'c_payment'     => $this->payments->select('id')->where('disabled', 0)->count(),
+                's_lunas'       => $this->payments->selectRaw('SUM(amount) AS total')->where('disabled', 0)->where('status', 'lunas')->first(),
+            ];
+        }
 
         return view('index', $data);
     }
