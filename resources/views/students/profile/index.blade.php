@@ -36,7 +36,7 @@
                                 {{ session('error') }}
                             </div>
                         @endif
-                        <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">
+                        <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                                 <div class="col s12">
@@ -55,7 +55,7 @@
                                         <div class="col s4">
                                             <div class="row">
                                                 <div class="col s12" style="text-align: center">
-                                                    <img class="img-preview img-fluid" alt="Foto Profil" style="max-width: 300px; max-height: 400px" @if ($student->picture) src="/download?file={{ $student->picture }}" @else src="/download/?file=/photos/blank-profile.jpeg" @endif>
+                                                    <img class="img-preview img-fluid" alt="Foto Profil" style="max-width: 300px; max-height: 400px" @if ($student->picture) src="{{ asset($student->picture) }}" @else src="/download/?file=/photos/blank-profile.jpeg" @endif>
                                                 </div>
                                             </div>
                                             <div class="row">

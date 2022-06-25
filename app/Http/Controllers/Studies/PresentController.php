@@ -27,12 +27,43 @@ class PresentController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'LIKE', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'classes'       => $this->classes->selectRaw('MAX(id) AS id, COUNT(student_id) AS student, class_id, study_year_id')->where('disabled', 0)->groupByRaw('class_id, study_year_id')->get(),
+            'months'        => $this->months->select('id', 'name')->where('disabled', 0)->get(),
         ];
 
-        if (session()->get('srole') == 'admin') return view('studies.present.index', $data);
-        if (session()->get('srole') == 'teacher') return view('teachers.present.index', $data);
-        abort(403);
+        if (session()->get('srole') == 'student' || session()->get('srole') == 'parent') {
+            $month = $request->month;
+            $year = $request->year;
+
+            if ($month || $year) {
+                $data += [
+                    'c_present'     => $this->presents->where('student_id', session()->get('suser_id'))->where('disabled', 0)->where('present', '<>', 0)->where('study_date', 'LIKE', $year.'-%'.$month.'-%')->count(),
+                    'c_sick'        => $this->presents->where('student_id', session()->get('suser_id'))->where('disabled', 0)->where('sick', '<>', 0)->where('study_date', 'LIKE', $year.'-%'.$month.'-%')->count(),
+                    'c_permit'      => $this->presents->where('student_id', session()->get('suser_id'))->where('disabled', 0)->where('permit', '<>', 0)->where('study_date', 'LIKE', $year.'-%'.$month.'-%')->count(),
+                    'c_absent'      => $this->presents->where('student_id', session()->get('suser_id'))->where('disabled', 0)->where('absent', '<>', 0)->where('study_date', 'LIKE', $year.'-%'.$month.'-%')->count(),
+                    'presents'      => $this->presents->where('student_id', session()->get('suser_id'))->where('disabled', 0)->where('study_date', 'LIKE', $year.'-%'.$month.'-%')->get(),
+                ];
+            } else {
+                $data += [
+                    'presents'      => $this->presents->where('student_id', session()->get('suser_id'))->where('disabled', 0)->get(),
+                    'c_present'     => $this->presents->where('student_id', session()->get('suser_id'))->where('disabled', 0)->where('present', '<>', 0)->count(),
+                    'c_sick'        => $this->presents->where('student_id', session()->get('suser_id'))->where('disabled', 0)->where('sick', '<>', 0)->count(),
+                    'c_permit'      => $this->presents->where('student_id', session()->get('suser_id'))->where('disabled', 0)->where('permit', '<>', 0)->count(),
+                    'c_absent'      => $this->presents->where('student_id', session()->get('suser_id'))->where('disabled', 0)->where('absent', '<>', 0)->count(),
+                ];
+            }
+
+            $data += [
+                'inp_month'     => $month,
+                'inp_year'      => $year,
+            ];
+            
+            return view('students.present.index', $data);
+        } else {
+            $data['classes'] = $this->classes->selectRaw('MAX(id) AS id, COUNT(student_id) AS student, class_id, study_year_id')->where('disabled', 0)->groupByRaw('class_id, study_year_id')->get();
+
+            if (session()->get('srole') == 'admin') return view('studies.present.index', $data);
+            if (session()->get('srole') == 'teacher') return view('teachers.present.index', $data);
+        }
     }
 
     public function store(Request $request)

@@ -91,6 +91,7 @@ Route::middleware('authcheck')->group(function() {
 
     // Print Routes
     Route::get('/studi/kelas/{id}/cetak', [PrintController::class, 'print_class']);
+    Route::get('/studi/siswa/{id}/cetak', [PrintController::class, 'print_student']);
 });
 
 Route::get('/download', [ArticleController::class, 'download']);

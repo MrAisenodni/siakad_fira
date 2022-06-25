@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Studies;
 
 use App\Models\Studies\{
     ClassModel,
+    ParentModel,
+    Student,
     Teacher,
 };
 use App\Http\Controllers\Controller;
@@ -14,6 +16,8 @@ class PrintController extends Controller
 {
     public function __construct()
     {
+        $this->students = new Student();
+        $this->parents = new ParentModel();
         $this->teachers = new Teacher();
         $this->classes = new ClassModel();
     }
@@ -29,6 +33,20 @@ class PrintController extends Controller
         ];
 
         $pdf = PDF::loadView('studies.class.print', $data);
-        return $pdf->stream('test.pdf');
+        return $pdf->stream(now().'_Kelas_'.$clazz->class->name.'.pdf');
+    }
+
+    public function print_student($id)
+    {
+        $data = [
+            'student'       => $this->students->where('id', $id)->first(),
+            'father'        => $this->parents->where('student_id', $id)->where('parent', 1)->where('gender', 'l')->where('disabled', 0)->first(),
+            'mother'        => $this->parents->where('student_id', $id)->where('parent', 1)->where('gender', 'p')->where('disabled', 0)->first(),
+            'guardian'      => $this->parents->where('student_id', $id)->where('parent', 0)->where('disabled', 0)->first(),
+        ];
+
+        $pdf = PDF::loadView('studies.student.print', $data);
+        return $pdf->stream($data['student']->nis.'_Lembar Induk Siswa_'.$data['student']->full_name.'.pdf');
+        // return view('studies.student.print', $data);
     }
 }

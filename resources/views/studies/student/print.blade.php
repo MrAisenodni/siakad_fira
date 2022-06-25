@@ -1,90 +1,74 @@
-@extends('layouts.main')
-
-@section('title', $menu->title)
-
-@section('styles')
-    {{-- Prism --}}
-    <link href="{{ asset('/extra-libs/prism/prism.css') }}" rel="stylesheet">
-
-    {{-- Select2 --}}
-    <link href="{{ asset('/libs/select2/dist/css/select2.css') }}" rel="stylesheet">
-
-    {{-- Data Tables --}}
-    <link href="{{ asset('/dist/css/pages/data-table.css') }}" rel="stylesheet">
-@endsection
-
-@section('content')
-<div class="page-wrapper">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col s12">
-                <div class="card">
-                    <div class="card-content">
-                        <div class="row">
-                            <div class="col s8">
-                                <h5 class="card-title">Kelola {{ $menu->title }}</h5>
-                            </div>
-                            <div class="col s4 right-align">
-                                <a class="waves-effect waves-light btn btn-round primary strong" href="{{ $menu->url }}/cetak">CETAK</a>
-                                <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a>
-                            </div>
-                            @if (session('status'))
-                                <div class="col s12">
-                                    <div class="success-alert-bar p-15 m-t-10 green white-text" style="display: block">
-                                        {{ session('status') }}
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                        <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
-                            <thead>
-                                <tr>
-                                    <th>NIS</th>
-                                    <th>NISN</th>
-                                    <th>Nama</th>
-                                    <th>No HP/Telepon</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if ($students)
-                                    @foreach ($students as $student)
-                                        <tr id="data" data-id="{{ $student->id }}">
-                                            <td>{{ $student->nis }}</td>
-                                            <td>{{ $student->nisn }}</td>
-                                            <td>{{ $student->full_name }}</td>
-                                            <td>{{ $student->phone_number }}@if($student->home_number != 0) /{{ $student->home_number }} @endif</td>
-                                            <td id="no-data" class="text-center" style="width: 5%">
-                                                <form action="{{ $menu->url }}/{{ $student->id }}" method="POST" class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-@endsection
-
-@section('scripts')
-    {{-- Prism --}}
-    <script src="{{ asset('/extra-libs/prism/prism.js') }}"></script>
-
-    {{-- Select2 --}}
-    <script src="{{ asset('/libs/select2/dist/js/select2.min.js') }}"></script>
-
-    {{-- Data Tables --}}
-    <script src="{{ asset('/extra-libs/datatables/datatables.min.js') }}"></script>
-    <script src="{{ asset('/dist/js/pages/datatable/datatable-basic.init.js') }}"></script>
-    
-    {{-- Form --}}
-    <script src="{{ asset('/dist/js/form.js') }}"></script>
-    @include('scripts.select2')
-@endsection
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        
+        <style>
+            .m-5 {
+                margin: 5px 5px 5px 5px;
+            }
+            .m-10 {
+                margin: 10px 10px 10px 10px;
+            }
+            .p-20 {
+                margin: 20px 20px 20px 20px!important;
+            }
+            .ml-5 {
+                margin-left: 5px;
+            }
+            .mr-5 {
+                margin-right: 5px;
+            }
+            .mr-10 {
+                margin-right: 10px!important;
+            }
+            .center {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .text-center {
+                text-align: center;
+            }
+            .text-left {
+                text-align: left;
+            }
+            .text-right {
+                text-align: right;
+            }
+        </style>
+    </head>
+    <body>
+        <h3 class="text-center">LEMBAR BUKU INDUK SISWA</h3>
+        
+        <table class="center">
+            <tr>
+                <th class="text-left">Nomor Induk Siswa</th>
+                <td>:</td>
+                <td>{{ $student->nis }}</td>
+            </tr>
+            <tr>
+                <th class="text-left">Nomor Induk Siswa Nasional</th>
+                <td>:</td>
+                <td>{{ $student->nisn }}</td>
+            </tr>
+        </table><br>
+        
+        <table style="width: 100%">
+            <tr>
+                <th colspan="4" class="text-left ml-5">Keterangan Tentang Diri Siswa</th>
+                <td class="text-right" width="10%">
+                    <img src="{{ asset($student->picture) }}" alt="Foto Siswa" class="mr-10">
+                </td>
+            </tr>   
+            <tr>
+                <td width="5px" class="ml-5">1.</td>
+                <td>Nama Siswa</td>
+                <td width="5px">:</td>
+                <td class="text-left">{{ $student->full_name }}</td>
+            </tr>
+        </table>
+    </body>
+</html>

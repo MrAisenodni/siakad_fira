@@ -88,6 +88,7 @@ class ProfileController extends Controller
             $father_died = $request->father_died;
             $mother_died = $request->mother_died;
             $guardian_died = $request->guardian_died;
+            $guardian = $request->guardian;
             $check = $this->students
                             ->where('nik', $input['nik'])
                             ->where('nis', $input['nis'])
@@ -106,7 +107,7 @@ class ProfileController extends Controller
                 'language'      => 'required',
                 'height'        => 'required|numeric',
                 'weight'        => 'required|numeric',
-                'picture'       => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048',
+                'photo'         => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048|dimensions:max_width=300px,max_height=400px',
                 
                 // Validasi Keluarga
                 'family_status'     => 'required',
@@ -158,7 +159,7 @@ class ProfileController extends Controller
             ]);
     
             if ($input['child_to'] >= $input['child_count']) return redirect($this->url)->with('error', 'Anak Dari tidak boleh lebih besar dari Jumlah Saudara.')->withInput();
-            if ($input['from_study_date'] > $input['to_study_date']) return redirect($this->url)->with('error', 'Tanggal Dari tidak boleh lebih besar dari Tanggal Sampai.')->withInput();
+            if (strtotime($input['from_study_date']) > strtotime($input['to_study_date'])) return redirect($this->url)->with('error', 'Tanggal Dari tidak boleh lebih besar dari Tanggal Sampai.')->withInput();
     
             $data = [
                 'nik'                   => $input['nik'],
@@ -235,8 +236,21 @@ class ProfileController extends Controller
                 'updated_at'        => now(),
                 'updated_by'        => session()->get('sname'),
             ];
+            ($father_died) ? $father['died'] = $father_died : $father['died'] = 0;
+            ($mother_died) ? $mother['died'] = $mother_died : $mother['died'] = 0;
     
-            if ($input['guardian']) 
+            if ($request->photo) {
+                if ($request->old_photo) File::delete(public_path().$request->old_photo);
+                $file = $request->file('photo');
+                $extension = $request->photo->getClientOriginalExtension();  //Get Image Extension
+                $fileName =  strtotime(now()).'_'.$request->nis.'_'.$request->full_name.'.'.$extension;  //Concatenate both to get FileName (eg: file.jpg)
+                $file->move(public_path().'/images/students/', $fileName);  
+                $data1 = $fileName;  
+    
+                $data['picture'] = '/images/students/'.$fileName; 
+            }
+    
+            if ($guardian) {
                 $validated = $request->validate([        
                     // Validasi Wali
                     'guardian_name'           => 'required',
@@ -250,25 +264,41 @@ class ProfileController extends Controller
                     'guardian_occupation'     => 'required',
                     'guardian_revenue'        => 'required',
                 ]);
-            ($father_died) ? $father['died'] = $father_died : $father['died'] = 0;
-            ($mother_died) ? $mother['died'] = $mother_died : $mother['died'] = 0;
-    
-            $guardian = [
-                'full_name'         => $input['guardian_name'],
-                'birth_date'        => date('Y-m-d', strtotime(str_replace('/', '-', $input['guardian_birth_date']))),
-                'birth_place'       => $input['guardian_birth_place'],
-                'gender'            => $input['guardian_gender'],
-                'citizen'           => $input['guardian_citizen'],
-                'address'           => $input['guardian_address'],
-                'phone_number'      => $input['guardian_phone_number'],
-                'home_number'       => $input['guardian_home_number'],
-                'last_study'        => $input['guardian_last_study'],
-                'occupation_id'     => $input['guardian_occupation'],
-                'revenue'           => str_replace(",", ".", str_replace(".", "", $input['guardian_revenue'])),
-                'revenue_type'      => $input['guardian_revenue_type'],
-                'parent'            => 0,
-            ];
-            ($guardian_died) ? $guardian['died'] = $guardian_died : $guardian['died'] = 0;
+                
+                $guardian = [
+                    'full_name'         => $input['guardian_name'],
+                    'birth_date'        => date('Y-m-d', strtotime(str_replace('/', '-', $input['guardian_birth_date']))),
+                    'birth_place'       => $input['guardian_birth_place'],
+                    'gender'            => $input['guardian_gender'],
+                    'citizen'           => $input['guardian_citizen'],
+                    'address'           => $input['guardian_address'],
+                    'phone_number'      => $input['guardian_phone_number'],
+                    'home_number'       => $input['guardian_home_number'],
+                    'last_study'        => $input['guardian_last_study'],
+                    'occupation_id'     => $input['guardian_occupation'],
+                    'revenue'           => str_replace(",", ".", str_replace(".", "", $input['guardian_revenue'])),
+                    'revenue_type'      => $input['guardian_revenue_type'],
+                    'parent'            => 0,
+                ];
+                ($guardian_died) ? $guardian['died'] = $guardian_died : $guardian['died'] = 0;
+                
+                if($c_guardian) { 
+                    $guardian += [
+                        'updated_at'        => now(),
+                        'updated_by'        => session()->get('sname'),
+                    ];
+        
+                    $this->parents->where('id', $c_guardian['id'])->update($guardian);
+                } else {
+                    $guardian += [
+                        'student_id'        => session()->get('suser_id'),
+                        'created_at'        => now(),
+                        'created_by'        => session()->get('sname'),
+                    ];
+        
+                    $this->parents->insert($guardian);
+                }
+            } 
     
             if ($check) $this->students->where('id', $check['id'])->delete();
     
@@ -281,22 +311,6 @@ class ProfileController extends Controller
             // update parents
             $this->parents->where('id', $c_father['id'])->update($father);
             $this->parents->where('id', $c_mother['id'])->update($mother);
-            if($c_guardian) { 
-                $guardian += [
-                    'updated_at'        => now(),
-                    'updated_by'        => session()->get('sname'),
-                ];
-    
-                $this->parents->where('id', $c_guardian['id'])->update($guardian);
-            } else {
-                $guardian += [
-                    'student_id'        => session()->get('suser_id'),
-                    'created_at'        => now(),
-                    'created_by'        => session()->get('sname'),
-                ];
-    
-                $this->parents->insert($guardian);
-            }
         } elseif (session()->get('srole') == 'teacher') {
             $validated = $request->validate([
                 'nip'           => 'required|numeric|unique:mst_teacher,nip,'.session()->get('suser_id').',id,disabled,0|digits_between:1,25',
