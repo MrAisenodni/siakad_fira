@@ -45,7 +45,7 @@
                                         <div class="col s4">
                                             <div class="row">
                                                 <div class="col s12" style="text-align: center">
-                                                    <img class="img-preview img-fluid" alt="Foto Profil" style="max-width: 300px; max-height: 400px" @if ($student->picture) src="/download?file={{ $student->picture }}" @else src="/download/?file=/photos/blank-profile.jpeg" @endif>
+                                                    <img class="img-preview img-fluid" alt="Foto Profil" style="max-width: 300px; max-height: 400px" @if ($student->picture) src="{{ asset($student->picture) }}" @else src="/download/?file=/photos/blank-profile.jpeg" @endif>
                                                 </div>
                                             </div>
                                             <div class="row">

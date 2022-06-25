@@ -15,7 +15,7 @@ class CreateMstLesson extends Migration
     {
         Schema::create('mst_lesson', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique();
+            $table->string('code')->unique()->nullable();
             $table->string('name');
             $table->decimal('kkm')->nullable();
                         

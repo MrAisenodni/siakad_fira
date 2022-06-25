@@ -8,6 +8,7 @@ use App\Http\Controllers\Studies\{
     ParentController,
     PaymentController as StdPaymentController,
     PresentController,
+    PrintController,
     ProfileController,
     ReportScoreController,
     ScheduleController,
@@ -87,6 +88,9 @@ Route::middleware('authcheck')->group(function() {
     Route::post('/studi/spp/create-tagihan', [StdPaymentController::class, 'store_payment']);
     Route::resource('/studi/spp', StdPaymentController::class);
     Route::post('/what', [StdPaymentController::class, 'test']);
+
+    // Print Routes
+    Route::get('/studi/kelas/{id}/cetak', [PrintController::class, 'print_class']);
 });
 
 Route::get('/download', [ArticleController::class, 'download']);

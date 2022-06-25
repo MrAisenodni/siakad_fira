@@ -35,7 +35,7 @@ class ClassController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'classes'       => $this->classes->select('id', 'student_id', 'teacher_id', 'class_id', 'study_year_id')->where('disabled', 0)->get(),
+            'classes'       => $this->classes->selectRaw('MAX(id) AS id, teacher_id, class_id, study_year_id')->where('disabled', 0)->groupByRaw('teacher_id, class_id, study_year_id')->get(),
         ];
 
         if (session()->get('srole') == 'admin') return view('studies.class.index', $data);
@@ -47,7 +47,6 @@ class ClassController extends Controller
         $data = [
             'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->get(),
             'studies'           => $this->studies->select('id', 'name')->where('disabled', 0)->get(),
             'teachers'          => $this->teachers->select('id', 'nip', 'full_name')->where('disabled', 0)->where('role', 'teacher')->get(),
             'mst_classes'       => $this->mst_classes->select('id', 'name')->where('disabled', 0)->get(),
@@ -60,25 +59,30 @@ class ClassController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+
         $check = $this->classes
                         ->where('class_id', $input['class'])
                         ->where('teacher_id', $input['teacher'])
-                        ->where('student_id', $input['student'])
                         ->where('study_year_id', $input['study'])
                         ->where('disabled', 1)
+                        ->first();
+        $check1 = $this->classes
+                        ->where('class_id', $input['class'])
+                        ->where('study_year_id', $input['study'])
+                        ->where('disabled', 0)
                         ->first();
 
         $validated = $request->validate([
             'class'     => 'required',
-            'student'   => 'required',
             'study'     => 'required',
             'teacher'   => 'required',
         ]);
 
+        if ($check1) return redirect(url()->previous())->with('error', 'Data sudah terdaftar.')->withInput();
+
         if ($check) {
             $data = [
                 'teacher_id'    => $check['teacher'],
-                'student_id'    => $check['student'],
                 'class_id'      => $check['class'],
                 'study_year_id' => $check['study'],
                 'disabled'      => 0,
@@ -86,7 +90,6 @@ class ClassController extends Controller
         } else {
             $data = [
                 'teacher_id'    => $input['teacher'],
-                'student_id'    => $input['student'],
                 'class_id'      => $input['class'],
                 'study_year_id' => $input['study'],
             ];
@@ -113,14 +116,16 @@ class ClassController extends Controller
 
     public function edit(Request $request, $id)
     {
+        $clazz = $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('id', $id)->first();
+        $student_id = $this->classes->select('student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();
+        $classes = $this->classes->select('id', 'student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();
+
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->get(),
-            'studies'           => $this->studies->select('id', 'name')->where('disabled', 0)->get(),
-            'teachers'          => $this->teachers->select('id', 'nip', 'full_name')->where('disabled', 0)->where('role', 'teacher')->get(),
-            'mst_classes'       => $this->mst_classes->select('id', 'name')->where('disabled', 0)->get(),
-            'class'             => $this->classes->where('id', $id)->first(),
+            'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereNotIn('id', $student_id)->get(),
+            'clazz'             => $clazz,
+            'classes'           => $classes,
         ];
         
         if (session()->get('srole') == 'admin') return view('studies.class.edit', $data);
@@ -132,24 +137,22 @@ class ClassController extends Controller
         $input = $request->all();
 
         $validated = $request->validate([
-            'class'     => 'required',
             'student'   => 'required',
-            'study'     => 'required',
-            'teacher'   => 'required',
         ]);
 
         $data = [
-            'teacher_id'    => $input['teacher'],
+            'teacher_id'    => $input['teacher_id'],
             'student_id'    => $input['student'],
-            'class_id'      => $input['class'],
-            'study_year_id' => $input['study'],
-            'updated_by'    => session()->get('sname'),
-            'updated_at'    => now(),
+            'class_id'      => $input['class_id'],
+            'study_year_id' => $input['study_year_id'],
+            'created_by'    => session()->get('sname'),
+            'created_at'    => now(),
         ];
 
-        $this->classes->where('id', $id)->update($data);
+        // $this->classes->where('id', $id)->update($data);
+        $this->classes->insert($data);
 
-        return redirect($this->url)->with('status', 'Data berhasil diubah.');
+        return redirect(url()->previous())->with('status', 'Data berhasil ditambahkan.');
     }
 
     public function destroy($id)
@@ -162,6 +165,6 @@ class ClassController extends Controller
 
         $this->classes->where('id', $id)->update($data);
 
-        return redirect($this->url)->with('status', 'Data berhasil dihapus.');
+        return redirect(url()->previous())->with('status', 'Data berhasil dihapus.');
     }
 }

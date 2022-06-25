@@ -36,7 +36,7 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s6">
-                                    <select id="teacher_name" name="teacher_name" class="">
+                                    <select id="teacher_name" name="teacher_name" class="" disabled>
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($teachers)
                                             @foreach ($teachers as $teacher)
@@ -95,10 +95,13 @@
 @endsection
 
 @section('scripts')
+    {{-- Prism --}}
     <script src="{{ asset('/extra-libs/prism/prism.js') }}"></script>
 
     {{-- Select2 --}}
     <script src="{{ asset('/libs/select2/dist/js/select2.min.js') }}"></script>
 
+    {{-- Form --}}
+    <script src="{{ asset('/dist/js/form.js') }}"></script>
     @include('scripts.select2')
 @endsection

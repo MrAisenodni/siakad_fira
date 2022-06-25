@@ -35,31 +35,32 @@
                                 </div>
                             @endif
                         </div>
-                        <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
+                        <table id="payment_config" class="responsive-table display" style="width:100%" onload="message()">
                             <thead>
                                 <tr>
-                                    <th>Nama Guru</th>
-                                    <th>Nama Siswa</th>
                                     <th>Kelas</th>
+                                    <th>Wali Kelas</th>
                                     <th>Tahun Ajar</th>
-                                    <th>Aksi</th>
+                                    <th>Cetak</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @if ($classes)
                                     @foreach ($classes as $clas)
                                         <tr id="data" data-id="{{ $clas->id }}">
-                                            <td>[{{ $clas->teacher->nip }}] {{ $clas->teacher->full_name }}</td>
-                                            <td>{{ $clas->student->nis }} - {{ $clas->student->full_name }}</td>
                                             <td>{{ $clas->class->name }}</td>
+                                            <td>{{ $clas->teacher->full_name }}</td>
                                             <td>{{ $clas->study_year->name }}</td>
-                                            <td id="no-data" class="text-center" style="width: 5%">
+                                            <td>
+                                                <a class="waves-effect waves-light btn btn-round primary strong" href="{{ $menu->url }}/{{ $clas->id }}/cetak"><i class="material-icons">print</i></a>
+                                            </td>
+                                            {{-- <td id="no-data" class="text-center" style="width: 5%">
                                                 <form action="{{ $menu->url }}/{{ $clas->id }}" method="POST" class="d-inline">
                                                     @method('delete')
                                                     @csrf
                                                     <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>
                                                 </form>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 @endif

@@ -10,12 +10,12 @@
             <!-- ============================================================== -->
             <a href="javascript:void(0)" class="brand-logo">
                 <span class="icon">
-                    <img class="light-logo" src="{{ asset('/images/logo-light-icon.png') }}">
-                    <img class="dark-logo" src="{{ asset('/images/logo-icon.png') }}">
+                    <img class="light-logo" src="{{ asset('/images/logo-smp-nobg.png') }}" width="50px">
+                    <img class="dark-logo" src="{{ asset('/images/logo-smp-nobg.png') }}" width="50px">
                 </span>
                 <span class="text">
-                    <img class="light-logo" src="{{ asset('/images/logo-light-text.png') }}">
-                    <img class="dark-logo" src="{{ asset('/images/logo-text.png') }}">
+                    <img class="light-logo" src="{{ asset('/images/logo-smp-text-nobg.png') }}" width="160px">
+                    <img class="dark-logo" src="{{ asset('/images/logo-smp-text-nobg.png') }}">
                 </span>
             </a>
             <!-- ============================================================== -->
@@ -77,12 +77,12 @@
                         </li>
                     </ul>
                 </li>
-                <li class="search-box">
+                {{-- <li class="search-box">
                     <a href="javascript: void(0);"><i class="material-icons">search</i></a>
                     <form class="app-search">
                         <input type="text" class="form-control" placeholder="Search &amp; enter"> <a class="srh-btn"><i class="ti-close"></i></a>
                     </form>
-                </li>
+                </li> --}}
             </ul>
             <!-- ============================================================== -->
             <!-- Left topbar icon scss in header.scss -->
@@ -116,10 +116,10 @@
                                 </div>
                             </div>
                         </li>
-                        <li role="separator" class="divider"></li>
+                        {{-- <li role="separator" class="divider"></li>
                         <li><a href="/studi/notifikasi"><i class="material-icons">inbox</i> Kotak Masuk</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#"><i class="material-icons">settings</i> Pengaturan</a></li>
+                        <li><a href="#"><i class="material-icons">settings</i> Pengaturan</a></li> --}}
                         <li role="separator" class="divider"></li>
                         <li><a href="/logout"><i class="material-icons">power_settings_new</i> Keluar</a></li>
                     </ul>

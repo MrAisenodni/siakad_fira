@@ -49,7 +49,7 @@ class LessonController extends Controller
         $check = $this->lessons->select('id', 'disabled', 'code')->where('code', $input['code'])->first();
 
         $validated = $request->validate([
-            'code'          => 'required|unique:mst_lesson,code,1,disabled',
+            'code'          => 'unique:mst_lesson,code,1,disabled',
             'name'          => 'required',
             'kkm'           => 'required|numeric|digits_between:1,5',
         ]);
@@ -97,7 +97,7 @@ class LessonController extends Controller
         $check = $this->lessons->select('id', 'disabled', 'code')->where('code', $input['code'])->first();
 
         $validated = $request->validate([
-            'code'          => 'required|unique:mst_lesson,code,'.$id.',id,disabled,0',
+            'code'          => 'unique:mst_lesson,code,'.$id.',id,disabled,0',
             'name'          => 'required',
             'kkm'           => 'required|numeric|digits_between:1,5',
         ]);

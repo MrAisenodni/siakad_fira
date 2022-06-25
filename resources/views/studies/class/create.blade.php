@@ -18,15 +18,15 @@
                 <div class="card">
                     <div class="card-content">
                         <h5 class="card-title">Tambah {{ $menu->title }}</h5>
-                        @if (session('status'))
+                        @if (session('error'))
                             <div class="success-alert-bar p-15 m-t-10 m-b-10 red white-text" style="display: block">
-                                {{ session('status') }}
+                                {{ session('error') }}
                             </div>
                         @endif
                         <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">
                             @csrf
                             <div class="row">
-                                <div class="input-field col s6">
+                                <div class="input-field col s4">
                                     <select id="teacher" name="teacher" class="">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($teachers)
@@ -35,29 +35,12 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="teacher">Guru <span class="materialize-red-text">*</span></label>
+                                    <label for="teacher">Wali Kelas <span class="materialize-red-text">*</span></label>
                                     @error('teacher')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="input-field col s6">
-                                    <select id="student" name="student" class="">
-                                        <option value="" selected>--- SILAHKAN PILIH ---</option>
-                                        @if ($students)
-                                            @foreach ($students as $student)
-                                                <option @if(old('student') == $student->id) selected @endif value="{{ $student->id }}">[{{ $student->nis }}] {{ $student->full_name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
-                                    <label for="student">Siswa <span class="materialize-red-text">*</span></label>
-                                    @error('student')
-                                        <div class="error">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="input-field col s6">
+                                <div class="input-field col s4">
                                     <select id="study" name="study" class="">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($studies)
@@ -71,7 +54,7 @@
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="input-field col s6">
+                                <div class="input-field col s4">
                                     <select id="class" name="class" class="">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($mst_classes)

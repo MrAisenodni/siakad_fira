@@ -76,14 +76,14 @@
                                         <div class="col s8">
                                             <div class="row">
                                                 <div class="input-field col s6">
-                                                    <input id="nik" type="text" placeholder="NIK" name="nik" value="{{ old('nik', $student->nik) }}">
+                                                    <input id="nik" type="text" placeholder="NIK" name="nik" value="{{ old('nik', $student->nik) }}" disabled>
                                                     <label for="nik">NIK <span class="materialize-red-text">*</span></label>
                                                     @error('nik')
                                                         <div class="error">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                                 <div class="input-field col s6">
-                                                    <input id="nisn" type="text" placeholder="NISN" name="nisn" value="{{ old('nisn', $student->nisn) }}">
+                                                    <input id="nisn" type="text" placeholder="NISN" name="nisn" value="{{ old('nisn', $student->nisn) }}" disabled>
                                                     <label for="nisn">NISN <span class="materialize-red-text">*</span></label>
                                                     @error('nisn')
                                                         <div class="error">{{ $message }}</div>
@@ -92,14 +92,14 @@
                                             </div>
                                             <div class="row">
                                                 <div class="input-field col s3">
-                                                    <input id="nis" type="text" placeholder="NIS" name="nis" value="{{ old('nis', $student->nis) }}">
+                                                    <input id="nis" type="text" placeholder="NIS" name="nis" value="{{ old('nis', $student->nis) }}" disabled>
                                                     <label for="nis">NIS <span class="materialize-red-text">*</span></label>
                                                     @error('nis')
                                                         <div class="error">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                                 <div class="input-field col s9">
-                                                    <input id="full_name" type="text" placeholder="Nama Lengkap" name="full_name" value="{{ old('full_name', $student->full_name) }}">
+                                                    <input id="full_name" type="text" placeholder="Nama Lengkap" name="full_name" value="{{ old('full_name', $student->full_name) }}" disabled>
                                                     <label for="full_name">Nama Lengkap <span class="materialize-red-text">*</span></label>
                                                     @error('full_name')
                                                         <div class="error">{{ $message }}</div>
@@ -108,14 +108,14 @@
                                             </div>
                                             <div class="row">
                                                 <div class="input-field col s4">
-                                                    <input id="birth_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="birth_date" value="{{ old('birth_date', date('d/m/Y', strtotime($student->birth_date))) }}">
+                                                    <input id="birth_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="birth_date" value="{{ old('birth_date', date('d/m/Y', strtotime($student->birth_date))) }}" disabled>
                                                     <label for="birth_date">Tanggal Lahir <span class="materialize-red-text">*</span></label>
                                                     @error('birth_date')
                                                         <div class="error">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                                 <div class="input-field col s8">
-                                                    <input id="birth_place" type="text" placeholder="Tempat Lahir" name="birth_place" value="{{ old('birth_place', $student->birth_place) }}">
+                                                    <input id="birth_place" type="text" placeholder="Tempat Lahir" name="birth_place" value="{{ old('birth_place', $student->birth_place) }}" disabled>
                                                     <label for="birth_place">Tempat Lahir <span class="materialize-red-text">*</span></label>
                                                     @error('birth_place')
                                                         <div class="error">{{ $message }}</div>
@@ -124,14 +124,14 @@
                                             </div>
                                             <div class="row">
                                                 <div class="input-field col s3">
-                                                    <input id="height" type="text" placeholder="143" name="height" value="{{ old('height', $student->height) }}">
+                                                    <input id="height" type="text" placeholder="143" name="height" value="{{ old('height', $student->height) }}" disabled>
                                                     <label for="height">Tinggi Badan (cm) <span class="materialize-red-text">*</span></label>
                                                     @error('height')
                                                         <div class="error">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                                 <div class="input-field col s3">
-                                                    <input id="weight" type="text" placeholder="55" name="weight" value="{{ old('weight', $student->weight) }}">
+                                                    <input id="weight" type="text" placeholder="55" name="weight" value="{{ old('weight', $student->weight) }}" disabled>
                                                     <label for="weight">Berat Badan (kg) <span class="materialize-red-text">*</span></label>
                                                     @error('weight')
                                                         <div class="error">{{ $message }}</div>

@@ -20,14 +20,14 @@
                             @csrf
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <input id="name" type="text" placeholder="Nama" name="name" value="{{ old('name', $study->name) }}">
-                                    <label for="name">Nama</label>
+                                    <input id="name" type="text" placeholder="Tahun Pelajaran" name="name" value="{{ old('name', $study->name) }}">
+                                    <label for="name">Tahun Pelajaran</label>
                                     @error('name')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-field col s4">
-                                    <input id="semester" type="text" placeholder="Nama" name="semester" value="{{ old('semester', $study->semester) }}">
+                                    <input id="semester" type="text" placeholder="Semester" name="semester" value="{{ old('semester', $study->semester) }}">
                                     <label for="semester">Semester</label>
                                     @error('semester')
                                         <div class="error">{{ $message }}</div>
