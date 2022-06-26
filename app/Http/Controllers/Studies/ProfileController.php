@@ -119,7 +119,7 @@ class ProfileController extends Controller
     
                 // Validasi Kontak
                 'address'       => 'required',
-                'distance'      => 'required|numeric|digits_between:1,7',
+                'distance'      => 'required|numeric',
                 'phone_number'  => 'required|numeric|digits_between:1,25',
                 'home_number'   => 'numeric|digits_between:1,25',
     
@@ -157,9 +157,6 @@ class ProfileController extends Controller
                 'mother_occupation'     => 'required',
                 'mother_revenue'        => 'required',
             ]);
-    
-            if ($input['child_to'] >= $input['child_count']) return redirect($this->url)->with('error', 'Anak Dari tidak boleh lebih besar dari Jumlah Saudara.')->withInput();
-            if (strtotime($input['from_study_date']) > strtotime($input['to_study_date'])) return redirect($this->url)->with('error', 'Tanggal Dari tidak boleh lebih besar dari Tanggal Sampai.')->withInput();
     
             $data = [
                 'nik'                   => $input['nik'],
@@ -214,7 +211,7 @@ class ProfileController extends Controller
                 'home_number'       => $input['father_home_number'],
                 'last_study'        => $input['father_last_study'],
                 'occupation_id'     => $input['father_occupation'],
-                'revenue'           => str_replace(",", ".", str_replace(".", "", $input['father_revenue'])),
+                'revenue'           => str_replace(",", ".", str_replace(".", "", str_replace('Rp', '',$input['father_revenue']))),
                 'revenue_type'      => $input['father_revenue_type'],
                 'updated_at'        => now(),
                 'updated_by'        => session()->get('sname'),
@@ -231,7 +228,7 @@ class ProfileController extends Controller
                 'home_number'       => $input['mother_home_number'],
                 'last_study'        => $input['mother_last_study'],
                 'occupation_id'     => $input['mother_occupation'],
-                'revenue'           => str_replace(",", ".", str_replace(".", "", $input['mother_revenue'])),
+                'revenue'           => str_replace(",", ".", str_replace(".", "", str_replace('Rp', '', $input['mother_revenue']))),
                 'revenue_type'      => $input['mother_revenue_type'],
                 'updated_at'        => now(),
                 'updated_by'        => session()->get('sname'),
@@ -276,7 +273,7 @@ class ProfileController extends Controller
                     'home_number'       => $input['guardian_home_number'],
                     'last_study'        => $input['guardian_last_study'],
                     'occupation_id'     => $input['guardian_occupation'],
-                    'revenue'           => str_replace(",", ".", str_replace(".", "", $input['guardian_revenue'])),
+                    'revenue'           => str_replace(",", ".", str_replace(".", "", str_replace('Rp', '', $input['guardian_revenue']))),
                     'revenue_type'      => $input['guardian_revenue_type'],
                     'parent'            => 0,
                 ];

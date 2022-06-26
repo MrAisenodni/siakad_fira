@@ -47,6 +47,6 @@ class PrintController extends Controller
 
         $pdf = PDF::loadView('studies.student.print', $data);
         return $pdf->stream($data['student']->nis.'_Lembar Induk Siswa_'.$data['student']->full_name.'.pdf');
-        // return view('studies.student.print', $data);
+        return view('studies.student.print', $data);
     }
 }

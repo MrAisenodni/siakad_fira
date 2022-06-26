@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/images/favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('/images/logo-smp-nobg.png') }}">
     <title>Login | SIAKAD SMP</title>
     <link href="{{ asset('/dist/css/style.css') }}" rel="stylesheet">
     <!-- This page CSS -->
@@ -40,7 +40,7 @@
             <div class="auth-box">
                 <div id="loginform">
                     <div class="logo">
-                        <span class="db"><img src="{{ asset('/images/logo-icon.png') }}" alt="logo" /></span>
+                        <span class="db"><img src="{{ asset('/images/logo-smp.png') }}" alt="logo" /></span>
                         <h5 class="font-medium m-b-20">Masuk ke SIAKAD SMP</h5>
                     </div>
                     <!-- Form -->

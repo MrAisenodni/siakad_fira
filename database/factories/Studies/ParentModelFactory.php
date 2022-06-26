@@ -18,6 +18,7 @@ class ParentModelFactory extends Factory
             'birth_place'       => $this->faker->city(),
             'birth_date'        => $this->faker->date(),
             // 'gender'            => 'l',
+            'religion_id'       => $this->faker->numberBetween(1, 4),
             'citizen'           => 'wni',
             'address'           => $this->faker->address(),
             'phone_number'      => trim($this->faker->e164PhoneNumber(), "+"), 

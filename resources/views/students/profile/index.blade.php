@@ -371,7 +371,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="father_revenue" type="text" placeholder="3.000.000" name="father_revenue" value="{{ old('father_revenue', $father->revenue) }}" data-type="currency" disabled>
+                                            <input id="father_revenue" type="text" placeholder="3.000.000" name="father_revenue" value="{{ old('father_revenue', 'Rp '.number_format($father->revenue, 0, ',', '.').',00') }}" data-type="currency" disabled>
                                             <label for="father_revenue">Penghasilan <span class="materialize-red-text">*</span></label>
                                             @error('father_revenue')
                                                 <div class="error">{{ $message }}</div>
@@ -507,7 +507,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="mother_revenue" type="text" placeholder="3.000.000" name="mother_revenue" value="{{ old('mother_revenue', $mother->revenue) }}" data-type="currency" disabled>
+                                            <input id="mother_revenue" type="text" placeholder="3.000.000" name="mother_revenue" value="{{ old('mother_revenue', 'Rp '.number_format($mother->revenue, 0, ',', '.').',00') }}" data-type="currency" disabled>
                                             <label for="mother_revenue">Penghasilan <span class="materialize-red-text">*</span></label>
                                             @error('mother_revenue')
                                                 <div class="error">{{ $message }}</div>
@@ -656,7 +656,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="guardian" type="text" placeholder="3.000.000" name="guardian_revenue" value="@if($guardian) {{ old('guardian_revenue', $guardian->revenue) }} @else {{ old('guardian_revenue') }} @endif"  @if(!$guardian) disabled @endif data-type="currency" disabled>
+                                            <input id="guardian" type="text" placeholder="3.000.000" name="guardian_revenue" value="@if($guardian) {{ old('guardian_revenue', 'Rp '.number_format($guardian->revenue, 0, ',', '.').',00') }} @else {{ old('guardian_revenue') }} @endif"  @if(!$guardian) disabled @endif data-type="currency" disabled>
                                             <label for="guardian_revenue">Penghasilan</label>
                                             @error('guardian_revenue')
                                                 <div class="error">{{ $message }}</div>

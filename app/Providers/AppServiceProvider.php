@@ -16,7 +16,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        view()->composer('layouts.header', function ($view) {
+            $view->with('harticles', Article::select('id', 'title', 'created_at', 'author', 'category_id')->where('created_at', 'LIKE', '%'.date('Y-m-d', strtotime(now())).'%')->where('disabled', 0)->get());
+        });
     }
 
     /**
@@ -26,8 +28,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $harticles     = Article::select('id', 'title', 'created_at', 'author', 'category_id')->where('created_at', 'LIKE', '%'.date('Y-m-d', strtotime(now())).'%')->where('disabled', 0)->get();
-
-        View::share('harticles', $harticles);
     }
 }

@@ -152,9 +152,6 @@ class StudentController extends Controller
             'mother_revenue'        => 'required',
         ]);
 
-        if ($input['child_to'] >= $input['child_count']) return redirect($this->url.'/create')->with('status', 'Anak Dari tidak boleh lebih besar dari Jumlah Saudara.')->withInput();
-        if ($input['from_study_date'] > $input['to_study_date']) return redirect($this->url.'/create')->with('status', 'Tanggal Dari tidak boleh lebih besar dari Tanggal Sampai.')->withInput();
-
         if ($check) {
             $data = [
                 'nik'       => $check['nik'],
@@ -230,7 +227,7 @@ class StudentController extends Controller
             'home_number'       => $input['father_home_number'],
             'last_study'        => $input['father_last_study'],
             'occupation_id'     => $input['father_occupation'],
-            'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['father_revenue'], "Rp"))),
+            'revenue'           => str_replace(",", ".", str_replace(".", "", str_replace('Rp', '', $input['father_revenue']))),
             'revenue_type'      => $input['father_revenue_type'],
             'created_at'        => now(),
             'created_by'        => session()->get('sname'),
@@ -247,7 +244,7 @@ class StudentController extends Controller
             'home_number'       => $input['mother_home_number'],
             'last_study'        => $input['mother_last_study'],
             'occupation_id'     => $input['mother_occupation'],
-            'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['mother_revenue'], "Rp"))),
+            'revenue'           => str_replace(",", ".", str_replace(".", "", str_replace('Rp', '', $input['mother_revenue']))),
             'revenue_type'      => $input['mother_revenue_type'],
             'created_at'        => now(),
             'created_by'        => session()->get('sname'),
@@ -281,7 +278,7 @@ class StudentController extends Controller
                 'home_number'       => $input['guardian_home_number'],
                 'last_study'        => $input['guardian_last_study'],
                 'occupation_id'     => $input['guardian_occupation'],
-                'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['guardian_revenue'], "Rp"))),
+                'revenue'           => str_replace(",", ".", str_replace(".", "", str_replace('Rp', '', $input['guardian_revenue']))),
                 'revenue_type'      => $input['guardian_revenue_type'],
                 'parent'            => 0,
                 'created_at'        => now(),
@@ -434,9 +431,6 @@ class StudentController extends Controller
             'mother_revenue'        => 'required',
         ]);
 
-        if ($input['child_to'] >= $input['child_count']) return redirect($this->url.'/'.$id.'/edit')->with('status', 'Anak Dari tidak boleh lebih besar dari Jumlah Saudara.')->withInput();
-        if ($input['from_study_date'] > $input['to_study_date']) return redirect($this->url.'/'.$id.'/edit')->with('status', 'Tanggal Dari tidak boleh lebih besar dari Tanggal Sampai.')->withInput();
-
         $data = [
             'nik'                   => $input['nik'],
             'nis'                   => $input['nis'],
@@ -490,7 +484,7 @@ class StudentController extends Controller
             'home_number'       => $input['father_home_number'],
             'last_study'        => $input['father_last_study'],
             'occupation_id'     => $input['father_occupation'],
-            'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['father_revenue'], "Rp"))),
+            'revenue'           => str_replace(",", ".", str_replace(".", "", str_replace('Rp', '', $input['father_revenue']))),
             'revenue_type'      => $input['father_revenue_type'],
             'updated_at'        => now(),
             'updated_by'        => session()->get('sname'),
@@ -507,7 +501,7 @@ class StudentController extends Controller
             'home_number'       => $input['mother_home_number'],
             'last_study'        => $input['mother_last_study'],
             'occupation_id'     => $input['mother_occupation'],
-            'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['mother_revenue'], "Rp"))),
+            'revenue'           => str_replace(",", ".", str_replace(".", "", str_replace('Rp', '', $input['mother_revenue']))),
             'revenue_type'      => $input['mother_revenue_type'],
             'updated_at'        => now(),
             'updated_by'        => session()->get('sname'),
@@ -539,7 +533,7 @@ class StudentController extends Controller
                 'home_number'       => $input['guardian_home_number'],
                 'last_study'        => $input['guardian_last_study'],
                 'occupation_id'     => $input['guardian_occupation'],
-                'revenue'           => str_replace(",", ".", str_replace(".", "", trim($input['guardian_revenue'], "Rp"))),
+                'revenue'           => str_replace(",", ".", str_replace(".", "", str_replace('Rp', '', $input['guardian_revenue']))),
                 'revenue_type'      => $input['guardian_revenue_type'],
                 'parent'            => 0,
             ];
