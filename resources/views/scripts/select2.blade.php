@@ -7,6 +7,24 @@
         // ============================================================== 
         $('select').not('.disabled').formSelect();
 
+        $('.auto_fill_teacher').change(function (){
+            var id = $('option:selected', this).val()
+            var class_id = $('#class_id').val()
+            var study_year_id = $('#study_year_id').val()
+
+            $.ajax({
+                // url: '/api/mata-pelajaran/'+id,
+                url: '/api/mata-pelajaran/'+id+'/'+class_id+'/'+study_year_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if(response != null) {
+                        $('#teacher').val(response.data.teacher.full_name)
+                    }
+                }
+            })
+        })
+
         $('.auto_fill').change(function (){
             var id = $('option:selected', this).val()
 

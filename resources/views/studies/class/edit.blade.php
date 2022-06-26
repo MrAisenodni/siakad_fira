@@ -83,8 +83,8 @@
                                 <h5 class="card-title">Daftar Siswa</h5>
                             </div>
                             <div class="col s4 right-align">
-                                <a class="waves-effect waves-light btn btn-round primary strong" href="{{ $menu->url }}/{{ $clazz->id }}/cetak">CETAK</a>
-                                <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a>
+                                <a class="waves-effect waves-light btn btn-round primary strong" href="{{ $menu->url }}/{{ $clazz->id }}/cetak"><i class="material-icons">print</i></a>
+                                {{-- <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a> --}}
                             </div>
                             @if (session('status'))
                                 <div class="col s12">
@@ -94,7 +94,7 @@
                                 </div>
                             @endif
                         </div>
-                        <table id="payment_config" class="responsive-table display" style="width:100%" onload="message()">
+                        <table id="noedit_config" class="responsive-table display" style="width:100%" onload="message()">
                             <thead>
                                 <tr>
                                     <th>NIS</th>

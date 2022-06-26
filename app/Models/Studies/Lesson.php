@@ -10,6 +10,7 @@ use App\Models\Masters\{
 use App\Models\Studies\Teacher;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Lesson extends Model
 {
@@ -40,5 +41,12 @@ class Lesson extends Model
     public function score()
     {
         return $this->belongsTo(ReportScore::class, 'lesson_id', 'lesson_id')->where('disabled', 0);
+    }
+
+    public function get_lesson($class_id, $study_year_id)
+    {
+        return DB::table('std_lesson AS a')->selectRaw('b.id, b.name')->join('mst_lesson AS b', 'a.lesson_id', '=', 'b.id')
+            ->where('a.disabled', 0)->where('b.disabled', 0)->where('a.class_id', $class_id)->where('study_year_id', $study_year_id)
+            ->get();
     }
 }

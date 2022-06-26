@@ -122,9 +122,35 @@ $('#present_config').DataTable({
 });
 
 /****************************************
+ *       No Edit Config Data Tables      *
+ ****************************************/
+$('#noedit_config').DataTable({
+    "columnDefs": [{
+        "orderable": false,
+        "targets": -1
+    }],
+    "pageLength": 25,
+    "processing": true,
+    "serverside": true,
+    "drawCallback": function() {
+        $('tbody>tr').hover(function () {
+            $('form>button', this).addClass('white-text').removeClass('materialize-red-text')
+            $(this).addClass('blue white-text')
+        }, function () {
+            $('form>button', this).addClass('materialize-red-text').removeClass('white-text')
+            $(this).removeClass('blue white-text')
+        })
+
+        $('td#no-data').on('click', function() {
+            bool = 0
+        })
+    }
+});
+
+/****************************************
  *       Payment Config Data Tables      *
  ****************************************/
-$('#payment_config').DataTable({
+ $('#payment_config').DataTable({
     "pageLength": 25,
     "processing": true,
     "serverside": true,
@@ -162,6 +188,47 @@ $('#payment_config').DataTable({
             var id = $(this).attr('data-id')
 
             if (bool) location = path+'/'+id
+            bool = 1
+        })
+    }
+});
+
+/****************************************
+ *   List Payment Config Data Tables    *
+ ****************************************/
+ $('#listpayment_config').DataTable({
+    "pageLength": 25,
+    "columnDefs": [{
+        "orderable": false,
+        "targets": -1
+    }],
+    "processing": true,
+    "serverside": true,
+    "drawCallback": function() {
+        var bool = 1
+        var path = location.pathname
+
+        $('tbody>tr').hover(function () {
+            $(this).addClass('blue white-text')
+        }, function () {
+            $(this).removeClass('blue white-text')
+        })
+
+        $('td#no-data').on('click', function() {
+            bool = 0
+        })
+        
+        $('tr#data').click(function () {
+            var id = $(this).attr('data-id')
+            var url = $(this).attr('data-url')
+
+            if (bool) {
+                if (url) {
+                    location = url
+                } else {
+                    location = path+'/'+id+'/edit'
+                }
+            } 
             bool = 1
         })
     }

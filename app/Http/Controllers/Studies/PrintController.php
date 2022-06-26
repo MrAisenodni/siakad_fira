@@ -49,4 +49,24 @@ class PrintController extends Controller
         return $pdf->stream($data['student']->nis.'_Lembar Induk Siswa_'.$data['student']->full_name.'.pdf');
         return view('studies.student.print', $data);
     }
+
+    public function word_student($id)
+    {
+        $file = public_path('/document/Format_Lembar-Induk-Siswa.rtf');
+
+        $data = [
+            'student'       => $this->students->where('id', $id)->first(),
+            'father'        => $this->parents->where('student_id', $id)->where('parent', 1)->where('gender', 'l')->where('disabled', 0)->first(),
+            'mother'        => $this->parents->where('student_id', $id)->where('parent', 1)->where('gender', 'p')->where('disabled', 0)->first(),
+            'guardian'      => $this->parents->where('student_id', $id)->where('parent', 0)->where('disabled', 0)->first(),
+        ];
+
+        $array = array(
+            '[NIS]'         => $data['student']->nis,
+            '[NISN]'        => $data['student']->nisn,
+        );
+        $export = $data['student']->nis.'_Lembar Induk Siswa_'.$data['student']->full_name.'.docx';
+
+        return \WordTemplate::export($file, $array, $export);
+    }
 }

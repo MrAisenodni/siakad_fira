@@ -114,7 +114,7 @@ class ClassController extends Controller
         return redirect($this->url)->with('status', 'Data berhasil ditambahkan.');
     }
 
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
         $clazz = $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('id', $id)->first();
         $student_id = $this->classes->select('student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();

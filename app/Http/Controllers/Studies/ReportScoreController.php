@@ -41,7 +41,7 @@ class ReportScoreController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'students'      => $this->students->select('id', 'nis', 'nisn', 'full_name', 'phone_number', 'home_number')->where('disabled', 0)->orderBy('nis')->get(),
+            'classes'       => $this->classes->selectRaw('MAX(id) AS id, teacher_id, class_id, study_year_id')->where('disabled', 0)->groupByRaw('teacher_id, class_id, study_year_id')->get(),
         ];
         
         if (session()->get('srole') == 'admin') {
@@ -142,35 +142,38 @@ class ReportScoreController extends Controller
 
     public function show($id)
     {
-        $class = $this->classes->select('class_id AS id')->where('student_id', $id)->first();
+        $clazz = $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('id', $id)->first();
+        $classes = $this->classes->select('id', 'student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();
 
         $data = [
             'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'reports'           => $this->reports->where('student_id', $id)->where('class_id', $class->id)->where('disabled', 0)->get(),
-            'student'           => $this->students->select('id', 'nis', 'nisn', 'full_name')->where('id', $id)->first(),
+            'lessons'           => $this->lessons->get_lesson($clazz->class_id, $clazz->study_year_id),
+            'clazz'             => $clazz,
+            'classes'           => $classes,
         ];
 
-        if (session()->get('srole') == 'admin') return view('studies.report.show', $data);
-        if (session()->get('srole') == 'teacher') return view('teachers.report.show', $data);
-
-        $data['reports'] = $this->reports->where('student_id', session()->get('suser_id'))->where('class_id', $id)->where('disabled', 0)->get();
-
-        return view('students.report.show', $data);
+        if (session()->get('srole') == 'admin') {
+            return view('studies.report.show', $data);
+        } elseif (session()->get('srole') == 'teacher') {
+            return view('teachers.report.show', $data);
+        } else {
+            abort(403);
+        }
     }
 
     public function edit($id, $ids)
     {
-        $class = $this->classes->select('class_id AS id')->where('student_id', $id)->first();
-        $lesson = $this->lessons->select('lesson_id')->where('class_id', $class->id)->where('disabled', 0)->get();
+        $clazz = $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('id', $id)->first();
+        $student_id = $this->classes->select('student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();
+        $classes = $this->classes->select('id', 'student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();
 
         $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
+            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'lessons'           => $this->mst_lessons->whereIn('id', $lesson)->where('disabled', 0)->get(),
-            'report'            => $this->reports->where('id', $ids)->where('disabled', 0)->first(),
-            'report_details'    => $this->report_details->where('score_id', $ids)->where('disabled', 0)->get(),
-            'student'           => $this->students->select('id', 'nis', 'nisn', 'full_name')->where('id', $id)->first(),
+            'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereNotIn('id', $student_id)->get(),
+            'clazz'             => $clazz,
+            'classes'           => $classes,
         ];
 
         if (session()->get('srole') == 'admin') {

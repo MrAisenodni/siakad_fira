@@ -5,7 +5,7 @@
 @section('styles')
     {{-- Prism --}}
     <link href="{{ asset('/extra-libs/prism/prism.css') }}" rel="stylesheet">
-
+    
     {{-- Select2 --}}
     <link href="{{ asset('/libs/select2/dist/css/select2.css') }}" rel="stylesheet">
 
@@ -20,51 +20,75 @@
             <div class="col s12">
                 <div class="card">
                     <div class="card-content">
-                        <h5 class="card-title">Detail Siswa</h5>
-                        <div class="row">
-                            <div class="col s12"><hr>
-                                <div class="row">
-                                    <div class="input-field col s2">
-                                        <input id="nis" type="text" name="nis" value="{{ $student->nis }}" disabled>
-                                        <label for="nis">NIS</label>
-                                    </div>
-                                    <div class="input-field col s2">
-                                        <input id="nisn" type="text" name="nisn" value="{{ $student->nisn }}" disabled>
-                                        <label for="nisn">NISN</label>
-                                        @error('nisn')
-                                            <div class="error">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    <div class="input-field col s7">
-                                        <input id="full_name" type="text" name="full_name" value="{{ $student->full_name }}" disabled>
-                                        <label for="full_name">Nama Lengkap</label>
-                                    </div>
-                                    <div class="input-field col s1">
-                                        <input id="clazz" type="text" name="clazz" value="{{ $student->class->class->name }}" disabled>
-                                        <label for="clazz">Kelas</label>
-                                        @error('clazz')
-                                            <div class="error">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                        <h5 class="card-title">{{ $menu->title }}</h5>
+                        @if (session('error'))
+                            <div class="success-alert-bar p-15 m-t-10 m-b-10 red white-text" style="display: block">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                        <form method="POST" action="{{ str_replace("/edit", "", url()->current()) }}">
+                            @method('put')
+                            @csrf
+                            <input type="hidden" id="class_id" name="class_id" value="{{ $clazz->class_id }}">
+                            <input type="hidden" id="study_year_id" name="study_year_id" value="{{ $clazz->study_year_id }}">
+                            <input type="hidden" name="teacher_id" value="{{ $clazz->teacher_id }}">
+                            <div class="row">
+                                <div class="input-field col s4">
+                                    <input id="clazz" type="text" name="clazz" value="{{ $clazz->class->name }}" disabled>
+                                    <label for="clazz">Kelas</label>
                                 </div>
-
-                                <div class="row">
-                                    <div class="col s12" style="text-align: right">
-                                        <a class="waves-effect waves-light btn btn-round blue strong" href="{{ url()->previous() }}">KEMBALI</a>
-                                    </div>
+                                <div class="input-field col s4">
+                                    <input id="study_year" type="text" name="study_year" value="{{ $clazz->study_year->name }}" disabled>
+                                    <label for="study_year">Tahun Pelajaran</label>
+                                </div>
+                                <div class="input-field col s4">
+                                    <input id="teacher_head" type="text" name="teacher_head" value="{{ $clazz->teacher->full_name }}" disabled>
+                                    <label for="teacher_head">Wali Kelas</label>
                                 </div>
                             </div>
-                        </div>
+
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <select id="lesson" name="lesson" class="auto_fill_teacher">
+                                        @if ($lessons)
+                                            <option selected value="">=== SILAHKAN PILIH ===</option>
+                                            @foreach ($lessons as $lesson)
+                                                <option @if(old('lesson') == $lesson->id) selected @endif value="{{ $lesson->id }}">{{ $lesson->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <label for="lesson">Mata Pelajaran</label>
+                                    @error('lesson')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="input-field col s6">
+                                    <input id="teacher" type="text" placeholder="Guru" name="teacher" disabled>
+                                    <label for="teacher">Guru</label>
+                                </div>
+                            </div>
+
+                            <hr>
+                            <div class="row">
+                                <div class="col s12" style="text-align: right">
+                                    <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}">KEMBALI</a>
+                                    <button class="waves-effect waves-light btn btn-round green strong" type="submit">CARI</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
+
+                {{-- Daftar Siswa --}}
                 <div class="card">
                     <div class="card-content">
                         <div class="row">
-                            <div class="col s10">
-                                <h5 class="card-title">{{ $menu->title }}</h5>
+                            <div class="col s8">
+                                <h5 class="card-title">Daftar Siswa</h5>
                             </div>
-                            <div class="col s2 right-align">
-                                <a class="waves-effect waves-light btn btn-round green strong" href="{{ url()->current() }}/create">TAMBAH</a>
+                            <div class="col s4 right-align">
+                                <a class="waves-effect waves-light btn btn-round primary strong" href="{{ $menu->url }}/{{ $clazz->id }}/cetak"><i class="material-icons">print</i></a>
+                                {{-- <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a> --}}
                             </div>
                             @if (session('status'))
                                 <div class="col s12">
@@ -74,48 +98,28 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="row">
-                            <div class="col s12">
-                                <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
-                                    <thead>
-                                        <tr>
-                                            <th>Mata Pelajaran</th>
-                                            <th>Bulan 1</th>
-                                            <th>Bulan 2</th>
-                                            <th>Bulan 3</th>
-                                            <th>Bulan 4</th>
-                                            <th>UTS</th>
-                                            <th>UAS</th>
-                                            <th>Nilai Akhir</th>
-                                            <th>Nilai Rata-Rata</th>
+                        <table id="payment_config" class="responsive-table display" style="width:100%" onload="message()">
+                            <thead>
+                                <tr>
+                                    <th>NIS</th>
+                                    <th>NISN</th>
+                                    <th>Siswa</th>
+                                    <th>Nomor HP</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if ($classes)
+                                    @foreach ($classes as $clas)
+                                        <tr id="data" data-id="{{ $clas->student_id }}">
+                                            <td>{{ $clas->student->nis }}</td>
+                                            <td>{{ $clas->student->nisn }}</td>
+                                            <td>{{ $clas->student->full_name }}</td>
+                                            <td>{{ $clas->student->phone_number }}</td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if ($reports)
-                                            @foreach ($reports as $report)
-                                                <tr id="data" data-id="{{ $report->id }}" data-aid="{{ $student->id }}">
-                                                    <td>{{ $report->lesson->name }}</td>
-                                                    <td>{{ $report->score_1 }}</td>
-                                                    <td>{{ $report->score_2 }}</td>
-                                                    <td>{{ $report->score_3 }}</td>
-                                                    <td>{{ $report->score_4 }}</td>
-                                                    <td>{{ $report->score_uts }}</td>
-                                                    <td>{{ $report->score_uas }}</td>
-                                                    <td>{{ $report->score_na }}</td>
-                                                    <td>{{ $report->score_avg }}</td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="row m-t-10">
-                            <div class="col s12" style="text-align: right">
-                                <a class="waves-effect waves-light btn btn-round blue strong" href="{{ url()->previous() }}">KEMBALI</a>
-                            </div>
-                        </div>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -126,7 +130,7 @@
 @section('scripts')
     {{-- Prism --}}
     <script src="{{ asset('/extra-libs/prism/prism.js') }}"></script>
-
+    
     {{-- Select2 --}}
     <script src="{{ asset('/libs/select2/dist/js/select2.min.js') }}"></script>
 

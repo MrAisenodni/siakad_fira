@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\{
+    LessonController,
     PaymentController,
     StudentController
 };
@@ -24,3 +25,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::resource('/siswa', StudentController::class);
 Route::resource('/spp', PaymentController::class);
+// Route::resource('/mata-pelajaran', LessonController::class);
+Route::get('/mata-pelajaran/{id}/{cid}/{sid}', [LessonController::class, 'show']);

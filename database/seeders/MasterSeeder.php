@@ -19,6 +19,7 @@ class MasterSeeder extends Seeder
     {
         // Truncate All Table Master
         Schema::disableForeignKeyConstraints();
+        DB::table('mst_grade')->truncate();
         DB::table('mst_month')->truncate();
         DB::table('mst_religion')->truncate();
         DB::table('mst_family_status')->truncate();
@@ -32,6 +33,40 @@ class MasterSeeder extends Seeder
         DB::table('mst_study_year')->truncate();
         DB::table('mst_payment')->truncate();
         Schema::enableForeignKeyConstraints();
+
+        // Master Nilai (5)
+        DB::table('mst_grade')->insert([
+            [
+                'min_score'     => 0,
+                'max_score'     => 50,
+                'name'          => 'E',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'min_score'     => 50,
+                'max_score'     => 60,
+                'name'          => 'D',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'min_score'     => 60,
+                'max_score'     => 70,
+                'name'          => 'C',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'min_score'     => 70,
+                'max_score'     => 85,
+                'name'          => 'B',
+                'created_by'    => 'Migrasi',
+            ],
+            [
+                'min_score'     => 85,
+                'max_score'     => 100,
+                'name'          => 'A',
+                'created_by'    => 'Migrasi',
+            ],
+        ]);
 
         // Master Bulan (12)
         DB::table('mst_month')->insert([

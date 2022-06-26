@@ -85,7 +85,7 @@
                                 </div>
                             @endif
                         </div>
-                        <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
+                        <table id="listpayment_config" class="responsive-table display" style="width:100%" onload="message()">
                             <thead>
                                 <tr>
                                     <th>NIS</th>
