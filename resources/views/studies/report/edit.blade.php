@@ -29,21 +29,57 @@
                         <form method="POST" action="{{ str_replace("/edit", "", url()->current()) }}">
                             @method('put')
                             @csrf
-                            <input type="hidden" name="class_id" value="{{ $clazz->class_id }}">
-                            <input type="hidden" name="study_year_id" value="{{ $clazz->study_year_id }}">
+                            <input type="hidden" id="class_id" name="class_id" value="{{ $clazz->class_id }}">
+                            <input type="hidden" id="study_year_id" name="study_year_id" value="{{ $clazz->study_year_id }}">
                             <input type="hidden" name="teacher_id" value="{{ $clazz->teacher_id }}">
+                            <input type="hidden" name="lesson_id" value="{{ $less }}">
                             <div class="row">
                                 <div class="input-field col s4">
-                                    <input id="clazz" type="text" placeholder="Kelas" name="clazz" value="{{ $clazz->class->name }}" disabled>
+                                    <input id="clazz" type="text" name="clazz" value="{{ $clazz->class->name }}" disabled>
                                     <label for="clazz">Kelas</label>
                                 </div>
                                 <div class="input-field col s4">
-                                    <input id="study_year" type="text" placeholder="Tahun Pelajaran" name="study_year" value="{{ $clazz->study_year->name }}" disabled>
+                                    <input id="study_year" type="text" name="study_year" value="{{ $clazz->study_year->name }}" disabled>
                                     <label for="study_year">Tahun Pelajaran</label>
                                 </div>
                                 <div class="input-field col s4">
-                                    <input id="teacher" type="text" placeholder="Guru" name="teacher" value="{{ $clazz->teacher->name }}" disabled>
+                                    <input id="teacher_head" type="text" name="teacher_head" value="{{ $clazz->teacher->full_name }}" disabled>
+                                    <label for="teacher_head">Wali Kelas</label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-field col s4">
+                                    <select id="lesson" name="lesson" class="auto_fill_teacher">
+                                        @if ($lessons)
+                                            <option selected value="">=== SILAHKAN PILIH ===</option>
+                                            @foreach ($lessons as $lesson)
+                                                <option @if(old('lesson', $less) == $lesson->id) selected @endif value="{{ $lesson->id }}">{{ $lesson->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <label for="lesson">Mata Pelajaran</label>
+                                    @error('lesson')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="input-field col s4">
+                                    <input id="teacher" type="text" placeholder="Guru" name="teacher" disabled>
                                     <label for="teacher">Guru</label>
+                                </div>
+                                <div class="input-field col s4">
+                                    <select id="type" name="type">
+                                        <option @if(old('type') == 'ph') selected @endif value="ph">Ujian Harian</option>
+                                        <option @if(old('type') == 't') selected @endif value="t">Tugas</option>
+                                        <option @if(old('type') == 'r') selected @endif value="r">Remedial</option>
+                                        <option @if(old('type') == 'k') selected @endif value="k">Keterampilan</option>
+                                        <option @if(old('type') == 'uts') selected @endif value="uts">UTS</option>
+                                        <option @if(old('type') == 'uas') selected @endif value="uas">UAS</option>
+                                    </select>
+                                    <label for="type">Tipe Nilai</label>
+                                    @error('type')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -51,7 +87,7 @@
                             <div class="row">
                                 <div class="col s12" style="text-align: right">
                                     <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}">KEMBALI</a>
-                                    {{-- <button class="waves-effect waves-light btn btn-round green strong" type="submit">SIMPAN</button> --}}
+                                    <button class="waves-effect waves-light btn btn-round green strong" type="submit">SIMPAN</button>
                                 </div>
                             </div>
                         </form>
@@ -89,7 +125,7 @@
                             <tbody>
                                 @if ($classes)
                                     @foreach ($classes as $clas)
-                                        <tr id="data" data-id="{{ $clas->id }}">
+                                        <tr id="data" data-id="{{ $clas->student_id }}">
                                             <td>{{ $clas->student->nis }}</td>
                                             <td>{{ $clas->student->nisn }}</td>
                                             <td>{{ $clas->student->full_name }}</td>

@@ -17,7 +17,7 @@ class CreateStdScoreDetail extends Migration
             $table->id();
             $table->unsignedInteger('score_id')->nullable();
             $table->decimal('score');
-            $table->enum('type', ['uh1', 'uh2', 'uh3', 'uh4', 'uts', 'uas']);
+            $table->enum('type', ['ph', 't', 'k', 'uts', 'uas']);
             $table->text('description')->nullable();
                                     
             // Struktur Baku

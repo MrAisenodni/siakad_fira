@@ -50,8 +50,8 @@
                             <div class="row">
                                 <div class="input-field col s6">
                                     <select id="lesson" name="lesson" class="auto_fill_teacher">
+                                        <option selected value="">=== SILAHKAN PILIH ===</option>
                                         @if ($lessons)
-                                            <option selected value="">=== SILAHKAN PILIH ===</option>
                                             @foreach ($lessons as $lesson)
                                                 <option @if(old('lesson') == $lesson->id) selected @endif value="{{ $lesson->id }}">{{ $lesson->name }}</option>
                                             @endforeach

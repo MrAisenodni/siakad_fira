@@ -4,6 +4,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\Studies\{
     ArticleController,
     ClassController as StdClassController,
+    GradeController,
     LessonController as StdLessonController,
     ParentController,
     PaymentController as StdPaymentController,
@@ -63,6 +64,7 @@ Route::middleware('authcheck')->group(function() {
     Route::resource('/master/kategori', CategoryController::class);
     Route::resource('/master/login', LoginController::class);
     Route::resource('/master/mata-pelajaran', LessonController::class);
+    Route::resource('/master/nilai', GradeController::class);
     Route::resource('/master/pekerjaan', OccupationController::class);
     Route::resource('/master/spp', PaymentController::class);
     Route::resource('/master/status-keluarga', FamilyStatusController::class);

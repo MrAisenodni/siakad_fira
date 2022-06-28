@@ -3,8 +3,14 @@
 @section('title', $menu->title)
 
 @section('styles')
-    {{-- Select2 --}}
-    <link href="{{ asset('/libs/select2/dist/css/select2.css') }}" rel="stylesheet">
+{{-- Prism --}}
+<link href="{{ asset('/extra-libs/prism/prism.css') }}" rel="stylesheet">
+
+{{-- Select2 --}}
+<link href="{{ asset('/libs/select2/dist/css/select2.css') }}" rel="stylesheet">
+
+{{-- Data Tables --}}
+<link href="{{ asset('/dist/css/pages/data-table.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -21,7 +27,7 @@
                             </div>
                         @endif
                         <div class="row">
-                            <div class="col s12"><hr>
+                            {{-- <div class="col s12"><hr>
                                 <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $id }}">
@@ -95,7 +101,37 @@
                                         </div>
                                     </div>
                                 </form>
-                            </div>
+                            </div> --}}
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Edit Table --}}
+                <div class="card">
+                    <div class="card-content">
+                        <h5 class="card-title">Editable with Datatable</h5>
+                        <h6 class="card-subtitle">Just click on the table cell you want to edit.</h6>
+                        <div class="table-responsive">
+                            <table class="table striped m-b-20" id="editable-datatable">
+                                <thead>
+                                    <tr>
+                                        <th>Rendering engine</th>
+                                        <th>Browser</th>
+                                        <th>Platform(s)</th>
+                                        <th>Engine version</th>
+                                        <th>CSS grade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="1" class="gradeX">
+                                        <td>Trident</td>
+                                        <td>Internet Explorer 4.0 </td>
+                                        <td>Win 95+</td>
+                                        <td class="center">4</td>
+                                        <td class="center">X</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -105,10 +141,25 @@
 @endsection
 
 @section('scripts')
-    {{-- Select2 --}}
-    <script src="{{ asset('/libs/select2/dist/js/select2.min.js') }}"></script>
+{{-- Prism --}}
+<script src="{{ asset('/extra-libs/prism/prism.js') }}"></script>
 
-    {{-- Form --}}
-    <script src="{{ asset('/dist/js/form.js') }}"></script>
-    @include('scripts.select2')
+{{-- Select2 --}}
+<script src="{{ asset('/libs/select2/dist/js/select2.min.js') }}"></script>
+
+{{-- Data Tables --}}
+{{-- <script src="{{ asset('/extra-libs/datatables/datatables.min.js') }}"></script>
+<script src="{{ asset('/dist/js/pages/datatable/datatable-basic.init.js') }}"></script> --}}
+<script src="{{ asset('/assets/extra-libs/jquery-datatables-editable/jquery.dataTables.js') }}"></script>
+<script src="{{ asset('/assets/extra-libs/tiny-editable/mindmup-editabletable.js') }}"></script>
+<script src="{{ asset('/assets/extra-libs/tiny-editable/numeric-input-example.js') }}"></script>
+{{-- $('#mainTable').editableTableWidget().numericInputExample().find('td:first').focus();
+$('#editable-datatable').editableTableWidget().numericInputExample().find('td:first').focus();
+$(function() {
+    $('#editable-datatable').DataTable();
+}); --}}
+
+{{-- Form --}}
+<script src="{{ asset('/dist/js/form.js') }}"></script>
+@include('scripts.select2')
 @endsection

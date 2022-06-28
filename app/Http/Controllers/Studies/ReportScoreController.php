@@ -55,19 +55,19 @@ class ReportScoreController extends Controller
         }
     }
 
-    public function create($id)
+    public function create()
     {
-        $class = $this->classes->select('class_id AS id', 'student_id')->where('student_id', $id)->first();
-        $lesson = $this->lessons->select('lesson_id')->where('class_id', $class->id)->where('disabled', 0)->get();
+        // $class = $this->classes->select('class_id AS id', 'student_id')->where('student_id', $id)->first();
+        // $lesson = $this->lessons->select('lesson_id')->where('class_id', $class->id)->where('disabled', 0)->get();
 
         $data = [
             'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'class'             => $class->id,
-            'id'                => $class->student_id,
-            'reports'           => $this->reports->where('student_id', $id)->where('class_id', $class->id)->get(),
-            'lessons'           => $this->mst_lessons->whereIn('id', $lesson)->where('disabled', 0)->get(),
-            'student'           => $this->students->select('id', 'nis', 'nisn', 'full_name')->where('id', $id)->first(),
+            // 'class'             => $class->id,
+            // 'id'                => $class->student_id,
+            // 'reports'           => $this->reports->where('student_id', $id)->where('class_id', $class->id)->get(),
+            // 'lessons'           => $this->mst_lessons->whereIn('id', $lesson)->where('disabled', 0)->get(),
+            // 'student'           => $this->students->select('id', 'nis', 'nisn', 'full_name')->where('id', $id)->first(),
         ];
 
         if (session()->get('srole') == 'admin') {
@@ -169,7 +169,7 @@ class ReportScoreController extends Controller
         $classes = $this->classes->select('id', 'student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();
 
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereNotIn('id', $student_id)->get(),
             'clazz'             => $clazz,
@@ -185,84 +185,28 @@ class ReportScoreController extends Controller
         }
     }
 
-    public function update(Request $request, $id, $ids)
+    public function update(Request $request, $id)
     {
-        $input = $request->all();
-
-        $validated = $request->validate([
-            'score'         => 'required|numeric',
-        ]);
-
+        $clazz = $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('id', $id)->first();
+        $classes = $this->classes->select('id', 'student_id')->where('class_id', $request->class_id)->where('teacher_id', $request->teacher_id)->where('study_year_id', $request->study_year_id)->where('disabled', 0)->get();
+        
         $data = [
-            'score_id'      => $ids,
-            'score'         => $input['score'],
-            'type'          => $input['type'],
-            'created_by'    => session()->get('sname'),
-            'created_at'    => now(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
+            'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
+            'lessons'           => $this->lessons->get_lesson($clazz->class_id, $clazz->study_year_id),
+            'less'              => $request->lesson_id,
+            'clazz'             => $clazz,
+            'classes'           => $classes,
         ];
 
-        $this->report_details->insert($data);
+        if ($request->type) {
 
-        $data = [
-            'created_by'    => session()->get('sname'),
-            'created_at'    => now(),
-        ];
-
-        $check = $this->reports->where('id', $ids)->where('disabled', 0)->first();
-        $rdetail = $this->report_details->where('score_id', $ids)->where('type', $input['type'])->where('disabled', 0)->get();
-
-        if ($input['type'] == 'uh1') $rdetail->sum('score') != 0 ? $data['score_1'] = $rdetail->sum('score')/$rdetail->count() : $data['score_1'] = 0;
-        if ($input['type'] == 'uh2') $rdetail->sum('score') != 0 ? $data['score_2'] = $rdetail->sum('score')/$rdetail->count() : $data['score_2'] = 0;
-        if ($input['type'] == 'uh3') $rdetail->sum('score') != 0 ? $data['score_3'] = $rdetail->sum('score')/$rdetail->count() : $data['score_3'] = 0;
-        if ($input['type'] == 'uh4') $rdetail->sum('score') != 0 ? $data['score_4'] = $rdetail->sum('score')/$rdetail->count() : $data['score_4'] = 0;
-        if ($input['type'] == 'uts') $rdetail->sum('score') != 0 ? $data['score_uts'] = $rdetail->sum('score')/$rdetail->count() : $data['score_uts'] = 0;
-        if ($input['type'] == 'uas') $rdetail->sum('score') != 0 ? $data['score_uas'] = $rdetail->sum('score')/$rdetail->count() : $data['score_uas'] = 0;
-
-        $rdetail = $this->report_details->where('score_id', $ids)->where('disabled', 0)->get();
-        $data += [
-            'score_na'      => $rdetail->sum('score')/$rdetail->count(),
-            'score_avg'     => $rdetail->sum('score')/$rdetail->count(),
-        ];
-
-        $this->reports->where('id', $ids)->update($data);
-
-        return redirect($this->url.'/'.$id.'/'.$ids.'/edit')->with('status', 'Data berhasil diubah.');
+        } else {
+            return view('studies.report.edit', $data);
+        }
     }
 
     public function destroy(Request $request, $id)
     {
-        $input = $request->all();
-
-        $data = [
-            'disabled'      => 1,
-            'updated_by'    => session()->get('sname'),
-            'updated_at'    => now(),
-        ];
-
-        $this->report_details->where('id', $id)->update($data);
-
-        $data = [
-            'updated_by'    => session()->get('sname'),
-            'updated_at'    => now(),
-        ];
-
-        $rdetail = $this->report_details->where('score_id', $input['report'])->where('type', $input['type'])->where('disabled', 0)->get();
-
-        if ($input['type'] == 'uh1') $rdetail->sum('score') != 0 ? $data['score_1'] = $rdetail->sum('score')/$rdetail->count() : $data['score_1'] = 0;
-        if ($input['type'] == 'uh2') $rdetail->sum('score') != 0 ? $data['score_2'] = $rdetail->sum('score')/$rdetail->count() : $data['score_2'] = 0;
-        if ($input['type'] == 'uh3') $rdetail->sum('score') != 0 ? $data['score_3'] = $rdetail->sum('score')/$rdetail->count() : $data['score_3'] = 0;
-        if ($input['type'] == 'uh4') $rdetail->sum('score') != 0 ? $data['score_4'] = $rdetail->sum('score')/$rdetail->count() : $data['score_4'] = 0;
-        if ($input['type'] == 'uts') $rdetail->sum('score') != 0 ? $data['score_uts'] = $rdetail->sum('score')/$rdetail->count() : $data['score_uts'] = 0;
-        if ($input['type'] == 'uas') $rdetail->sum('score') != 0 ? $data['score_uas'] = $rdetail->sum('score')/$rdetail->count() : $data['score_uas'] = 0;
-
-        $rdetail = $this->report_details->where('score_id', $input['report'])->where('disabled', 0)->get();
-        $data += [
-            'score_na'      => $rdetail->sum('score')/$rdetail->count(),
-            'score_avg'     => $rdetail->sum('score')/$rdetail->count(),
-        ];
-
-        $this->reports->where('id', $input['report'])->update($data);
-
-        return redirect($this->url.'/'.$input['student'].'/'.$input['report'].'/edit')->with('status', 'Data berhasil dihapus.');
     }
 }

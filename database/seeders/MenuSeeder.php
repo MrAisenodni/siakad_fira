@@ -191,6 +191,13 @@ class MenuSeeder extends Seeder
                 'role'          => 'admin',
             ],
             [
+                'title'         => 'Nilai',
+                'url'           => '/master/nilai',
+                'icon'          => 'assignment_turned_in',
+                'menu_id'       => 13,
+                'role'          => 'admin',
+            ],
+            [
                 'title'         => 'Alasan',
                 'url'           => '/master/alasan',
                 'icon'          => 'remove_circle_outline',
