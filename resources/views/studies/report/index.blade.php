@@ -35,28 +35,32 @@
                                 </div>
                             @endif
                         </div>
-                        <table id="payment_config" class="responsive-table display" style="width:100%" onload="message()">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Kelas</th>
-                                    <th>Wali Kelas</th>
-                                    <th>Tahun Ajar</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if ($classes)
-                                    @foreach ($classes as $clas)
-                                        <tr id="show" data-id="{{ $clas->id }}">
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $clas->class->name }}</td>
-                                            <td>{{ $clas->teacher->full_name }}</td>
-                                            <td>{{ $clas->study_year->name }}</td>
+                        <div class="row">
+                            <div class="col s12">
+                                <table id="payment_config" class="responsive-table display" style="width:100%" onload="message()">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kelas</th>
+                                            <th>Wali Kelas</th>
+                                            <th>Tahun Ajar</th>
                                         </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
+                                    </thead>
+                                    <tbody>
+                                        @if ($classes)
+                                            @foreach ($classes as $clas)
+                                                <tr id="show" data-id="{{ $clas->id }}">
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $clas->class->name }}</td>
+                                                    <td>{{ $clas->teacher->full_name }}</td>
+                                                    <td>{{ $clas->study_year->name }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

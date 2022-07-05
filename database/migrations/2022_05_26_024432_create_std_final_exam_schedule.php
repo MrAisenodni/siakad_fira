@@ -15,9 +15,11 @@ class CreateStdFinalExamSchedule extends Migration
     {
         Schema::create('std_final_exam_schedule', function (Blueprint $table) {
             $table->id();
-            $table->char('day');
-            $table->time('clock');
-            $table->foreignId('lesson_id')->constrained('std_lesson');
+            $table->date('date');
+            $table->time('clock_in');
+            $table->time('clock_out');
+            $table->unsignedInteger('teacher_id')->nullable(); // Foreign Key ke tabel mst_teacher
+            $table->unsignedInteger('lesson_id')->nullable(); // Foreign Key ke tabel std_lesson
                                     
             // Struktur Baku
             $table->boolean('disabled')->default(0);

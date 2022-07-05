@@ -30,12 +30,12 @@
                             @method('put')
                             @csrf
                             <div class="row">
-                                <div class="input-field col s6">
+                                <div class="input-field col s8">
                                     <select id="lesson" name="lesson" class="">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($lessons)
                                             @foreach ($lessons as $lesson)
-                                                <option @if(old('lesson', $schedule->lesson_id) == $lesson->id) selected @endif value="{{ $lesson->id }}">[{{ $lesson->teacher->nip }}] {{ $lesson->teacher->full_name }} | {{ $lesson->lesson->name }} ({{ $lesson->class->name }})</option>
+                                                <option @if(old('lesson', $midterm->lesson_id) == $lesson->id) selected @endif value="{{ $lesson->id }}">[{{ $lesson->teacher->nip }}] {{ $lesson->teacher->full_name }} | {{ $lesson->lesson->name }} ({{ $lesson->class->name }})</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -43,36 +43,41 @@
                                     @error('lesson')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
-                                </div>
-                                <div class="input-field col s2">
-                                    <select id="day" name="day" class="">
-                                        <option @if(old('day', $schedule->day) == '1') selected @endif value="1" selected>Senin</option>
-                                        <option @if(old('day', $schedule->day) == '2') selected @endif value="2">Selasa</option>
-                                        <option @if(old('day', $schedule->day) == '3') selected @endif value="3">Rabu</option>
-                                        <option @if(old('day', $schedule->day) == '4') selected @endif value="4">Kamis</option>
-                                        <option @if(old('day', $schedule->day) == '5') selected @endif value="5">Jumat</option>
-                                        <option @if(old('day', $schedule->day) == '6') selected @endif value="6">Sabtu</option>
-                                        <option @if(old('day', $schedule->day) == '7') selected @endif value="7">Minggu</option>
-                                    </select>
-                                    <label for="day">Hari <span class="materialize-red-text">*</span></label>
-                                    @error('day')
+                                </div>     
+                                <div class="input-field col s4">
+                                    <label for="date">Tanggal Ujian <span class="materialize-red-text">*</span></label>
+                                    <input id="date" type="text" name="date" placeholder="dd/MM/yyyy" class="datepicker" value="{{ old('date', date('d/m/Y', strtotime($midterm->date))) }}">
+                                    @error('date')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col s2">
-                                    <label for="clock_in" class="m-t-20">Masuk <span class="materialize-red-text">*</span></label>
-                                    <div class="input-fleid">
-                                        <input id="clock_in" type="text" name="clock_in" placeholder="07:00" class="timepicker" value="{{ old('clock_in', date('H:i', strtotime($schedule->clock_in))) }}">
-                                    </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="input-field col s8">
+                                    <select id="teacher" name="teacher" class="">
+                                        <option value="" selected>--- SILAHKAN PILIH ---</option>
+                                        @if ($teachers)
+                                            @foreach ($teachers as $teacher)
+                                                <option @if(old('teacher', $midterm->teacher_id) == $teacher->id) selected @endif value="{{ $teacher->id }}">[{{ $teacher->nip }}] {{ $teacher->full_name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <label for="teacher">Guru Pengawas <span class="materialize-red-text">*</span></label>
+                                    @error('teacher')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>  
+                                <div class="input-field col s2">
+                                    <label for="clock_in">Masuk <span class="materialize-red-text">*</span></label>
+                                    <input id="clock_in" type="text" name="clock_in" placeholder="07:00" class="timepicker" value="{{ old('clock_in', date('H:i', strtotime($midterm->clock_in))) }}">
                                     @error('clock_in')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col s2">
-                                    <label for="clock_out" class="m-t-20">Keluar <span class="materialize-red-text">*</span></label>
-                                    <div class="input-fleid">
-                                        <input id="clock_out" type="text" name="clock_out" placeholder="09:00" class="timepicker" value="{{ old('clock_out', date('H:i', strtotime($schedule->clock_out))) }}">
-                                    </div>
+                                <div class="input-field col s2">
+                                    <label for="clock_out">Keluar <span class="materialize-red-text">*</span></label>
+                                    <input id="clock_out" type="text" name="clock_out" placeholder="09:00" class="timepicker" value="{{ old('clock_out', date('H:i', strtotime($midterm->clock_out))) }}">
                                     @error('clock_out')
                                         <div class="error">{{ $message }}</div>
                                     @enderror

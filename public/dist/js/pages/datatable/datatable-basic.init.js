@@ -130,6 +130,7 @@ $('#noedit_config').DataTable({
         "targets": -1
     }],
     "pageLength": 25,
+    "scrollX": true,
     "processing": true,
     "serverside": true,
     "drawCallback": function() {
@@ -232,6 +233,13 @@ $('#noedit_config').DataTable({
             bool = 1
         })
     }
+});
+
+/*************************************
+ *          Scroll Horizontal        *
+ *************************************/
+ $('#scroll-hor').DataTable({
+     "scrollX": true
 });
 
 /****************************************

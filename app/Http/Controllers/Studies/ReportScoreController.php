@@ -166,14 +166,12 @@ class ReportScoreController extends Controller
     {
         $clazz = $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('id', $id)->first();
         $student_id = $this->classes->select('student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();
-        $classes = $this->classes->select('id', 'student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();
 
         $data = [
             'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereNotIn('id', $student_id)->get(),
+            'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereIn('id', $student_id)->get(),
             'clazz'             => $clazz,
-            'classes'           => $classes,
         ];
 
         if (session()->get('srole') == 'admin') {

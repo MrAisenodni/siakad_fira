@@ -86,7 +86,7 @@ class PagesController extends Controller
                 $request->session()->put('sremember_token', $check->remember_token);
                 
                 if ($check->role == 'teacher') $request->session()->put('sname', $check->teacher->full_name);
-                if ($check->role == 'student' || 'parent' && $check->role != 'admin') $request->session()->put('sname', $check->student->full_name);
+                if ($check->role == 'student' || $check->role == 'parent' && $check->role != 'admin') $request->session()->put('sname', $check->student->full_name);
                 if ($check->role == 'admin') $request->session()->put('sname', 'Administrator');
 
                 return redirect()->intended('/');

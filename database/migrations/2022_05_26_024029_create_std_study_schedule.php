@@ -18,8 +18,6 @@ class CreateStdStudySchedule extends Migration
             $table->enum('day', [1,2,3,4,5,6,7]);
             $table->time('clock_in');
             $table->time('clock_out');
-            $table->enum('type', ['std', 'uts', 'uas']);
-            $table->unsignedInteger('spv_teacher_id')->nullable();
             $table->unsignedInteger('lesson_id')->nullable();
                                     
             // Struktur Baku

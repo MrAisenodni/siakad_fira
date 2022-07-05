@@ -30,37 +30,23 @@
                             @method('put')
                             @csrf
                             <div class="row">
-                                <div class="input-field col s2">
-                                    <input id="type" type="text" name="type" value="@if ($schedule->type == 'std') PELAJARAN 
-                                        @elseif ($schedule->type == 'uts') UTS
-                                        @else UAS
-                                        @endif" disabled>
-                                    <label for="type">Tipe</label>
-                                </div>
                                 <div class="input-field col s6">
-                                    <input id="lesson" type="text" name="lesson" value="{{ $schedule->lesson->lesson->name }} ({{ $schedule->lesson->class->name }})" disabled>
+                                    <input id="lesson" type="text" name="lesson" value="{{ $schedule->lesson->lesson->name }}" disabled>
                                     <label for="lesson">Mata Pelajaran</label>
                                 </div>
-                                @if (!$schedule->teacher)
-                                    <div class="input-field col s2">
-                                        <input id="day" type="text" name="day" data-day="@php $day = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']; @endphp" value="@for($i=0; $i<7; $i++)@if($i+1 == $schedule->day){{str_replace(' ', '', $day[$i])}}@endif @endfor" disabled>
-                                        <label for="day">Hari</label>
-                                    </div>
-                                    <div class="input-field col s2">
-                                        <input id="clock_in" type="text" name="clock_in" value="{{ date('H:i', strtotime($schedule->clock_in)).' - '.date('H:i', strtotime($schedule->clock_out)) }}" disabled>
-                                        <label for="clock_in">Waktu</label>
-                                    </div>
-                                @endif
-                            </div>
-
-                            @if ($schedule->teacher) 
-                                <div class="row">
-                                    <div class="input-field col s12">
-                                        <input id="spv_teacher" type="text" name="spv_teacher" value="[{{ $schedule->teacher->nip }}] {{ $schedule->teacher->full_name }}" disabled>
-                                        <label for="spv_teacher">Guru Pengawas</label>
-                                    </div>
+                                <div class="input-field col s2">
+                                    <input id="clazz" type="text" name="clazz" value="{{ $schedule->lesson->class->name }}" disabled>
+                                    <label for="clazz">Kelas</label>
                                 </div>
-                            @endif
+                                <div class="input-field col s2">
+                                    <input id="day" type="text" name="day" data-day="@php $day = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']; @endphp" value="@for($i=0; $i<7; $i++)@if($i+1 == $schedule->day){{str_replace(' ', '', $day[$i])}}@endif @endfor" disabled>
+                                    <label for="day">Hari</label>
+                                </div>
+                                <div class="input-field col s2">
+                                    <input id="clock_in" type="text" name="clock_in" value="{{ date('H:i', strtotime($schedule->clock_in)).' - '.date('H:i', strtotime($schedule->clock_out)) }}" disabled>
+                                    <label for="clock_in">Waktu</label>
+                                </div>
+                            </div>
 
                             <hr>
                             <div class="row">

@@ -13,7 +13,6 @@ class ScheduleFactory extends Factory
     public function definition()
     {
         return [
-            'type'              => 'std',
             'lesson_id'         => $this->faker->numberBetween(1, 144),
             'created_at'        => now(),
             'created_by'        => 'Migrasi',

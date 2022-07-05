@@ -30,28 +30,27 @@
                             @method('put')
                             @csrf
                             <div class="row">
-                                <div class="input-field col s6">
-                                    <input id="lesson" type="text" name="lesson" value="{{ $schedule->lesson->lesson->name }}" disabled>
+                                <div class="input-field col s12">
                                     <label for="lesson">Mata Pelajaran</label>
-                                </div>
-                                <div class="input-field col s2">
-                                    <input id="clazz" type="text" name="clazz" value="{{ $schedule->lesson->class->name }}" disabled>
-                                    <label for="clazz">Kelas</label>
-                                </div>
-                                <div class="input-field col s2">
-                                    <input id="day" type="text" name="day" data-day="@php $day = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu']; @endphp" value="@for($i=0; $i<7; $i++)@if($i+1 == $schedule->day){{str_replace(' ', '', $day[$i])}}@endif @endfor" disabled>
-                                    <label for="day">Hari</label>
-                                </div>
-                                <div class="input-field col s2">
-                                    <input id="clock_in" type="text" name="clock_in" value="{{ date('H:i', strtotime($schedule->clock_in)).' - '.date('H:i', strtotime($schedule->clock_out)) }}" disabled>
-                                    <label for="clock_in">Waktu</label>
+                                    <input id="lesson" type="text" name="lesson" placeholder="Mata Pelajaran" value="[{{ $midterm->lesson->teacher->nip }}] {{ $midterm->lesson->teacher->full_name }} | {{ $midterm->lesson->lesson->name }} ({{ $midterm->lesson->class->name }})" disabled>
                                 </div>
                             </div>
-
+                            <div class="row">
+                                <div class="input-field col s7">
+                                    <label for="teacher">Pengawas</label>
+                                    <input id="teacher" type="text" name="teacher" placeholder="Pengawas" value="[{{ $midterm->teacher->nip }}] {{ $midterm->teacher->full_name }}" disabled>
+                                </div>
+                                <div class="input-field col s5">
+                                    <label for="date">Jadwal Ujian</label>
+                                    <input id="date" type="text" name="date" placeholder="Jadwal" value="{{ date('d/m/Y', strtotime($midterm->date)) }} | {{ date('H:i', strtotime($midterm->clock_in)).' - '.date('H:i', strtotime($midterm->clock_out)) }}" disabled>
+                                </div>
+                            </div>
+                            
                             <hr>
                             <div class="row">
                                 <div class="col s12" style="text-align: right">
                                     <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}">KEMBALI</a>
+                                    {{-- <button class="waves-effect waves-light btn btn-round green strong" type="submit">SIMPAN</button> --}}
                                 </div>
                             </div>
                         </form>

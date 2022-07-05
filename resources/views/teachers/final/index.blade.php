@@ -25,7 +25,7 @@
                                 <h5 class="card-title">Kelola {{ $menu->title }}</h5>
                             </div>
                             <div class="col s2 right-align">
-                                <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a>
+                                {{-- <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a> --}}
                             </div>
                             @if (session('status'))
                                 <div class="col s12">
@@ -35,41 +35,23 @@
                                 </div>
                             @endif
                         </div>
-                        <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
+                        <table id="payment_config" class="responsive-table display" style="width:100%" onload="message()">
                             <thead>
                                 <tr>
-                                    <th>Jadwal</th>
-                                    <th>Waktu</th>
+                                    <th>No</th>
+                                    <th>Jadwal Ujian</th>
                                     <th>Mata Pelajaran</th>
                                     <th>Kelas</th>
-                                    <th>Guru</th>
-                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($schedules)
-                                    @foreach ($schedules as $schedule)
-                                        <tr id="data" data-id="{{ $schedule->id }}">
-                                            <td>
-                                                @if ($schedule->day == '1') Senin @endif
-                                                @if ($schedule->day == '2') Selasa @endif
-                                                @if ($schedule->day == '3') Rabu @endif
-                                                @if ($schedule->day == '4') Kamis @endif
-                                                @if ($schedule->day == '5') Jumat @endif
-                                                @if ($schedule->day == '6') Sabtu @endif
-                                                @if ($schedule->day == '7') Minggu @endif
-                                            </td>
-                                            <td>({{ date('H:i', strtotime($schedule->clock_in)) }} - {{ date('H:i', strtotime($schedule->clock_out)) }})</td>
-                                            <td>{{ $schedule->lesson->lesson->name }}</td>
-                                            <td>{{ $schedule->lesson->class->name }}</td>
-                                            <td>{{ $schedule->lesson->teacher->full_name }}</td>
-                                            <td id="no-data" class="text-center" style="width: 5%">
-                                                <form action="{{ $menu->url }}/{{ $schedule->id }}" method="POST" class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>
-                                                </form>
-                                            </td>
+                                @if ($finals)
+                                    @foreach ($finals as $final)
+                                        <tr id="show" data-id="{{ $final->id }}">
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ date('d F Y', strtotime($final->date)) }} | {{ date('H:i', strtotime($final->clock_in)) }} - {{ date('H:i', strtotime($final->clock_out)) }}</td>
+                                            <td>{{ $final->lesson->lesson->name }} | {{ $final->lesson->teacher->full_name }}</td>
+                                            <td>{{ $final->lesson->class->name }}</td>
                                         </tr>
                                     @endforeach
                                 @endif

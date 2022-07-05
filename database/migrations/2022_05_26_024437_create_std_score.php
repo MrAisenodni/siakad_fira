@@ -18,8 +18,8 @@ class CreateStdScore extends Migration
             $table->unsignedInteger('student_id')->nullable();
             $table->unsignedInteger('lesson_id')->nullable();
             $table->unsignedInteger('class_id')->nullable();
-            $table->decimal('score_1')->nullable();
-            $table->decimal('score_2')->nullable();
+            $table->decimal('avg_ph')->nullable();
+            $table->decimal('avg_t')->nullable();
             $table->decimal('score_3')->nullable();
             $table->decimal('score_4')->nullable();
             $table->decimal('score_uts')->nullable();

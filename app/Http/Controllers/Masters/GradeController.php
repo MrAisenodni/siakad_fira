@@ -14,7 +14,7 @@ class GradeController extends Controller
 {
     public function __construct()
     {
-        $this->url = '/master/kategori';
+        $this->url = '/master/nilai';
         $this->menus = new Menu();
         $this->sub_menus = new SubMenu();
         $this->grades = new Grade();
@@ -49,8 +49,8 @@ class GradeController extends Controller
 
         $validated = $request->validate([
             'name'          => 'required',
-            'min_score'     => 'required|number|before_or_equal:max_score',
-            'max_score'     => 'required|number|after_or_equal:min_score',
+            'min_score'     => 'required|numeric',
+            'max_score'     => 'required|numeric',
         ]);
 
         $data = [
@@ -71,7 +71,7 @@ class GradeController extends Controller
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->sub_menus->select('title', 'url')->where('url', $this->url)->first(),
-            'grade'         => $this->grades->select('id', 'name')->where('id', $id)->first(),
+            'grade'         => $this->grades->select('id', 'min_score', 'max_score', 'name')->where('id', $id)->first(),
         ];
 
         if (session()->get('srole') == 'admin') return view('masters.grade.edit', $data);
@@ -84,8 +84,8 @@ class GradeController extends Controller
 
         $validated = $request->validate([
             'name'          => 'required',
-            'min_score'     => 'required|number|before_or_equal:max_score',
-            'max_score'     => 'required|number|after_or_equal:min_score',
+            'min_score'     => 'required|numeric',
+            'max_score'     => 'required|numeric',
         ]);
 
         $data = [

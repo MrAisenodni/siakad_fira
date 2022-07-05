@@ -40,8 +40,6 @@
                                     <th>Mata Pelajaran</th>
                                     <th>Kelas</th>
                                     <th>Guru</th>
-                                    <th>Pengawas</th>
-                                    <th>Tipe</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,16 +59,6 @@
                                             <td>{{ $schedule->lesson->lesson->name }}</td>
                                             <td>{{ $schedule->lesson->class->name }}</td>
                                             <td>{{ $schedule->lesson->teacher->full_name }}</td>
-                                            <td>@if ($schedule->spv_teacher_id) {{ $schedule->teacher->full_name }} @else - @endif</td>
-                                            <td>
-                                                @if ($schedule->type == 'uas')
-                                                    <p class="red-text">UAS</p>
-                                                @elseif ($schedule->type == 'uts')
-                                                    <p class="green-text">UTS</p>
-                                                @else
-                                                    Pelajaran
-                                                @endif
-                                            </td>
                                         </tr>
                                     @endforeach
                                 @endif

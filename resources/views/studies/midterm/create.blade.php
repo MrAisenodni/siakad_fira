@@ -8,7 +8,7 @@
     
     {{-- Select2 --}}
     <link href="{{ asset('/libs/select2/dist/css/select2.css') }}" rel="stylesheet">
-    
+
     {{-- Datepicker --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('/libs/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css') }}">
 @endsection
@@ -20,22 +20,16 @@
             <div class="col s12">
                 <div class="card">
                     <div class="card-content">
-                        <h5 class="card-title">Ubah {{ $menu->title }}</h5>
-                        @if (session('status'))
-                            <div class="success-alert-bar p-15 m-t-10 m-b-10 red white-text" style="display: block">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-                        <form method="POST" action="{{ str_replace("/edit", "", url()->current()) }}">
-                            @method('put')
+                        <h5 class="card-title">Tambah {{ $menu->title }}</h5>
+                        <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">
                             @csrf
                             <div class="row">
-                                <div class="input-field col s6">
+                                <div class="input-field col s8">
                                     <select id="lesson" name="lesson" class="">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($lessons)
                                             @foreach ($lessons as $lesson)
-                                                <option @if(old('lesson', $schedule->lesson_id) == $lesson->id) selected @endif value="{{ $lesson->id }}">[{{ $lesson->teacher->nip }}] {{ $lesson->teacher->full_name }} | {{ $lesson->lesson->name }} ({{ $lesson->class->name }})</option>
+                                                <option @if(old('lesson') == $lesson->id) selected @endif value="{{ $lesson->id }}">[{{ $lesson->teacher->nip }}] {{ $lesson->teacher->full_name }} | {{ $lesson->lesson->name }} ({{ $lesson->class->name }})</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -43,42 +37,46 @@
                                     @error('lesson')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
-                                </div>
-                                <div class="input-field col s2">
-                                    <select id="day" name="day" class="">
-                                        <option @if(old('day', $schedule->day) == '1') selected @endif value="1" selected>Senin</option>
-                                        <option @if(old('day', $schedule->day) == '2') selected @endif value="2">Selasa</option>
-                                        <option @if(old('day', $schedule->day) == '3') selected @endif value="3">Rabu</option>
-                                        <option @if(old('day', $schedule->day) == '4') selected @endif value="4">Kamis</option>
-                                        <option @if(old('day', $schedule->day) == '5') selected @endif value="5">Jumat</option>
-                                        <option @if(old('day', $schedule->day) == '6') selected @endif value="6">Sabtu</option>
-                                        <option @if(old('day', $schedule->day) == '7') selected @endif value="7">Minggu</option>
-                                    </select>
-                                    <label for="day">Hari <span class="materialize-red-text">*</span></label>
-                                    @error('day')
+                                </div>                              
+                                <div class="input-field col s4">
+                                    <label for="date">Tanggal Ujian <span class="materialize-red-text">*</span></label>
+                                        <input id="date" type="text" name="date" placeholder="dd/MM/yyyy" class="datepicker" value="{{ old('date') }}">
+                                    @error('date')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col s2">
-                                    <label for="clock_in" class="m-t-20">Masuk <span class="materialize-red-text">*</span></label>
-                                    <div class="input-fleid">
-                                        <input id="clock_in" type="text" name="clock_in" placeholder="07:00" class="timepicker" value="{{ old('clock_in', date('H:i', strtotime($schedule->clock_in))) }}">
-                                    </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s8">
+                                    <select id="teacher" name="teacher" class="">
+                                        <option value="" selected>--- SILAHKAN PILIH ---</option>
+                                        @if ($teachers)
+                                            @foreach ($teachers as $teacher)
+                                                <option @if(old('teacher') == $teacher->id) selected @endif value="{{ $teacher->id }}">[{{ $teacher->nip }}] {{ $teacher->full_name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <label for="teacher">Guru Pengawas <span class="materialize-red-text">*</span></label>
+                                    @error('teacher')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>  
+                                <div class="input-field col s2">
+                                    <label for="clock_in">Masuk <span class="materialize-red-text">*</span></label>
+                                    <input id="clock_in" type="text" name="clock_in" placeholder="07:00" class="timepicker" value="{{ old('clock_in') }}">
                                     @error('clock_in')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col s2">
-                                    <label for="clock_out" class="m-t-20">Keluar <span class="materialize-red-text">*</span></label>
-                                    <div class="input-fleid">
-                                        <input id="clock_out" type="text" name="clock_out" placeholder="09:00" class="timepicker" value="{{ old('clock_out', date('H:i', strtotime($schedule->clock_out))) }}">
-                                    </div>
+                                <div class="input-field col s2">
+                                    <label for="clock_out">Keluar <span class="materialize-red-text">*</span></label>
+                                    <input id="clock_out" type="text" name="clock_out" placeholder="09:00" class="timepicker" value="{{ old('clock_out') }}">
                                     @error('clock_out')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
-                            
+
                             <hr>
                             <div class="row">
                                 <div class="col s12" style="text-align: right">
@@ -104,7 +102,7 @@
     {{-- Datepicker --}}
     <script src="{{ asset('/libs/moment/moment.js') }}"></script>
     <script src="{{ asset('/libs/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker-custom.js') }}"></script>
-    
+
     {{-- Form --}}
     <script src="{{ asset('/dist/js/form.js') }}"></script>
     @include('scripts.datepicker')

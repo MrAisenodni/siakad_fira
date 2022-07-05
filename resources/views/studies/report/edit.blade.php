@@ -29,10 +29,6 @@
                         <form method="POST" action="{{ str_replace("/edit", "", url()->current()) }}">
                             @method('put')
                             @csrf
-                            <input type="hidden" id="class_id" name="class_id" value="{{ $clazz->class_id }}">
-                            <input type="hidden" id="study_year_id" name="study_year_id" value="{{ $clazz->study_year_id }}">
-                            <input type="hidden" name="teacher_id" value="{{ $clazz->teacher_id }}">
-                            <input type="hidden" name="lesson_id" value="{{ $less }}">
                             <div class="row">
                                 <div class="input-field col s4">
                                     <input id="clazz" type="text" name="clazz" value="{{ $clazz->class->name }}" disabled>
@@ -48,7 +44,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="input-field col s4">
                                     <select id="lesson" name="lesson" class="auto_fill_teacher">
                                         @if ($lessons)
@@ -80,8 +76,8 @@
                                     @error('type')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
-                                </div>
-                            </div>
+                                </div> --}}
+                            {{-- </div> --}}
 
                             <hr>
                             <div class="row">
@@ -94,49 +90,123 @@
                     </div>
                 </div>
 
-                {{-- Daftar Siswa --}}
-                <div class="card">
-                    <div class="card-content">
-                        <div class="row">
-                            <div class="col s8">
-                                <h5 class="card-title">Daftar Siswa</h5>
-                            </div>
-                            <div class="col s4 right-align">
-                                <a class="waves-effect waves-light btn btn-round primary strong" href="{{ $menu->url }}/{{ $clazz->id }}/cetak"><i class="material-icons">print</i></a>
-                                {{-- <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a> --}}
-                            </div>
-                            @if (session('status'))
-                                <div class="col s12">
-                                    <div class="success-alert-bar p-15 m-t-10 green white-text" style="display: block">
-                                        {{ session('status') }}
-                                    </div>
-                                </div>
-                            @endif
+                <ul class="collapsible">
+                    <li>
+                        <div class="collapsible-header"><h5 class="card-title">Ujian Harian</h5></div>
+                        <div class="collapsible-body">
+                            <table id="noedit" class="responsive-table display" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>NIS</th>
+                                        <th>Siswa</th>
+                                        @for ($i = 1; $i < 6; $i++)
+                                            <th>PH{{ $i }}</th>
+                                            <th>R{{ $i }}</th>
+                                            <th>N{{ $i }}</th>
+                                        @endfor
+                                            <th>Rata PH</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if ($students)
+                                        @foreach ($students as $student)
+                                            <tr id="noedit" data-id="{{ $student->id }}">
+                                                <td>{{ $student->nis }}</td>
+                                                <td>{{ $student->full_name }}</td>
+                                                @for ($i = 1; $i < 6; $i++)
+                                                    <td>
+                                                        <div class="input-field">
+                                                            <input id="ph{{ $i }}" type="text" name="ph{{ $i }}" placeholder="PH1" value="">
+                                                            @error('ph'.$i)
+                                                                <div class="error">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-field">
+                                                            <input id="r{{ $i }}" type="text" name="r{{ $i }}" placeholder="R1" value="">
+                                                            @error('r'.$i)
+                                                                <div class="error">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="input-field">
+                                                            <input id="n{{ $i }}" type="text" name="n{{ $i }}" placeholder="N1" value="">
+                                                            @error('n'.$i)
+                                                                <div class="error">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </td>
+                                                @endfor
+                                                <td>
+                                                    <div class="input-field">
+                                                        <input id="n{{ $i }}" type="text" name="n{{ $i }}" placeholder="N1" value="">
+                                                        @error('n'.$i)
+                                                            <div class="error">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
                         </div>
-                        <table id="payment_config" class="responsive-table display" style="width:100%" onload="message()">
-                            <thead>
-                                <tr>
-                                    <th>NIS</th>
-                                    <th>NISN</th>
-                                    <th>Siswa</th>
-                                    <th>Nomor HP</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if ($classes)
-                                    @foreach ($classes as $clas)
-                                        <tr id="data" data-id="{{ $clas->student_id }}">
-                                            <td>{{ $clas->student->nis }}</td>
-                                            <td>{{ $clas->student->nisn }}</td>
-                                            <td>{{ $clas->student->full_name }}</td>
-                                            <td>{{ $clas->student->phone_number }}</td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                    </li>
+                </ul>
+
+                <ul id="tugas" class="collapsible">
+                    <li class="active">
+                        <div class="collapsible-header"><h5 class="card-title">Tugas</h5></div>
+                        <div class="collapsible-body">
+                            <p>TEsting</p>
+                            {{-- <table id="noedit" class="responsive-table" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>NIS</th>
+                                        <th>Siswa</th>
+                                        @for ($i = 1; $i < 6; $i++)
+                                            <th>T{{ $i }}</th>
+                                        @endfor
+                                        <th>Rata T</th>
+                                        <th>PTS</th>
+                                        <th>PAS</th>
+                                        <th>NPA</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if ($students)
+                                        @foreach ($students as $student)
+                                            <tr id="noedit" data-id="{{ $student->id }}">
+                                                <td>{{ $student->nis }}</td>
+                                                <td>{{ $student->full_name }}</td>
+                                                @for ($i = 1; $i < 6; $i++)
+                                                    <td>
+                                                        <div class="input-field">
+                                                            <input id="t{{ $i }}" type="text" name="t{{ $i }}" placeholder="T{{ $i }}" value="{{ old('t'.$i) }}">
+                                                            @error('t'.$i)
+                                                                <div class="error">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </td>
+                                                @endfor
+                                                <td>
+                                                    <div class="input-field">
+                                                        <input id="n{{ $i }}" type="text" name="n{{ $i }}" placeholder="N1" value="">
+                                                        @error('n'.$i)
+                                                            <div class="error">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table> --}}
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>

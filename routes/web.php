@@ -4,8 +4,9 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\Studies\{
     ArticleController,
     ClassController as StdClassController,
-    GradeController,
+    FinalExamController,
     LessonController as StdLessonController,
+    MidtermController,
     ParentController,
     PaymentController as StdPaymentController,
     PresentController,
@@ -22,6 +23,7 @@ use App\Http\Controllers\Masters\{
     ClassController,
     ExtracurricularController,
     FamilyStatusController,
+    GradeController,
     LanguageController,
     LoginController,
     LessonController,
@@ -75,12 +77,10 @@ Route::middleware('authcheck')->group(function() {
     Route::resource('/studi/pengumuman', ArticleController::class);
     Route::resource('/studi/guru', TeacherController::class);
     Route::resource('/studi/jadwal-pembelajaran', ScheduleController::class);
+    Route::resource('/studi/jadwal-uts', MidtermController::class);
+    Route::resource('/studi/jadwal-uas', FinalExamController::class);
     Route::resource('/studi/kelas', StdClassController::class);
     Route::resource('/studi/mata-pelajaran', StdLessonController::class);
-    Route::resource('/studi/nilai-siswa', ReportScoreController::class);
-    Route::get('/studi/nilai-siswa/{id}/edit/{ids}/edit', [ReportScoreController::class, 'edit']);
-    Route::put('/studi/nilai-siswa/{id}/{ids}', [ReportScoreController::class, 'update']);
-    Route::get('/studi/nilai-siswa/{id}/create', [ReportScoreController::class, 'create']);
     Route::resource('/studi/orang-tua', ParentController::class);
     Route::get('/studi/presensi/{id}/cari', [PresentController::class, 'search']);
     Route::resource('/studi/presensi', PresentController::class);
@@ -90,6 +90,12 @@ Route::middleware('authcheck')->group(function() {
     Route::post('/studi/spp/create-tagihan', [StdPaymentController::class, 'store_payment']);
     Route::resource('/studi/spp', StdPaymentController::class);
     Route::post('/what', [StdPaymentController::class, 'test']);
+
+    // This part for Nilai Siswa
+    Route::resource('/studi/nilai-siswa', ReportScoreController::class);
+    Route::get('/studi/nilai-siswa/{id}/{ids}/edit', [ReportScoreController::class, 'edit']);
+    Route::put('/studi/nilai-siswa/{id}/{ids}', [ReportScoreController::class, 'update']);
+    Route::get('/studi/nilai-siswa/{id}/create', [ReportScoreController::class, 'create']);
 
     // Print Routes (PDF)
     Route::get('/studi/kelas/{id}/cetak', [PrintController::class, 'print_class']);

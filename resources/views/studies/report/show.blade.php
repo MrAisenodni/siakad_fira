@@ -47,7 +47,7 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="input-field col s6">
                                     <select id="lesson" name="lesson" class="auto_fill_teacher">
                                         <option selected value="">=== SILAHKAN PILIH ===</option>
@@ -66,7 +66,7 @@
                                     <input id="teacher" type="text" placeholder="Guru" name="teacher" disabled>
                                     <label for="teacher">Guru</label>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <hr>
                             <div class="row">
@@ -79,12 +79,12 @@
                     </div>
                 </div>
 
-                {{-- Daftar Siswa --}}
+                {{-- Daftar Mata Pelajaran --}}
                 <div class="card">
                     <div class="card-content">
                         <div class="row">
                             <div class="col s8">
-                                <h5 class="card-title">Daftar Siswa</h5>
+                                <h5 class="card-title">Daftar Mata Pelajaran</h5>
                             </div>
                             <div class="col s4 right-align">
                                 <a class="waves-effect waves-light btn btn-round primary strong" href="{{ $menu->url }}/{{ $clazz->id }}/cetak"><i class="material-icons">print</i></a>
@@ -98,28 +98,32 @@
                                 </div>
                             @endif
                         </div>
-                        <table id="payment_config" class="responsive-table display" style="width:100%" onload="message()">
-                            <thead>
-                                <tr>
-                                    <th>NIS</th>
-                                    <th>NISN</th>
-                                    <th>Siswa</th>
-                                    <th>Nomor HP</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if ($classes)
-                                    @foreach ($classes as $clas)
-                                        <tr id="data" data-id="{{ $clas->student_id }}">
-                                            <td>{{ $clas->student->nis }}</td>
-                                            <td>{{ $clas->student->nisn }}</td>
-                                            <td>{{ $clas->student->full_name }}</td>
-                                            <td>{{ $clas->student->phone_number }}</td>
+                        <div class="row">
+                            <div class="col s12">
+                                <table id="payment_config" class="responsive-table display" style="width:100%" onload="message()">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Mata Pelajaran</th>
+                                            <th>Guru</th>
+                                            <th>KKM</th>
                                         </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
+                                    </thead>
+                                    <tbody>
+                                        @if ($lessons)
+                                            @foreach ($lessons as $lesson)
+                                                <tr id="data" data-id="{{ $lesson->id }}">
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $lesson->name }}</td>
+                                                    <td>{{ $lesson->full_name }}</td>
+                                                    <td>{{ $lesson->kkm }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

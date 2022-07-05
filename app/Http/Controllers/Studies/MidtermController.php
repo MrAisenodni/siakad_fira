@@ -7,21 +7,21 @@ use App\Models\Settings\Menu;
 use App\Models\Studies\{
     ClassModel,
     Lesson,
-    Schedule,
+    Midterm,
     Student,
     Teacher,
 };
 use Illuminate\Http\Request;
 
-class ScheduleController extends Controller
+class MidtermController extends Controller
 {
     public function __construct()
     {
-        $this->url = '/studi/jadwal-pembelajaran';
+        $this->url = '/studi/jadwal-uts';
         $this->menus = new Menu();
         $this->classes = new ClassModel();
         $this->lessons = new Lesson();
-        $this->schedules = new Schedule();
+        $this->midterms = new Midterm();
         $this->students = new Student();
         $this->teachers = new Teacher();
     }
@@ -34,22 +34,20 @@ class ScheduleController extends Controller
         ];
 
         if (session()->get('srole') == 'admin') {
-            $data['schedules'] = $this->schedules->select('id', 'day', 'clock_in', 'clock_out', 'lesson_id')->where('disabled', 0)->orderBy('day')->orderBy('clock_in')->get();
+            $data['midterms'] = $this->midterms->select('id', 'date', 'clock_in', 'clock_out', 'teacher_id', 'lesson_id')->where('disabled', 0)->orderByRaw('date, clock_in ASC')->get();
 
-            return view('studies.schedule.index', $data);
+            return view('studies.midterm.index', $data);
         } elseif (session()->get('srole') == 'teacher') {
-            $lesson_id = $this->lessons->select('id')->where('teacher_id', session()->get('suser_id'))->where('disabled', 0)->get();
+            $data['midterms'] = $this->midterms->select('id', 'date', 'clock_in', 'clock_out', 'lesson_id')->where('teacher_id', session()->get('suser_id'))->where('disabled', 0)->orderByRaw('date, clock_in ASC')->get();
             
-            $data['schedules'] = $this->schedules->select('id', 'day', 'clock_in', 'clock_out', 'lesson_id')->whereIn('lesson_id', $lesson_id)->where('disabled', 0)->orderBy('day')->get();
-            
-            return view('teachers.schedule.index', $data);
+            return view('teachers.midterm.index', $data);
         } else {
             $class = $this->classes->select('id')->where('student_id', session()->get('suser_id'))->where('disabled', 0)->first();
             $lesson_id = $this->lessons->select('id')->where('class_id', $class->id)->where('disabled', 0)->get();
 
-            $data['schedules'] = $this->schedules->select('id', 'day', 'clock_in', 'clock_out', 'lesson_id')->whereIn('lesson_id', $lesson_id)->where('disabled', 0)->orderBy('day')->get();
+            $data['midterms'] = $this->midterms->select('id', 'date', 'clock_in', 'clock_out', 'teacher_id', 'lesson_id')->whereIn('lesson_id', $lesson_id)->where('disabled', 0)->orderByRaw('date, clock_in ASC')->get();
 
-            return view('students.schedule.index', $data);
+            return view('students.midterm.index', $data);
         }
     }
 
@@ -62,7 +60,7 @@ class ScheduleController extends Controller
             'teachers'          => $this->teachers->select('id', 'nip', 'full_name')->where('disabled', 0)->where('role', 'teacher')->get(),
         ];
 
-        if (session()->get('srole') == 'admin') return view('studies.schedule.create', $data);
+        if (session()->get('srole') == 'admin') return view('studies.midterm.create', $data);
         abort(403);
     }
 
@@ -73,23 +71,21 @@ class ScheduleController extends Controller
         $validated = $request->validate([
             'clock_in'  => 'required|date_format:H:i',
             'clock_out' => 'required|date_format:H:i|after:clock_in',
+            'teacher'   => 'required',
             'lesson'    => 'required',
         ]);
 
-        // Uncomment this validation if you need
-        // $check = $this->lessons->where('lesson_id', $input['lesson'])->where('clock_in', $input['clock_in'])->where('clock_out', $input['clock_out'])->where('day', $input['day'])->first();
-        // if ($check) return redirect(url()->previous())->with('error', 'Mata Pelajaran '.$check->lesson->name.' sudah terdaftar pada hari '.$check->days->name.' pukul '.$check->clock_in.'-'.$check->clock_out);
-
         $data = [
-            'day'               => $input['day'],
+            'date'              => date('Y-m-d', strtotime(str_replace('/', '-', $input['date']))),
             'clock_in'          => $input['clock_in'],
             'clock_out'         => $input['clock_out'],
+            'teacher_id'        => $input['teacher'],
             'lesson_id'         => $input['lesson'],
             'created_by'        => session()->get('sname'),
             'created_at'        => now(),
         ];
 
-        $this->schedules->insert($data);
+        $this->midterms->insert($data);
 
         return redirect($this->url)->with('status', 'Data berhasil ditambahkan.');
     }
@@ -99,19 +95,19 @@ class ScheduleController extends Controller
         $data = [
             'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'schedule'          => $this->schedules->where('id', $id)->first(),
+            'midterm'          => $this->midterms->where('id', $id)->first(),
         ];
         
         if (session()->get('srole') == 'admin') {
-            return view('studies.schedule.show', $data);
+            return view('studies.midterm.show', $data);
         } elseif (session()->get('srole') == 'teacher') {
-            $lesson = $this->lessons->select('class_id')->where('id', $data['schedule']->lesson_id)->where('disabled', 0)->first();
+            $lesson = $this->lessons->select('class_id')->where('id', $data['midterm']->lesson_id)->where('disabled', 0)->first();
             $student_id = $this->classes->select('student_id')->where('disabled', 0)->where('class_id', $lesson->class_id)->get();
             $data['students'] = $this->students->select('id', 'nis', 'nisn', 'full_name', 'phone_number', 'home_number')->whereIn('id', $student_id)->where('disabled', 0)->get();
 
-            return view('teachers.schedule.show', $data);
+            return view('teachers.midterm.show', $data);
         } else {
-            return view('students.schedule.show', $data);
+            return view('students.midterm.show', $data);
         }
     }
 
@@ -122,10 +118,10 @@ class ScheduleController extends Controller
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'lessons'           => $this->lessons->select('id', 'teacher_id', 'class_id', 'study_year_id', 'lesson_id')->where('disabled', 0)->get(),
             'teachers'          => $this->teachers->select('id', 'nip', 'full_name')->where('disabled', 0)->where('role', 'teacher')->get(),
-            'schedule'          => $this->schedules->where('id', $id)->first(),
+            'midterm'           => $this->midterms->where('id', $id)->first(),
         ];
         
-        if (session()->get('srole') == 'admin') return view('studies.schedule.edit', $data);
+        if (session()->get('srole') == 'admin') return view('studies.midterm.edit', $data);
         abort(403);
     }
 
@@ -136,19 +132,21 @@ class ScheduleController extends Controller
         $validated = $request->validate([
             'clock_in'  => 'required|date_format:H:i',
             'clock_out' => 'required|date_format:H:i|after:clock_in',
+            'teacher'   => 'required',
             'lesson'    => 'required',
         ]);
 
         $data = [
-            'day'               => $input['day'],
+            'date'              => date('Y-m-d', strtotime(str_replace('/', '-', $input['date']))),
             'clock_in'          => $input['clock_in'],
             'clock_out'         => $input['clock_out'],
+            'teacher_id'        => $input['teacher'],
             'lesson_id'         => $input['lesson'],
-            'updated_by'        => session()->get('sname'),
-            'updated_at'        => now(),
+            'created_by'        => session()->get('sname'),
+            'created_at'        => now(),
         ];
 
-        $this->schedules->where('id', $id)->update($data);
+        $this->midterms->where('id', $id)->update($data);
 
         return redirect($this->url)->with('status', 'Data berhasil diubah.');
     }
@@ -161,7 +159,7 @@ class ScheduleController extends Controller
             'updated_at'    => now(),
         ];
 
-        $this->schedules->where('id', $id)->update($data);
+        $this->midterms->where('id', $id)->update($data);
 
         return redirect($this->url)->with('status', 'Data berhasil dihapus.');
     }

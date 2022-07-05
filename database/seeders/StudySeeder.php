@@ -78,6 +78,6 @@ class StudySeeder extends Seeder
         }
 
         // Nilai Siswa
-        ReportScore::factory()->count(450)->create();
+        // ReportScore::factory()->count(450)->create();
     }
 }
