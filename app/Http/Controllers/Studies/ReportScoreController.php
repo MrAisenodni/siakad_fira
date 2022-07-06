@@ -170,6 +170,7 @@ class ReportScoreController extends Controller
         $data = [
             'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
+            'lesson'            => $this->lessons->select('teacher_id', 'lesson_id')->where('id', $ids)->first(),
             'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereIn('id', $student_id)->get(),
             'clazz'             => $clazz,
         ];
@@ -183,8 +184,11 @@ class ReportScoreController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, $ids)
     {
+        $input = $request->all();
+        dd($input);
+
         $clazz = $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('id', $id)->first();
         $classes = $this->classes->select('id', 'student_id')->where('class_id', $request->class_id)->where('teacher_id', $request->teacher_id)->where('study_year_id', $request->study_year_id)->where('disabled', 0)->get();
         
