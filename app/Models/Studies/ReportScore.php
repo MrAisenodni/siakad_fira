@@ -26,8 +26,8 @@ class ReportScore extends Model
         return $this->belongsTo(ClassModel::class)->where('disabled', 0);
     }
 
-    public function std_score_detail()
+    public function student()
     {
-        return $this->hasMany(ReportScoreDetail::class, 'id', 'score_id')->where('disabled', 0);
+        return $this->belongsTo(Student::class)->where('disabled', 0)->orderBy('nis');
     }
 }

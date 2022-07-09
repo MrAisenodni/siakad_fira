@@ -59,12 +59,17 @@ $(function() {
         // Variabel untuk nilai tugas
         var id = $(this).attr('data-id')
         var name = $(this).attr('name')
-
         // Variabel untuk perhitungan
         var hitung = $('#'+name)
+        if (name.match(/t.*/)) var n_hitung = $('#'+name.replace('t', 'n'))
+        if (name.match(/k.*/)) var n_hitung = $('#'+name.replace('k', 'n'))
+        if (name.match(/ph.*/)) var n_hitung = $('#'+name.replace('ph', 'n'))
+        if (name.match(/r.*/)) var n_hitung = $('#'+name.replace('r', 'n'))
         let value = 0
+        let n_value = 0
         if (hitung.val() != '') value = parseFloat(hitung.val())
         let bagi = 1
+        let n_bagi = 1
         let kkm = $('input[name="kkm"]').val()
 
         // Variabel untuk Perhitungan NPA
@@ -87,7 +92,6 @@ $(function() {
                 total = (parseFloat(value) + parseFloat(sum.val()))
                 value = total
             }
-
         }
 
         if (name.match(/t.*/)) var avg_name = 'avg_t'+id
@@ -95,10 +99,13 @@ $(function() {
         if (name.match(/ph.*/)) {
             var avg_name = 'avg_ph'+id
             var n_name = name.replace('ph', 'n')
+            var nh_name = name.replace('ph', 'nh')
 
             // Variabel untuk N atau Nilai Pembelajaran Harian
             var n_det = $('#'+n_name)
+            var nh_det = $('#'+nh_name)
             n_det.val(parseFloat(hitung.val()))
+            nh_det.val(parseFloat(hitung.val()))
             if (n_det.val() < parseFloat(kkm)) {
                 n_det.attr('style', 'color: red')
             } else {
@@ -108,18 +115,28 @@ $(function() {
         if (name.match(/r.*/)) {
             var ph_name = name.replace('r', 'ph')
             var n_name = name.replace('r', 'n')
+            var nh_name = name.replace('r', 'nh')
 
             // Variabel untuk N atau Nilai Pembelajaran Harian
             var ph_det = $('#'+ph_name)
             var n_det = $('#'+n_name)
+            var nh_det = $('#'+nh_name)
             if (value > ph_det.val()) {
                 if (parseFloat(value) > parseFloat(kkm)) {
-                    n_det.val(kkm)
+                    if (ph_det.val() > parseFloat(kkm)) {
+                        n_det.val(parseFloat(ph_det.val()))
+                        nh_det.val(parseFloat(ph_det.val()))
+                    } else {
+                        n_det.val(kkm)
+                        nh_det.val(kkm)
+                    }
                 } else {
                     n_det.val(parseFloat(hitung.val()))
+                    nh_det.val(parseFloat(hitung.val()))
                 }
             } else {
                 n_det.val(ph_det.val())
+                nh_det.val(ph_det.val())
             }
             if (n_det.val() < parseFloat(kkm)) {
                 n_det.attr('style', 'color: red')
@@ -127,12 +144,31 @@ $(function() {
                 n_det.attr('style', 'color: black')
             }
         }
+
+        if (n_hitung.val() != '') n_value = parseFloat(n_hitung.val())
+        // console.log(n_hitung.val())
+
+        // Looping untuk Perhitungan Rata-Rata PH
+        for (let i = 1; i < 6; i ++) {
+            let n_total
+            // Variabel untuk Nilai Tugas
+            var n_sum = $('#n'+i+'_'+id)
+
+            if (n_hitung.attr('name') != n_sum.attr('id') && n_sum.val() != '') {
+                // Nilai Bagi
+                if (n_value != 0) n_bagi++
+
+                // Penjumlahan Nilai Tugas
+                n_total = (parseFloat(n_value) + parseFloat(n_sum.val()))
+                n_value = n_total
+            }
+        }
         
         var avg = $('input[name="'+avg_name+'"]')
         
         // Perhitungan Nilai Rata-Rata
         if (name.match(/ph.*/) || name.match(/r.*/)) {
-
+            avg.val((n_value/n_bagi).toFixed(2))
         } else {
             avg.val((value/bagi).toFixed(2))
         }
@@ -144,15 +180,17 @@ $(function() {
         }
 
         // Perhitungan Nilai Akhir (NPA)
-        if (pts.val() != '' && pas.val() != '') {
-            var avg_ph = $('#avg_ph'+id)
-            var avg_t = $('#avg_t'+id)
-
-            if (avg_ph.val() != '' && avg_t != '') {
-
-            }
-            console.log(pts.val(), pas.val(), avg_ph.val(), avg_t.val())
+        var npa = $('#npa'+id)
+        var npah = $('#npah'+id)
+        var avg_ph = $('#avg_ph'+id)
+        var avg_t = $('#avg_t'+id)
+        var npa_value = 0
+        if (pts.val() != '' && pas.val() != '' && avg_ph.val() != '' && avg_t.val() != '') {
+            npa_value = ((parseFloat(avg_ph.val())+parseFloat(avg_t.val()))+parseFloat(pts.val())+parseFloat(pas.val()))/4
+            console.log(pts.val(), pas.val(), avg_ph.val(), avg_t.val(), npa_value)
         }
+        npa.val(npa_value.toFixed(2))
+        npah.val(npa_value.toFixed(2))
     })
     // ============================================================== 
     // auto calculate for npa
@@ -165,17 +203,19 @@ $(function() {
         // Variabel untuk Perhitungan NPA
         var pts = $('#pts'+id)
         var pas = $('#pas'+id)
+        var npa = $('#npa'+id)
+        var npah = $('#npah'+id)
+        var avg_ph = $('#avg_ph'+id)
+        var avg_t = $('#avg_t'+id)
+        var npa_value = 0
 
         // Perhitungan Nilai Akhir (NPA)
-        if (pts.val() != '' && pas.val() != '') {
-            var avg_ph = $('#avg_ph'+id)
-            var avg_t = $('#avg_t'+id)
-
-            if (avg_ph.val() != '' && avg_t != '') {
-
-            }
-            console.log(pts.val(), pas.val(), avg_ph.val(), avg_t.val())
+        if (pts.val() != '' && pas.val() != '' && avg_ph.val() != '' && avg_t.val() != '') {
+            npa_value = ((parseFloat(avg_ph.val())+parseFloat(avg_t.val()))+parseFloat(pts.val())+parseFloat(pas.val()))/4
+            console.log(pts.val(), pas.val(), avg_ph.val(), avg_t.val(), npa_value)
         }
+        npa.val(npa_value.toFixed(2))
+        npah.val(npa_value.toFixed(2))
     })
     // ============================================================== 
     // auto currency

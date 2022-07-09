@@ -14,7 +14,6 @@ use App\Models\Studies\{
     ClassModel,
     Lesson,
     ReportScore,
-    ReportScoreDetail,
     ParentModel,
     Student,
 };
@@ -32,7 +31,6 @@ class ReportScoreController extends Controller
         $this->mst_lessons = new MstLesson();
         $this->parents = new ParentModel();
         $this->reports = new ReportScore();
-        $this->report_details = new ReportScoreDetail();
         $this->students = new Student();
     }
     
@@ -171,6 +169,7 @@ class ReportScoreController extends Controller
             'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'lesson'            => $this->lessons->select('teacher_id', 'lesson_id')->where('id', $ids)->first(),
+            'reports'           => $this->reports->where('disabled', 0)->where('class_id', $id)->where('lesson_id', $ids)->get(),
             'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereIn('id', $student_id)->get(),
             'clazz'             => $clazz,
         ];
@@ -187,25 +186,72 @@ class ReportScoreController extends Controller
     public function update(Request $request, $id, $ids)
     {
         $input = $request->all();
-        dd($input);
 
+        // dd($input, $input['ph'.'5'.'_1']);
         $clazz = $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('id', $id)->first();
-        $classes = $this->classes->select('id', 'student_id')->where('class_id', $request->class_id)->where('teacher_id', $request->teacher_id)->where('study_year_id', $request->study_year_id)->where('disabled', 0)->get();
+        $student = $this->classes->select('student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();
         
-        $data = [
-            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
-            'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'lessons'           => $this->lessons->get_lesson($clazz->class_id, $clazz->study_year_id),
-            'less'              => $request->lesson_id,
-            'clazz'             => $clazz,
-            'classes'           => $classes,
-        ];
+        for ($i = 1; $i <= $input['count']; $i++) 
+        {
+            $data = [
+                'student_id'    => $student[$i-1]->student_id,
+                'class_id'      => $id,
+                'lesson_id'     => $ids,
+                'ph1'           => $input['ph1_'.$student[$i-1]->student_id],
+                'ph2'           => $input['ph2_'.$student[$i-1]->student_id],
+                'ph3'           => $input['ph3_'.$student[$i-1]->student_id],
+                'ph4'           => $input['ph4_'.$student[$i-1]->student_id],
+                'ph5'           => $input['ph5_'.$student[$i-1]->student_id],
+                'r1'           => $input['r1_'.$student[$i-1]->student_id],
+                'r2'           => $input['r2_'.$student[$i-1]->student_id],
+                'r3'           => $input['r3_'.$student[$i-1]->student_id],
+                'r4'           => $input['r4_'.$student[$i-1]->student_id],
+                'r5'           => $input['r5_'.$student[$i-1]->student_id],
+                'n1'           => $input['n1_'.$student[$i-1]->student_id],
+                'n2'           => $input['n2_'.$student[$i-1]->student_id],
+                'n3'           => $input['n3_'.$student[$i-1]->student_id],
+                'n4'           => $input['n4_'.$student[$i-1]->student_id],
+                'n5'           => $input['n5_'.$student[$i-1]->student_id],
+                't1'           => $input['t1_'.$student[$i-1]->student_id],
+                't2'           => $input['t2_'.$student[$i-1]->student_id],
+                't3'           => $input['t3_'.$student[$i-1]->student_id],
+                't4'           => $input['t4_'.$student[$i-1]->student_id],
+                't5'           => $input['t5_'.$student[$i-1]->student_id],
+                'k1'           => $input['k1_'.$student[$i-1]->student_id],
+                'k2'           => $input['k2_'.$student[$i-1]->student_id],
+                'k3'           => $input['k3_'.$student[$i-1]->student_id],
+                'k4'           => $input['k4_'.$student[$i-1]->student_id],
+                'k5'           => $input['k5_'.$student[$i-1]->student_id],
+                'avg_ph'           => $input['avg_ph'.$student[$i-1]->student_id],
+                'avg_t'           => $input['avg_t'.$student[$i-1]->student_id],
+                'avg_k'           => $input['avg_k'.$student[$i-1]->student_id],
+                'pts'           => $input['pts'.$student[$i-1]->student_id],
+                'pas'           => $input['pas'.$student[$i-1]->student_id],
+                'npa'           => $input['npa'.$student[$i-1]->student_id],
+            ];
+            // dd($data);
 
-        if ($request->type) {
+            $check = $this->reports->select('id')->where('student_id', $student[$i-1]->student_id)->where('class_id', $id)->where('lesson_id', $ids)->where('disabled', 0)->first();
+            if ($check) {
+                $data += [
+                    'updated_by'        => session()->get('sname'),
+                    'updated_at'        => now(),
+                ];
 
-        } else {
-            return view('studies.report.edit', $data);
+                $this->reports->where('id', $check->id)->update($data);
+                // dd($data);
+            } else {
+                $data += [
+                    'created_by'        => session()->get('sname'),
+                    'created_at'        => now(),
+                ];
+
+                $this->reports->insert($data);
+                // dd($data);
+            }
+
         }
+        return redirect($this->url.'/'.$id.'/'.$ids.'/edit')->with('status', 'Nilai Siswa berhasil disimpan.');
     }
 
     public function destroy(Request $request, $id)
