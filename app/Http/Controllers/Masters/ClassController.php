@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Masters;
 
 use App\Http\Controllers\Controller;
+use App\Models\Studies\ClassModel as StdClass;
 use App\Models\Masters\ClassModel;
 use App\Models\Settings\{
     Menu,
@@ -17,6 +18,7 @@ class ClassController extends Controller
         $this->url = '/master/kelas';
         $this->menus = new Menu();
         $this->sub_menus = new SubMenu();
+        $this->std_classes = new StdClass();
         $this->classes = new ClassModel();
     }
     
@@ -95,11 +97,14 @@ class ClassController extends Controller
 
     public function destroy($id)
     {
+        $check = $this->std_classes->where('disabled', 0)->where('class_id', $id)->first();
         $data = [
             'disabled'      => 1,
             'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
+
+        if ($check) return redirect(url()->previous())->with('errdel', 'Data gagal dihapus karena Kelas masih aktif di Menu');
 
         $this->classes->where('id', $id)->update($data);
 

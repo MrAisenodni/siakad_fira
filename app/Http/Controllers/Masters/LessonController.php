@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Masters;
 
 use App\Http\Controllers\Controller;
+use App\Models\Studies\Lesson as StdLesson;
 use App\Models\Masters\Lesson;
 use App\Models\Settings\{
     Menu,
@@ -17,6 +18,7 @@ class LessonController extends Controller
         $this->url = '/master/mata-pelajaran';
         $this->menus = new Menu();
         $this->sub_menus = new SubMenu();
+        $this->std_lessons = new StdLesson();
         $this->lessons = new Lesson();
     }
     
@@ -51,7 +53,7 @@ class LessonController extends Controller
         $validated = $request->validate([
             'code'          => 'unique:mst_lesson,code,1,disabled',
             'name'          => 'required',
-            'kkm'           => 'required|numeric|digits_between:1,5',
+            'kkm'           => 'required|numeric',
         ]);
 
         if ($check) {
@@ -94,15 +96,12 @@ class LessonController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
-        $check = $this->lessons->select('id', 'disabled', 'code')->where('code', $input['code'])->first();
 
         $validated = $request->validate([
             'code'          => 'unique:mst_lesson,code,'.$id.',id,disabled,0',
             'name'          => 'required',
-            'kkm'           => 'required|numeric|digits_between:1,5',
+            'kkm'           => 'required|numeric',
         ]);
-
-        if ($check) $this->lessons->where('disabled', $check['disabled'])->where('id', $check['id'])->delete();
 
         $data = [
             'code'          => $input['code'],
@@ -119,11 +118,14 @@ class LessonController extends Controller
 
     public function destroy($id)
     {
+        $check = $this->std_lessons->where('disabled', 0)->where('lesson_id', $id)->first();
         $data = [
             'disabled'      => 1,
             'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
+
+        if ($check) return redirect(url()->previous())->with('errdel', 'Data gagal dihapus karena Mata Pelajaran masih aktif di Menu');
 
         $this->lessons->where('id', $id)->update($data);
 

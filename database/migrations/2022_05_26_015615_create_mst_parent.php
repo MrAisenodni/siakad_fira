@@ -15,16 +15,16 @@ class CreateMstParent extends Migration
     {
         Schema::create('mst_parent', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('student_id');
+            $table->unsignedInteger('student_id')->nullable();
 
             // Personal
-            $table->string('full_name');
-            $table->date('birth_date');
-            $table->string('birth_place');
+            $table->string('full_name')->nullable();
+            $table->date('birth_date')->nullable();
+            $table->string('birth_place')->nullable();
             $table->enum('gender', ['l', 'p'])->nullable();
             $table->enum('citizen', ['wni', 'wna'])->nullable();
-            $table->unsignedInteger('religion_id')->nullabl();
-            $table->text('address');
+            $table->unsignedInteger('religion_id')->nullable();
+            $table->text('address')->nullable();
             $table->string('phone_number', 25)->nullable();
             $table->string('home_number', 25)->nullable();
             $table->boolean('parent')->default(1);

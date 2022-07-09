@@ -20,10 +20,10 @@ class CreateMstStudent extends Migration
             $table->string('nis', 25)->unique();
             $table->string('nik', 16)->unique();
             $table->string('nisn', 25)->unique();
-            $table->string('full_name');
-            $table->string('birth_place');
-            $table->date('birth_date');
-            $table->enum('gender', ['l', 'p']);
+            $table->string('full_name')->nullable();
+            $table->string('birth_place')->nullable();
+            $table->date('birth_date')->nullable();
+            $table->enum('gender', ['l', 'p'])->nullable();
             $table->unsignedInteger('religion_id')->nullable();
             $table->unsignedInteger('language_id')->nullable();
             $table->unsignedInteger('blood_type_id')->nullable();
@@ -39,10 +39,10 @@ class CreateMstStudent extends Migration
             $table->string('child_count', 3)->nullable();
             $table->string('stepbrother_count', 3)->nullable();
             $table->string('stepsibling_count', 3)->nullable();
-            $table->enum('citizen', ['wni', 'wna']);
+            $table->enum('citizen', ['wni', 'wna'])->nullable();
             
             // Contact
-            $table->text('address');
+            $table->text('address')->nullable();
             $table->decimal('distance')->nullable();
             $table->string('phone_number', 25)->nullable();
             $table->string('home_number', 25)->nullable();

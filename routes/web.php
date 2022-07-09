@@ -98,6 +98,7 @@ Route::middleware('authcheck')->group(function() {
     Route::get('/studi/nilai-siswa/{id}/create', [ReportScoreController::class, 'create']);
 
     // Print Routes (PDF)
+    Route::get('/cetak/siswa', [PrintController::class, 'print_all_student']);
     Route::get('/studi/kelas/{id}/cetak', [PrintController::class, 'print_class']);
     Route::get('/studi/siswa/{id}/cetak', [PrintController::class, 'print_student']);
 

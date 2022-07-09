@@ -25,7 +25,7 @@
                                 <h5 class="card-title">Kelola {{ $menu->title }}</h5>
                             </div>
                             <div class="col s4 right-align">
-                                <a class="waves-effect waves-light btn btn-round primary strong" href="{{ $menu->url }}/cetak">CETAK</a>
+                                <a class="waves-effect waves-light btn btn-round primary strong" href="/cetak/siswa">CETAK</a>
                                 <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a>
                             </div>
                             @if (session('status'))

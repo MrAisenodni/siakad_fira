@@ -27,6 +27,13 @@
                             <div class="col s2 right-align">
                                 <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a>
                             </div>
+                            @if (session('errdel'))
+                                <div class="col s12">
+                                    <div class="success-alert-bar p-15 m-t-10 red white-text" style="display: block">
+                                        {{ session('errdel') }} <a href="/studi/mata-pelajaran" style="color: white; font-weight: bold; font-style: oblique">{{ $menu->title }}.</a>
+                                    </div>
+                                </div>
+                            @endif
                             @if (session('status'))
                                 <div class="col s12">
                                     <div class="success-alert-bar p-15 m-t-10 green white-text" style="display: block">

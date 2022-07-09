@@ -50,6 +50,18 @@ class PrintController extends Controller
         return view('studies.student.print', $data);
     }
 
+    public function print_all_student()
+    {
+        $data = [
+            'students'       => $this->students->where('disabled', 0)->get(),
+        ];
+
+        $pdf = PDF::loadView('studies.student.print_all', $data);
+        $pdf->set_time_limit(600);
+        return $pdf->stream('Lembar Induk Siswa.pdf');
+        return view('studies.student.print_all', $data);
+    }
+
     public function word_student($id)
     {
         $file = public_path('/document/Format_Lembar-Induk-Siswa.rtf');

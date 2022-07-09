@@ -112,14 +112,14 @@
                                             </div>
                                             <div class="row">
                                                 <div class="input-field col s3">
-                                                    <input id="height" type="text" placeholder="143" name="height" value="{{ old('height') }}">
+                                                    <input id="height" type="text" placeholder="143" name="height" value="{{ old('height', 0) }}">
                                                     <label for="height">Tinggi Badan (cm) <span class="materialize-red-text">*</span></label>
                                                     @error('height')
                                                         <div class="error">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                                 <div class="input-field col s3">
-                                                    <input id="weight" type="text" placeholder="55" name="weight" value="{{ old('weight') }}">
+                                                    <input id="weight" type="text" placeholder="55" name="weight" value="{{ old('weight', 0) }}">
                                                     <label for="weight">Berat Badan (kg) <span class="materialize-red-text">*</span></label>
                                                     @error('weight')
                                                         <div class="error">{{ $message }}</div>
@@ -310,7 +310,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="father_phone_number" type="text" placeholder="Nomor HP" name="father_phone_number" value="{{ old('father_phone_number') }}">
+                                            <input id="father_phone_number" type="text" placeholder="Nomor HP" name="father_phone_number" value="{{ old('father_phone_number', 0) }}">
                                             <label for="father_phone_number">Nomor HP <span class="materialize-red-text">*</span></label>
                                             @error('father_phone_number')
                                                 <div class="error">{{ $message }}</div>
@@ -687,7 +687,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s2">
-                                            <input id="distance" type="text" placeholder="10" name="distance" value="{{ old('distance') }}">
+                                            <input id="distance" type="text" placeholder="10" name="distance" value="{{ old('distance', 0) }}">
                                             <label for="distance">Jarak Tempuh (km) <span class="materialize-red-text">*</span></label>
                                             @error('distance')
                                                 <div class="error">{{ $message }}</div>

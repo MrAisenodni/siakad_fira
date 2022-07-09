@@ -95,61 +95,31 @@ class StudentController extends Controller
             'nis'           => 'required|numeric|unique:mst_student,nis,1,disabled|digits_between:1,20',
             'nisn'          => 'required|numeric|unique:mst_student,nisn,1,disabled|digits_between:1,20',
             'full_name'     => 'required',
-            'birth_place'   => 'required',
-            'birth_date'    => 'required|date_format:d/m/Y',
-            'religion'      => 'required',
-            'language'      => 'required',
-            'height'        => 'required|numeric',
-            'weight'        => 'required|numeric',
-            'photo'         => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048|dimensions:max_width=300px,max_height=400px',
+            'height'        => 'numeric',
+            'weight'        => 'numeric',
+            'photo'         => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048',
             
             // Validasi Keluarga
-            'family_status'     => 'required',
-            'child_to'          => 'required|numeric|digits_between:1,2|before_or_equal:child_count',
-            'child_count'       => 'required|numeric|digits_between:1,2',
+            'child_to'          => 'numeric|digits_between:1,2|before_or_equal:child_count',
+            'child_count'       => 'numeric|digits_between:1,2',
             'stepbrother_count' => 'numeric|digits_between:1,2',
             'stepsibling_count' => 'numeric|digits_between:1,2',
-            'citizen'           => 'required',
 
             // Validasi Kontak
-            'address'       => 'required',
-            'distance'      => 'required|numeric|digits_between:1,7',
-            'phone_number'  => 'required|digits_between:1,25',
+            'distance'      => 'numeric|digits_between:1,7',
+            'phone_number'  => 'digits_between:1,25',
             'home_number'   => 'digits_between:1,25',
 
             // Validasi Pendidikan
-            'level'             => 'required',
-            'group'             => 'required',
-            'start_date'        => 'required|date_format:d/m/Y',
-            'study_year'        => 'required',
-            'sttb_no'           => 'required|unique:mst_student,sttb_no,1,disabled',
-            'first_study'       => 'required',
-            'from_study_date'   => 'required|date_format:d/m/Y',
-            'to_study_date'     => 'required|date_format:d/m/Y|after:from_study_date',
+            'sttb_no'           => 'unique:mst_student,sttb_no,1,disabled',
 
             // Validasi Ayah
-            'father_name'           => 'required',
-            'father_birth_place'    => 'required',
-            'father_birth_date'     => 'required|date_format:d/m/Y',
-            'father_citizen'        => 'required',
-            'father_address'        => 'required',
-            'father_phone_number'   => 'required|digits_between:1,25',
+            'father_phone_number'   => 'digits_between:1,25',
             'father_home_number'    => 'digits_between:1,25',
-            'father_last_study'     => 'required',
-            'father_occupation'     => 'required',
-            'father_revenue'        => 'required',
 
             // Validasi Ibu
-            'mother_name'           => 'required',
-            'mother_birth_place'    => 'required',
-            'mother_birth_date'     => 'required|date_format:d/m/Y',
-            'mother_citizen'        => 'required',
-            'mother_address'        => 'required',
-            'mother_phone_number'   => 'required|digits_between:1,25',
+            'mother_phone_number'   => 'digits_between:1,25',
             'mother_home_number'    => 'digits_between:1,25',
-            'mother_last_study'     => 'required',
-            'mother_occupation'     => 'required',
-            'mother_revenue'        => 'required',
         ]);
 
         if ($check) {
@@ -374,61 +344,37 @@ class StudentController extends Controller
             'nis'           => 'required|numeric|unique:mst_student,nis,'.$id.',id,disabled,0|digits_between:1,20',
             'nisn'          => 'required|numeric|unique:mst_student,nisn,'.$id.',id,disabled,0|digits_between:1,20',
             'full_name'     => 'required',
-            'birth_place'   => 'required',
-            'birth_date'    => 'required|date_format:d/m/Y',
-            'religion'      => 'required',
-            'language'      => 'required',
-            'height'        => 'required|numeric',
-            'weight'        => 'required|numeric',
-            'photo'         => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048|dimensions:max_width=300px,max_height=400px',
+            'birth_date'    => 'date_format:d/m/Y',
+            'height'        => 'numeric',
+            'weight'        => 'numeric',
+            'photo'         => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048',
             
             // Validasi Keluarga
-            'family_status'     => 'required',
-            'child_to'          => 'required|numeric|digits_between:1,2|before_or_equal:child_count',
-            'child_count'       => 'required|numeric|digits_between:1,2',
+            'child_to'          => 'numeric|digits_between:1,2|before_or_equal:child_count',
+            'child_count'       => 'numeric|digits_between:1,2',
             'stepbrother_count' => 'numeric|digits_between:1,2',
             'stepsibling_count' => 'numeric|digits_between:1,2',
-            'citizen'           => 'required',
 
             // Validasi Kontak
-            'address'       => 'required',
-            'distance'      => 'required|numeric|digits_between:1,7',
-            'phone_number'  => 'required|digits_between:1,25',
+            'distance'      => 'numeric|digits_between:1,7',
+            'phone_number'  => 'digits_between:1,25',
             'home_number'   => 'digits_between:1,25',
 
             // Validasi Pendidikan
-            'level'             => 'required',
-            'group'             => 'required',
-            'start_date'        => 'required|date_format:d/m/Y',
-            'study_year'        => 'required',
-            'sttb_no'           => 'required|unique:mst_student,sttb_no,'.$id.',id,disabled,0',
-            'first_study'       => 'required',
-            'from_study_date'   => 'required|date_format:d/m/Y',
-            'to_study_date'     => 'required|date_format:d/m/Y|after:from_study_date',
+            'start_date'        => 'date_format:d/m/Y',
+            'sttb_no'           => 'unique:mst_student,sttb_no,'.$id.',id,disabled,0',
+            'from_study_date'   => 'date_format:d/m/Y',
+            'to_study_date'     => 'date_format:d/m/Y|after:from_study_date',
 
             // Validasi Ayah
-            'father_name'           => 'required',
-            'father_birth_place'    => 'required',
-            'father_birth_date'     => 'required|date_format:d/m/Y',
-            'father_citizen'        => 'required',
-            'father_address'        => 'required',
-            'father_phone_number'   => 'required|digits_between:1,25',
+            'father_birth_date'     => 'date_format:d/m/Y',
+            'father_phone_number'   => 'digits_between:1,25',
             'father_home_number'    => 'digits_between:1,25',
-            'father_last_study'     => 'required',
-            'father_occupation'     => 'required',
-            'father_revenue'        => 'required',
 
             // Validasi Ibu
-            'mother_name'           => 'required',
-            'mother_birth_place'    => 'required',
-            'mother_birth_date'     => 'required|date_format:d/m/Y',
-            'mother_citizen'        => 'required',
-            'mother_address'        => 'required',
-            'mother_phone_number'   => 'required|digits_between:1,25',
+            'mother_birth_date'     => 'date_format:d/m/Y',
+            'mother_phone_number'   => 'digits_between:1,25',
             'mother_home_number'    => 'digits_between:1,25',
-            'mother_last_study'     => 'required',
-            'mother_occupation'     => 'required',
-            'mother_revenue'        => 'required',
         ]);
 
         $data = [
@@ -596,6 +542,8 @@ class StudentController extends Controller
         ];
 
         $this->students->where('id', $id)->update($data);
+        $this->parents->where('student_id', $id)->update($data);
+        $this->logins->where('user_id', $id)->where('role', 'student')->update($data);
 
         return redirect($this->url)->with('status', 'Data berhasil dihapus.');
     }
