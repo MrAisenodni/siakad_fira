@@ -21,10 +21,11 @@
                 <div class="card">
                     <div class="card-content">
                         <div class="row">
-                            <div class="col s10">
+                            <div class="col s8">
                                 <h5 class="card-title">Kelola {{ $menu->title }}</h5>
                             </div>
-                            <div class="col s2 right-align">
+                            <div class="col s4 right-align">
+                                <a class="waves-effect waves-light btn btn-round primary strong" href="/cetak/guru">CETAK</a>
                                 <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a>
                             </div>
                             @if (session('status'))

@@ -73,10 +73,15 @@
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <div class="row">
+                                    <div class="col s12" style="text-align: center">
+                                        <img class="img-preview img-fluid" alt="Foto Profil" style="max-width: 100%" @if ($article->photo) src="{{ asset($article->photo) }}" @endif>
+                                    </div>
+                                </div>
                                 <div class="file-field input-field col s12">
                                     <div class="btn">
                                         <span>Unggah Foto</span>
-                                        <input type="file" name="photo" id="photo" value="{{ old('photo') }}">
+                                        <input type="file" name="photo" id="photo" value="{{ old('photo', $article->photo) }}">
                                     </div>
                                     <div class="file-path-wrapper">
                                         <input class="file-path validate" type="text">

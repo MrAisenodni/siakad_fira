@@ -173,6 +173,7 @@ return [
         'clazz'                 => 'Kelas',
         'clock_in'              => 'Jam Masuk',
         'clock_out'             => 'Jam Keluar',
+        'company_name'          => 'Nama Sekolah',
         'code'                  => 'Kode',
         'description'           => 'Deskripsi',
         'diagnose'              => 'Penyakit',

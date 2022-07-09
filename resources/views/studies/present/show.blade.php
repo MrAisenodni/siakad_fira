@@ -28,18 +28,22 @@
                             @csrf
                             <input type="hidden" name="clazz_id" value="{{ $clazz->id }}">
                             <div class="row">
-                                <div class="input-field col s5">
+                                <div class="input-field col s3">
                                     <input id="study_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="study_date" value="{{ old('study_date') }}" required>
                                     <label for="study_date">Tanggal</label>
                                     @error('study_date')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="input-field col s3">
+                                <div class="input-field col s1">
                                     <label for="clazz">Kelas</label>
                                     <input id="clazz" type="text" name="clazz" value="{{ $clazz->class->name }}" disabled>
                                 </div>
-                                <div class="input-field col s4">
+                                <div class="input-field col s5">
+                                    <label for="teacher">Wali Kelas</label>
+                                    <input id="teacher" type="text" name="teacher" value="{{ $clazz->teacher->full_name }}" disabled>
+                                </div>
+                                <div class="input-field col s3">
                                     <label for="study_year">Tahun Pelajaran</label>
                                     <input id="study_year" type="text" name="study_year" value="{{ $clazz->study_year->name }}" disabled>
                                 </div>
@@ -60,7 +64,6 @@
                     <div class="card-content">
                         <div class="row">
                             <form action="{{ url()->current() }}" method="GET">
-                                @csrf
                                 <div class="input-field col s5">
                                     <select id="month" name="month" class="">
                                         <option value="" selected>SEMUA</option>
@@ -80,7 +83,7 @@
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="input-field col s5">
+                                <div class="input-field col s4">
                                     <select id="year" name="year" class="">
                                         <option value="" selected>SEMUA</option>
                                         @for ($i = date('Y', strtotime(now())); $i >= 1700; $i--)
@@ -97,7 +100,9 @@
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="input-field col s2" style="text-align: right">
+                                <div class="input-field col s3" style="text-align: right">
+                                    <a class="waves-effect waves-light btn btn-round primary strong" 
+                                        href="/cetak/presensi/{{ $clazz->id }}?month={{ $inp_month }}&year={{ $inp_year }}">CETAK</a>
                                     <button class="waves-effect waves-light btn btn-round green strong" type="submit">CARI</button>
                                 </div>
                             </form>

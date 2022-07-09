@@ -5,6 +5,9 @@
 @section('styles')
     {{-- Prism --}}
     <link href="{{ asset('/extra-libs/prism/prism.css') }}" rel="stylesheet">
+    
+    {{-- Select2 --}}
+    <link href="{{ asset('/libs/select2/dist/css/select2.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -19,7 +22,7 @@
                             @method('put')
                             @csrf
                             <div class="row">
-                                <div class="input-field col s12">
+                                <div class="input-field col s8">
                                     <input id="name" type="text" placeholder="Tahun Pelajaran" name="name" value="{{ old('name', $study->name) }}">
                                     <label for="name">Tahun Pelajaran</label>
                                     @error('name')
@@ -27,7 +30,10 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s4">
-                                    <input id="semester" type="text" placeholder="Semester" name="semester" value="{{ old('semester', $study->semester) }}">
+                                    <select id="semester" name="semester" class="">
+                                        <option @if(old('semester', $study->semester) == 'ganjil') selected @endif value="ganjil">Ganjil</option>
+                                        <option @if(old('semester', $study->semester) == 'genap') selected @endif value="genap">Genap</option>
+                                    </select>
                                     <label for="semester">Semester</label>
                                     @error('semester')
                                         <div class="error">{{ $message }}</div>
@@ -51,5 +57,13 @@
 @endsection
 
 @section('scripts')
+    {{-- Prism --}}
     <script src="{{ asset('/extra-libs/prism/prism.js') }}"></script>
+    
+    {{-- Select2 --}}
+    <script src="{{ asset('/libs/select2/dist/js/select2.min.js') }}"></script>
+
+    {{-- Form --}}
+    <script src="{{ asset('/dist/js/form.js') }}"></script>
+    @include('scripts.select2')
 @endsection

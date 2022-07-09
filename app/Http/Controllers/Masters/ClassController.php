@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Masters;
 
 use App\Http\Controllers\Controller;
-use App\Models\Studies\ClassModel as StdClass;
+use App\Models\Studies\{
+    ClassModel as StdClass,
+    Lesson,
+};;
 use App\Models\Masters\ClassModel;
 use App\Models\Settings\{
     Menu,
@@ -20,6 +23,7 @@ class ClassController extends Controller
         $this->sub_menus = new SubMenu();
         $this->std_classes = new StdClass();
         $this->classes = new ClassModel();
+        $this->lessons = new Lesson();
     }
     
     public function index(Request $request)
@@ -97,14 +101,17 @@ class ClassController extends Controller
 
     public function destroy($id)
     {
-        $check = $this->std_classes->where('disabled', 0)->where('class_id', $id)->first();
+        $clazz = $this->std_classes->where('disabled', 0)->where('class_id', $id)->first();
+        $lesson = $this->lessons->where('disabled', 0)->where('class_id', $id)->first();
+
         $data = [
             'disabled'      => 1,
             'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 
-        if ($check) return redirect(url()->previous())->with('errdel', 'Data gagal dihapus karena Kelas masih aktif di Menu');
+        if ($clazz) return redirect(url()->previous())->with('errdel', 'Data gagal dihapus karena Kelas masih aktif di Menu')->with('errurl', 'kelas')->with('errtitle', 'Kelas');
+        if ($lesson) return redirect(url()->previous())->with('errdel', 'Data gagal dihapus karena Mata Pelajaran masih aktif di Menu')->with('errurl', 'mata-pelajaran')->with('errtitle', 'Mata Pelajaran');
 
         $this->classes->where('id', $id)->update($data);
 

@@ -48,7 +48,7 @@
                                     @foreach ($studies as $study)
                                         <tr id="data" data-id="{{ $study->id }}">
                                             <td>{{ $study->name }}</td>
-                                            <td>{{ $study->semester }}</td>
+                                            <td>{{ ucwords($study->semester) }}</td>
                                             <td id="no-data" study="text-center" style="width: 5%">
                                                 <form action="{{ $menu->url }}/{{ $study->id }}" method="POST" class="d-inline">
                                                     @method('delete')

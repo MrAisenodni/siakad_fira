@@ -96,7 +96,7 @@ class PresentController extends Controller
     {
         $month = $request->month;
         $year = $request->year;
-        $check = $this->classes->select('id', 'class_id', 'study_year_id')->where('id', $id)->first();
+        $check = $this->classes->select('id', 'class_id', 'teacher_id', 'study_year_id')->where('id', $id)->first();
 
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'LIKE', '%'.session()->get('srole').'%')->get(),

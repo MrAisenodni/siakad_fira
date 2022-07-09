@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ public_path('/images/logo-smp-nobg.png') }}">
         <title>Nomor Urut Peserta Didik Dalam Buku Induk Registrasi</title>
         <style>
             table, th, td {
@@ -21,12 +22,12 @@
         </style>
     </head>
     <body>
-        <h3>SMP Kartika VIII-1<br>Tahun Pelajaran {{ $classes[0]->study_year }}<br>Nomor Urut Peserta Didik</h3>
+        <h3>{{ $provider->company_name }}<br>Tahun Pelajaran {{ $classes[0]->study_year }}<br>Nomor Urut Peserta Didik</h3>
         <br>
 
         <table id="" style="width:100%; border-collapse: collapse;">
             <thead>
-                <tr style="text-align: center; line-height: 20px">
+                <tr style="text-align: center; line-height: 20px; background: grey">
                     <th>No</th>
                     <th>Nomor Induk</th>
                     <th>Nomor Induk Siswa Nasional</th>
@@ -43,7 +44,7 @@
                             <td style="text-align: center">{{ $clas->nis }}</td>
                             <td style="text-align: center">{{ $clas->nisn }}</td>
                             <td>{{ $clas->full_name }}</td>
-                            <td style="text-align: center">{{ $clas->gender }}</td>
+                            <td style="text-align: center">{{ strtoupper($clas->gender) }}</td>
                             <td style="text-align: center">{{ $clas->class }}</td>
                         </tr>
                     @endforeach
@@ -65,11 +66,11 @@
                 <th class="no-border"><br><br><br><br><br></th>
             </tr>
             <tr>
-                <th class="no-border" style="text-decoration: underline">@if($head) {{ $head->full_name }} @endif</th>
+                <th class="no-border" style="text-decoration: underline">@if($provider) {{ $provider->owner_name }} @endif</th>
                 <th class="no-border" style="text-decoration: underline">{{ $admin }}</th>
             </tr>
             <tr>
-                <th class="no-border">NIP @if($head) {{ $head->nip }} @endif</th>
+                <th class="no-border">NIP @if($provider) {{ $provider->owner_nip }} @endif</th>
                 <th class="no-border">NIP -</th>
             </tr>
         </table>

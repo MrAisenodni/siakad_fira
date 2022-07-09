@@ -130,6 +130,13 @@ class MenuSeeder extends Seeder
                 'parent'        => 1,
                 'role'          => 'admin',
             ],
+            [
+                'title'         => 'Profil Sekolah',
+                'url'           => '/provider',
+                'icon'          => 'school',
+                'parent'        => 0,
+                'role'          => 'admin',
+            ],
         ]);
 
         // Tabel Sub Menu

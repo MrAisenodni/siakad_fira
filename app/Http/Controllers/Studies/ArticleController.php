@@ -57,23 +57,30 @@ class ArticleController extends Controller
             'title'         => 'required',
             'category'      => 'required',
             'description'   => 'required',
-            'photo'         => 'required|mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:10000',
+            'photo'         => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:10000',
             'author'        => 'required',
         ]);
-
-        $photo_path = $request->photo->storeAs('pengumuman', strtotime(now()).'_'.$request->title.'_'.$request->author.'.png', 'public');
 
         $data = [
             'title'         => $input['title'],
             'category_id'   => $input['category'],
             'tag_id'        => $input['tag'],
             'description'   => $input['description'],
-            'photo'         => $photo_path,
             'status'        => $input['status'],
             'author'        => $input['author'],
             'created_by'    => session()->get('sname'),
             'created_at'    => now(),
         ];
+        
+        if ($request->photo) {
+            $file = $request->file('photo');
+            $extension = $request->photo->getClientOriginalExtension();  //Get Image Extension
+            $fileName =  strtotime(now()).'_'.$request->nis.'_'.$request->full_name.'.'.$extension;  //Concatenate both to get FileName (eg: file.jpg)
+            $file->move(public_path().'/images/articles/', $fileName);  
+            $data1 = $fileName;  
+
+            $data['photo'] = '/images/articles/'.$fileName; 
+        }
 
         $this->articles->insert($data);
 
@@ -120,22 +127,27 @@ class ArticleController extends Controller
             'author'        => 'required',
         ]);
 
-        if ($request->photo) {
-            if ($request->old_photo) File::delete(public_path().'/storage/'.$request->old_photo);
-            $photo_path = $request->photo->storeAs('pengumuman', strtotime(now()).'_'.$request->title.'_'.$request->author.'.png', 'public');
-        }
-
         $data = [
             'title'         => $input['title'],
             'category_id'   => $input['category'],
             'tag_id'        => $input['tag'],
             'description'   => $input['description'],
-            'photo'         => $photo_path,
             'status'        => $input['status'],
             'author'        => $input['author'],
             'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
+
+        if ($request->photo) {
+            if ($request->old_photo) File::delete(public_path().$request->old_photo);
+            $file = $request->file('photo');
+            $extension = $request->photo->getClientOriginalExtension();  //Get Image Extension
+            $fileName =  strtotime(now()).'_'.$request->nis.'_'.$request->full_name.'.'.$extension;  //Concatenate both to get FileName (eg: file.jpg)
+            $file->move(public_path().'/images/articles/', $fileName);  
+            $data1 = $fileName;  
+
+            $data['photo'] = '/images/articles/'.$fileName; 
+        }
 
         $this->articles->where('id', $id)->update($data);
 

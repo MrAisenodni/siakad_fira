@@ -22,8 +22,13 @@
                     <div class="card-content">
                         <h5 class="card-title">Ubah {{ $menu->title }}</h5>
                         @if (session('status'))
-                            <div class="success-alert-bar p-15 m-t-10 m-b-10 red white-text" style="display: block">
+                            <div class="success-alert-bar p-15 m-t-10 m-b-10 green white-text" style="display: block">
                                 {{ session('status') }}
+                            </div>
+                        @endif
+                        @if (session('error'))
+                            <div class="success-alert-bar p-15 m-t-10 m-b-10 red white-text" style="display: block">
+                                {{ session('error') }}
                             </div>
                         @endif
                         <form method="POST" action="{{ str_replace("/edit", "", url()->current()) }}" enctype="multipart/form-data">

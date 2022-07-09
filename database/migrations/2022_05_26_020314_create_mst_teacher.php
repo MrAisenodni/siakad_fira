@@ -23,9 +23,16 @@ class CreateMstTeacher extends Migration
             $table->string('phone_number', 25)->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('last_study')->nullable();
-            $table->text('picture')->nullable();
-            $table->unsignedInteger('religion_id')->nullable();
+            $table->unsignedInteger('religion_id')->nullable(); // Foreign Key ke tabel mst_religion
             $table->enum('role', ['teacher', 'head'])->nullable();
+            $table->text('address')->nullable();
+            $table->text('picture')->nullable();
+            $table->string('field_study')->nullable();
+            $table->string('role_admin')->nullable();
+            $table->string('curriculum_assist')->nullable(); // Wakil Kurikulum
+            $table->string('student_assist')->nullable(); // Wakil Kesiswaan
+            $table->string('facilities_assist')->nullable(); // Wakil Sarana dan Prasarana
+            $table->string('emissary_assist')->nullable(); // Wakil Caraka
             
             // Struktur Baku
             $table->boolean('disabled')->default(0);

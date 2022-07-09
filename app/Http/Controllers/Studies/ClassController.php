@@ -119,14 +119,19 @@ class ClassController extends Controller
         $clazz = $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('id', $id)->first();
         $student_id = $this->classes->select('student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();
         $classes = $this->classes->select('id', 'student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();
-
+        
         $data = [
-            'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
+            'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
-            'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereNotIn('id', $student_id)->get(),
             'clazz'             => $clazz,
             'classes'           => $classes,
         ];
+        
+        if ($student_id[0]->student_id != null) {
+            $data['students'] = $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereNotIn('id', $student_id)->get();
+        } else {
+            $data['students'] = $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->get();
+        }
         
         if (session()->get('srole') == 'admin') return view('studies.class.edit', $data);
         abort(403);
@@ -155,15 +160,19 @@ class ClassController extends Controller
         return redirect(url()->previous())->with('status', 'Data berhasil ditambahkan.');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $clue = $request->clue;
+        $clazz = $this->classes->select('teacher_id', 'study_year_id')->where('disabled', 0)->where('id', $id)->first();
+        $check = $this->classes->select('id')->where('disabled', 0)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->get();
         $data = [
             'disabled'      => 1,
             'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 
-        $this->classes->where('id', $id)->update($data);
+        if ($clue) $this->classes->whereIn('id', $check)->update($data);
+        if (!$clue) $this->classes->where('id', $id)->update($data);
 
         return redirect(url()->previous())->with('status', 'Data berhasil dihapus.');
     }

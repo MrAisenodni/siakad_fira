@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ public_path('/images/logo-smp-nobg.png') }}">
         <title>Lembar Buku Induk Siswa</title>
         <style>
             .m-5 {
@@ -57,15 +58,6 @@
                 <td>{{ $student->nisn }}</td>
             </tr>
         </table><br>
-
-        @php
-            // foreach(html()->find('table#student') as $table){ 
-            //     // returns all the <tr> tag inside $table
-            //     $all_trs = $table->find('tr');
-            //     $count = count($all_trs);
-            //     echo $count;
-            // } 
-        @endphp
         
         <table id="student" style="width: 100%">
             {{-- Keterangan Tentang Diri Siswa --}}
@@ -73,7 +65,14 @@
                 <th colspan="4" class="text-left ml-5" style="width: 100%">A. KETERANGAN TENTANG DIRI SISWA</th>
                 <td rowspan="50" class="text-center" style="width: 150px">
                     {{-- <img src="{{ asset($student->picture) }}" alt="Foto Siswa" class="mr-10" width="100%"> --}}
-                    <img src="{{ public_path($student->picture) }}" alt="Foto Siswa" class="mr-10" width="100%">
+                    <img 
+                        @if ($student->picture) 
+                            src="{{ public_path($student->picture) }}"
+                        @else 
+                            src="{{ public_path('images/blank-profile.png') }}"
+                        @endif 
+                        alt="Foto Siswa" class="mr-10" width="100%"
+                    >
                     <p style="font-size: 8pt">Cap tiga jari tengah ini di atas pas foto bagian bawah waktu diterima di sekolah</p>
                     <p style="font-size: 8pt">&nbsp;</p>
                     <p style="font-size: 8pt">Tanda Tangan</p>

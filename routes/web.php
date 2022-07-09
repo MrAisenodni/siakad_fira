@@ -1,6 +1,9 @@
 <?php
 
-use App\Http\Controllers\PagesController;
+use App\Http\Controllers\{
+    PagesController,
+    ProviderController,
+};
 use App\Http\Controllers\Studies\{
     ArticleController,
     ClassController as StdClassController,
@@ -82,6 +85,7 @@ Route::middleware('authcheck')->group(function() {
     Route::resource('/studi/kelas', StdClassController::class);
     Route::resource('/studi/mata-pelajaran', StdLessonController::class);
     Route::resource('/studi/orang-tua', ParentController::class);
+    Route::resource('/provider', ProviderController::class);
     Route::get('/studi/presensi/{id}/cari', [PresentController::class, 'search']);
     Route::resource('/studi/presensi', PresentController::class);
     Route::resource('/studi/profil', ProfileController::class);
@@ -98,7 +102,9 @@ Route::middleware('authcheck')->group(function() {
     Route::get('/studi/nilai-siswa/{id}/create', [ReportScoreController::class, 'create']);
 
     // Print Routes (PDF)
+    Route::get('/cetak/guru', [PrintController::class, 'print_all_teacher']);
     Route::get('/cetak/siswa', [PrintController::class, 'print_all_student']);
+    Route::get('/cetak/presensi/{id}', [PrintController::class, 'print_present']);
     Route::get('/studi/kelas/{id}/cetak', [PrintController::class, 'print_class']);
     Route::get('/studi/siswa/{id}/cetak', [PrintController::class, 'print_student']);
 

@@ -68,6 +68,21 @@ class Student extends Model
         return $this->belongsTo(ReportScore::class, 'id', 'student_id')->where('disabled', 0);
     }
 
+    public function father()
+    {
+        return $this->belongsTo(ParentModel::class, 'id', 'student_id')->where('disabled', 0)->where('parent', 1)->where('gender', 'l');
+    }
+
+    public function mother()
+    {
+        return $this->belongsTo(ParentModel::class, 'id', 'student_id')->where('disabled', 0)->where('parent', 1)->where('gender', 'p');
+    }
+
+    public function guardian()
+    {
+        return $this->belongsTo(ParentModel::class, 'id', 'student_id')->where('disabled', 0)->where('parent', 0);
+    }
+
     public function get_report($id, $ids)
     {
         return $this->select('id', 'nis', 'full_name')->where('disabled', 0)->whereIn('id', $student_id)->with(['report', function ($query) {

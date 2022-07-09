@@ -41,7 +41,7 @@
                                     <th>Kelas</th>
                                     <th>Wali Kelas</th>
                                     <th>Tahun Ajar</th>
-                                    <th>Cetak</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -52,7 +52,13 @@
                                             <td>{{ $clas->teacher->full_name }}</td>
                                             <td>{{ $clas->study_year->name }}</td>
                                             <td>
-                                                <a class="waves-effect waves-light btn btn-round primary strong" href="{{ $menu->url }}/{{ $clas->id }}/cetak"><i class="material-icons">print</i></a>
+                                                <form action="{{ $menu->url }}/{{ $clas->id }}" method="POST" class="d-inline">
+                                                    @method('delete')
+                                                    @csrf
+                                                    <input type="hidden" name="clue" value="main">
+                                                    {{-- <a class="transparent materialize-purple-text" href="{{ $menu->url }}/{{ $clas->id }}/cetak" style="margin-bottom: 2px"><i class="material-icons" style="font-size: 120%">print</i></a> --}}
+                                                    <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>
+                                                </form>
                                             </td>
                                             {{-- <td id="no-data" class="text-center" style="width: 5%">
                                                 <form action="{{ $menu->url }}/{{ $clas->id }}" method="POST" class="d-inline">

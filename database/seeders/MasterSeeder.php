@@ -19,6 +19,7 @@ class MasterSeeder extends Seeder
     {
         // Truncate All Table Master
         Schema::disableForeignKeyConstraints();
+        DB::table('stg_provider')->truncate();
         DB::table('mst_grade')->truncate();
         DB::table('mst_month')->truncate();
         DB::table('mst_religion')->truncate();
@@ -33,6 +34,14 @@ class MasterSeeder extends Seeder
         DB::table('mst_study_year')->truncate();
         DB::table('mst_payment')->truncate();
         Schema::enableForeignKeyConstraints();
+
+        // Menu Provider
+        DB::table('stg_provider')->insert([
+            'company_name'      => 'SMP Kartika VIII-1',
+            'owner_name'        => 'Drs. Kasim Daeng',
+            'created_by'        => 'Migrasi',
+            'created_at'        => now(),
+        ]);
 
         // Master Nilai (5)
         DB::table('mst_grade')->insert([
@@ -478,22 +487,22 @@ class MasterSeeder extends Seeder
         DB::table('mst_study_year')->insert([
             [
                 'name'          => '2021/2022',
-                'semester'      => 'Ganjil',
+                'semester'      => 'ganjil',
                 'created_by'    => 'Migrasi',
             ],
             [
                 'name'          => '2021/2022',
-                'semester'      => 'Genap',
+                'semester'      => 'genap',
                 'created_by'    => 'Migrasi',
             ],
             [
                 'name'          => '2022/2023',
-                'semester'      => 'Ganjil',
+                'semester'      => 'ganjil',
                 'created_by'    => 'Migrasi',
             ],
             [
                 'name'          => '2021/2022',
-                'semester'      => 'Genap',
+                'semester'      => 'genap',
                 'created_by'    => 'Migrasi',
             ],
         ]);

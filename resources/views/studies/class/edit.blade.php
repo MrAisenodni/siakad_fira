@@ -45,8 +45,8 @@
 
                             <div class="row">
                                 <div class="input-field col s6">
-                                    <input id="teacher" type="text" placeholder="Guru" name="teacher" value="{{ $clazz->teacher->name }}" disabled>
-                                    <label for="teacher">Guru</label>
+                                    <input id="teacher" type="text" placeholder="Wali Kelas" name="teacher" value="{{ $clazz->teacher->full_name }}" disabled>
+                                    <label for="teacher">Wali Kelas</label>
                                 </div>
                                 <div class="input-field col s6">
                                     <select id="student" name="student" class="">
@@ -106,18 +106,20 @@
                             <tbody>
                                 @if ($classes)
                                     @foreach ($classes as $clas)
-                                        <tr id="data" data-id="{{ $clas->id }}">
-                                            <td>{{ $clas->student->nis }}</td>
-                                            <td>{{ $clas->student->full_name }}</td>
-                                            <td>{{ $clas->student->phone_number }}</td>
-                                            <td id="no-data" class="text-center" style="width: 5%">
-                                                <form action="{{ $menu->url }}/{{ $clas->id }}" method="POST" class="d-inline">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>
-                                                </form>
-                                            </td>
-                                        </tr>
+                                        @if ($clas->student)
+                                            <tr id="data" data-id="{{ $clas->id }}">
+                                                <td>{{ $clas->student->nis }}</td>
+                                                <td>{{ $clas->student->full_name }}</td>
+                                                <td>{{ $clas->student->phone_number }}</td>
+                                                <td id="no-data" class="text-center" style="width: 5%">
+                                                    <form action="{{ $menu->url }}/{{ $clas->id }}" method="POST" class="d-inline">
+                                                        @method('delete')
+                                                        @csrf
+                                                        <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 @endif
                             </tbody>

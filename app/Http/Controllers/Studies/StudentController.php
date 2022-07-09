@@ -530,7 +530,7 @@ class StudentController extends Controller
         $this->parents->where('id', $c_father['id'])->update($father);
         $this->parents->where('id', $c_mother['id'])->update($mother);
 
-        return redirect($this->url)->with('status', 'Data berhasil diubah.');
+        return redirect(url()->previous())->with('status', 'Data berhasil diubah.');
     }
 
     public function destroy($id)

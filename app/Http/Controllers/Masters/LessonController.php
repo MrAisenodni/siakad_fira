@@ -118,14 +118,15 @@ class LessonController extends Controller
 
     public function destroy($id)
     {
-        $check = $this->std_lessons->where('disabled', 0)->where('lesson_id', $id)->first();
+        $lesson = $this->std_lessons->where('disabled', 0)->where('lesson_id', $id)->first();
+
         $data = [
             'disabled'      => 1,
             'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
 
-        if ($check) return redirect(url()->previous())->with('errdel', 'Data gagal dihapus karena Mata Pelajaran masih aktif di Menu');
+        if ($lesson) return redirect(url()->previous())->with('errdel', 'Data gagal dihapus karena Mata Pelajaran masih aktif di Menu')->with('errurl', 'mata-pelajaran')->with('errtitle', 'Mata Pelajaran');
 
         $this->lessons->where('id', $id)->update($data);
 

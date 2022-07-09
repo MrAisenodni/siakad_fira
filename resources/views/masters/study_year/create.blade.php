@@ -5,6 +5,9 @@
 @section('styles')
     {{-- Prism --}}
     <link href="{{ asset('/extra-libs/prism/prism.css') }}" rel="stylesheet">
+    
+    {{-- Select2 --}}
+    <link href="{{ asset('/libs/select2/dist/css/select2.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -26,7 +29,10 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s4">
-                                    <input id="semester" type="text" placeholder="Semester" name="semester" value="{{ old('semester') }}">
+                                    <select id="semester" name="semester" class="">
+                                        <option @if(old('semester') == 'ganjil') selected @endif value="ganjil">Ganjil</option>
+                                        <option @if(old('semester') == 'genap') selected @endif value="genap">Genap</option>
+                                    </select>
                                     <label for="semester">Semester</label>
                                     @error('semester')
                                         <div class="error">{{ $message }}</div>
@@ -50,5 +56,13 @@
 @endsection
 
 @section('scripts')
+    {{-- Prism --}}
     <script src="{{ asset('/extra-libs/prism/prism.js') }}"></script>
+    
+    {{-- Select2 --}}
+    <script src="{{ asset('/libs/select2/dist/js/select2.min.js') }}"></script>
+
+    {{-- Form --}}
+    <script src="{{ asset('/dist/js/form.js') }}"></script>
+    @include('scripts.select2')
 @endsection

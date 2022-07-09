@@ -30,7 +30,7 @@
                             @if (session('errdel'))
                                 <div class="col s12">
                                     <div class="success-alert-bar p-15 m-t-10 red white-text" style="display: block">
-                                        {{ session('errdel') }} <a href="/studi/kelas" style="color: white; font-weight: bold; font-style: oblique">{{ $menu->title }}.</a>
+                                        {{ session('errdel') }} <a href="/studi/{{ session('errurl') }}" style="color: white; font-weight: bold; font-style: oblique">{{ session('errtitle') }}.</a>
                                     </div>
                                 </div>
                             @endif
