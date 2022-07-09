@@ -169,8 +169,8 @@ class ReportScoreController extends Controller
             'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'lesson'            => $this->lessons->select('teacher_id', 'lesson_id')->where('id', $ids)->first(),
-            'reports'           => $this->reports->where('disabled', 0)->where('class_id', $id)->where('lesson_id', $ids)->get(),
-            'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereIn('id', $student_id)->get(),
+            'reports'           => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereIn('id', $student_id)->orderBy('full_name')->get(),
+            'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereIn('id', $student_id)->orderBy('full_name')->get(),
             'clazz'             => $clazz,
         ];
 
@@ -187,7 +187,6 @@ class ReportScoreController extends Controller
     {
         $input = $request->all();
 
-        // dd($input, $input['ph'.'5'.'_1']);
         $clazz = $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('id', $id)->first();
         $student = $this->classes->select('student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();
         
@@ -229,7 +228,6 @@ class ReportScoreController extends Controller
                 'pas'           => $input['pas'.$student[$i-1]->student_id],
                 'npa'           => $input['npa'.$student[$i-1]->student_id],
             ];
-            // dd($data);
 
             $check = $this->reports->select('id')->where('student_id', $student[$i-1]->student_id)->where('class_id', $id)->where('lesson_id', $ids)->where('disabled', 0)->first();
             if ($check) {
@@ -239,7 +237,6 @@ class ReportScoreController extends Controller
                 ];
 
                 $this->reports->where('id', $check->id)->update($data);
-                // dd($data);
             } else {
                 $data += [
                     'created_by'        => session()->get('sname'),
@@ -247,7 +244,6 @@ class ReportScoreController extends Controller
                 ];
 
                 $this->reports->insert($data);
-                // dd($data);
             }
 
         }

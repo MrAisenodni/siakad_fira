@@ -149,6 +149,26 @@ $('#noedit_config').DataTable({
 });
 
 /****************************************
+ *       Config Data Tables for Nilai Siswa     *
+ ****************************************/
+ $('.noedit_config').DataTable({
+     "order": [1, 'asc'],
+    "pageLength": 25,
+    "scrollX": true,
+    "processing": true,
+    "serverside": true,
+    "drawCallback": function() {
+        $('tbody>tr').hover(function () {
+            $('input', this).addClass('white-text')
+            $(this).addClass('blue white-text')
+        }, function () {
+            $('input', this).removeClass('white-text')
+            $(this).removeClass('blue white-text')
+        })
+    }
+});
+
+/****************************************
  *       Payment Config Data Tables      *
  ****************************************/
  $('#payment_config').DataTable({

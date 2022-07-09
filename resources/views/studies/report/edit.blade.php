@@ -32,13 +32,17 @@
                             </div>
                         @endif
                         <div class="row">
-                            <div class="input-field col s4">
+                            <div class="input-field col s2">
                                 <input id="clazz" type="text" name="clazz" value="{{ $clazz->class->name }}" disabled>
                                 <label for="clazz">Kelas</label>
                             </div>
-                            <div class="input-field col s4">
+                            <div class="input-field col s3">
                                 <input id="study_year" type="text" name="study_year" value="{{ $clazz->study_year->name }}" disabled>
                                 <label for="study_year">Tahun Pelajaran</label>
+                            </div>
+                            <div class="input-field col s3">
+                                <input id="semester" type="text" name="semester" value="{{ $clazz->study_year->semester }}" disabled>
+                                <label for="semester">Semester</label>
                             </div>
                             <div class="input-field col s4">
                                 <input id="teacher_head" type="text" name="teacher_head" value="{{ $clazz->teacher->full_name }}" disabled>
@@ -77,7 +81,7 @@
                             </div>
                             <div class="collapsible-body">
                                 <input type="hidden" name="kkm" value="{{ $lesson->lesson->kkm }}">
-                                <table id="noedit" class="responsive-table display" style="width:100%">
+                                <table class="responsive-table display" style="width:100%">
                                     <thead>
                                         <tr style="background: rgb(205, 255, 204)">
                                             <th style="border: 1px solid">NIS</th>
@@ -97,58 +101,58 @@
                                         @if ($reports)
                                             @foreach ($reports as $report)
                                                 <tr id="noedit" data-id="{{ $report->id }}">
-                                                    <td style="border: 1px solid">{{ $report->student->nis }}</td>
-                                                    <td style="border: 1px solid">{{ $report->student->full_name }}</td>
+                                                    <td style="border: 1px solid">{{ $report->nis }}</td>
+                                                    <td style="border: 1px solid">{{ $report->full_name }}</td>
                                                     @for ($i = 1; $i < 6; $i++)
                                                         <td style="border: 1px solid">
                                                             <div class="input-field">
-                                                                <input class="auto_calculate" id="ph{{ $i }}_{{ $report->student_id }}" data-id="{{ $report->student_id }}" type="text" name="ph{{ $i }}_{{ $report->student_id }}" placeholder="PH{{ $i }}" value="{{ old('ph'.$i.'_'.$report->student_id, $report['ph'.$i]) }}">
-                                                                @error('ph'.$i.'_'.$report->student_id)
+                                                                <input class="auto_calculate" id="ph{{ $i }}_{{ $report->id }}" data-id="{{ $report->id }}" type="text" name="ph{{ $i }}_{{ $report->id }}" placeholder="PH{{ $i }}" value="{{ old('ph'.$i.'_'.$report->id, $report->report['ph'.$i]) }}">
+                                                                @error('ph'.$i.'_'.$report->id)
                                                                     <div class="error">{{ $message }}</div>
                                                                 @enderror
                                                             </div>
                                                         </td>
                                                         <td style="border: 1px solid">
                                                             <div class="input-field">
-                                                                <input class="auto_calculate" id="r{{ $i }}_{{ $report->student_id }}" data-id="{{ $report->student_id }}" type="text" name="r{{ $i }}_{{ $report->student_id }}" placeholder="R{{ $i }}" value="{{ old('r'.$i.'_'.$report->student_id, $report['r'.$i]) }}">
-                                                                @error('r'.$i.'_'.$report->student_id)
+                                                                <input class="auto_calculate" id="r{{ $i }}_{{ $report->id }}" data-id="{{ $report->id }}" type="text" name="r{{ $i }}_{{ $report->id }}" placeholder="R{{ $i }}" value="{{ old('r'.$i.'_'.$report->id, $report->report['r'.$i]) }}">
+                                                                @error('r'.$i.'_'.$report->id)
                                                                     <div class="error">{{ $message }}</div>
                                                                 @enderror
                                                             </div>
                                                         </td>
                                                         <td style="border: 1px solid">
                                                             <div class="input-field">
-                                                                <input type="hidden" id="nh{{ $i }}_{{ $report->student_id }}" name="n{{ $i }}_{{ $report->student_id }}" value="{{ old('n'.$i.'_'.$report->student_id) }}">
-                                                                <input id="n{{ $i }}_{{ $report->student_id }}" type="text" name="n{{ $i }}_{{ $report->student_id }}" placeholder="N{{ $i }}" value="{{ old('n'.$i.'_'.$report->student_id, $report['n'.$i]) }}" disabled>
+                                                                <input type="hidden" id="nh{{ $i }}_{{ $report->id }}" name="n{{ $i }}_{{ $report->id }}" value="{{ old('n'.$i.'_'.$report->id) }}">
+                                                                <input id="n{{ $i }}_{{ $report->id }}" type="text" name="n{{ $i }}_{{ $report->id }}" placeholder="N{{ $i }}" value="{{ old('n'.$i.'_'.$report->id, $report->report['n'.$i]) }}" disabled>
                                                             </div>
                                                         </td>
                                                     @endfor
                                                     <td style="border: 1px solid">
                                                         <div class="input-field">
-                                                            <input type="hidden" name="avg_ph{{ $report->student_id }}" value="{{ old('avg_ph'.$report->student_id) }}">
-                                                            <input id="avg_ph{{ $report->student_id }}" type="text" name="avg_ph{{ $report->student_id }}" placeholder="Rata PH" value="{{ old('avg_ph'.$report->student_id, $report->avg_ph) }}" disabled>
+                                                            <input type="hidden" name="avg_ph{{ $report->id }}" value="{{ old('avg_ph'.$report->id) }}">
+                                                            <input id="avg_ph{{ $report->id }}" type="text" name="avg_ph{{ $report->id }}" placeholder="Rata PH" value="{{ old('avg_ph'.$report->id, $report->report->avg_ph) }}" disabled>
                                                         </div>
                                                     </td>
                                                     <td style="border: 1px solid">
                                                         <div class="input-field">
-                                                            <input class="auto_npa" id="pts{{ $report->student_id }}" data-id="{{ $report->student_id }}" type="text" name="pts{{ $report->student_id }}" placeholder="PTS" value="{{ old('pts'.$report->student_id, $report->pts) }}">
-                                                            @error('pts{{ $report->student_id }}')
+                                                            <input class="auto_npa" id="pts{{ $report->id }}" data-id="{{ $report->id }}" type="text" name="pts{{ $report->id }}" placeholder="PTS" value="{{ old('pts'.$report->id, $report->report->pts) }}">
+                                                            @error('pts{{ $report->id }}')
                                                                 <div class="error">{{ $message }}</div>
                                                             @enderror
                                                         </div>
                                                     </td>
                                                     <td style="border: 1px solid">
                                                         <div class="input-field">
-                                                            <input class="auto_npa" id="pas{{ $report->student_id }}" data-id="{{ $report->student_id }}" type="text" name="pas{{ $report->student_id }}" placeholder="PAS" value="{{ old('pas'.$report->student_id, $report->pas) }}">
-                                                            @error('pas{{ $report->student_id }}')
+                                                            <input class="auto_npa" id="pas{{ $report->id }}" data-id="{{ $report->id }}" type="text" name="pas{{ $report->id }}" placeholder="PAS" value="{{ old('pas'.$report->id, $report->report->pas) }}">
+                                                            @error('pas{{ $report->id }}')
                                                                 <div class="error">{{ $message }}</div>
                                                             @enderror
                                                         </div>
                                                     </td>
                                                     <td style="border: 1px solid">
                                                         <div class="input-field">
-                                                            <input type="hidden" id="npah{{ $report->student_id }}" name="npa{{ $report->student_id }}" value="{{ old('npa'.$report->student_id, $report->npa) }}">
-                                                            <input id="npa{{ $report->student_id }}" type="text" name="npa{{ $report->student_id }}" placeholder="NPA" value="{{ old('npa'.$report->student_id, $report->npa) }}" disabled>
+                                                            <input type="hidden" id="npah{{ $report->id }}" name="npa{{ $report->id }}" value="{{ old('npa'.$report->id, $report->report->npa) }}">
+                                                            <input id="npa{{ $report->id }}" type="text" name="npa{{ $report->id }}" placeholder="NPA" value="{{ old('npa'.$report->id, $report->report->npa) }}" disabled>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -224,7 +228,7 @@
                                 <h5 class="card-title">Nilai Tugas</h5>                            
                             </div>
                             <div class="collapsible-body">
-                                <table id="" class="responsive-table" style="width:100%; border: 1px solid">
+                                <table class="responsive-table" style="width:100%; border: 1px solid">
                                     <thead style="background: rgb(236, 217, 255)">
                                         <tr>
                                             <th style="border: 1px solid">NIS</th>
@@ -239,13 +243,13 @@
                                         @if ($reports)
                                             @foreach ($reports as $report)
                                                 <tr id="noedit" data-id="{{ $report->id }}">
-                                                    <td style="border: 1px solid">{{ $report->student->nis }}</td>
-                                                    <td style="border: 1px solid">{{ $report->student->full_name }}</td>
+                                                    <td style="border: 1px solid">{{ $report->nis }}</td>
+                                                    <td style="border: 1px solid">{{ $report->full_name }}</td>
                                                     @for ($i = 1; $i < 6; $i++)
                                                         <td style="border: 1px solid">
                                                             <div class="input-field">
-                                                                <input class="auto_calculate" data-id="{{ $report->student_id }}" id="t{{ $i }}_{{ $report->student_id }}" type="text" name="t{{ $i }}_{{ $report->student_id }}" placeholder="T{{ $i }}" value="{{ old('t'.$i.'_'.$report->student_id, $report['t'.$i]) }}">
-                                                                @error('t'.$i.'_'.$report->student_id)
+                                                                <input class="auto_calculate" data-id="{{ $report->id }}" id="t{{ $i }}_{{ $report->id }}" type="text" name="t{{ $i }}_{{ $report->id }}" placeholder="T{{ $i }}" value="{{ old('t'.$i.'_'.$report->id, $report->report['t'.$i]) }}">
+                                                                @error('t'.$i.'_'.$report->id)
                                                                     <div class="error">{{ $message }}</div>
                                                                 @enderror
                                                             </div>
@@ -253,8 +257,8 @@
                                                     @endfor
                                                     <td style="border: 1px solid">
                                                         <div class="input-field">
-                                                            <input type="hidden" name="avg_t{{ $report->student_id }}" value="{{ old('avg_t'.$report->student_id, $report->avg_t) }}">
-                                                            <input id="avg_t{{ $report->student_id }}" type="text" name="avg_t{{ $report->student_id }}" placeholder="Rata T" value="{{ old('avg_t'.$report->student_id, $report->avg_t) }}" disabled>
+                                                            <input type="hidden" name="avg_t{{ $report->id }}" value="{{ old('avg_t'.$report->id, $report->report->avg_t) }}">
+                                                            <input id="avg_t{{ $report->id }}" type="text" name="avg_t{{ $report->id }}" placeholder="Rata T" value="{{ old('avg_t'.$report->id, $report->report->avg_t) }}" disabled>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -295,7 +299,7 @@
                             </div>
                             <div class="collapsible-body">
                                 
-                                <table id="" class="responsive-table" style="width:100%; border: 1px solid">
+                                <table class="responsive-table" style="width:100%; border: 1px solid">
                                     <thead style="background: rgb(254, 241, 200)">
                                         <tr>
                                             <th style="border: 1px solid">NIS</th>
@@ -310,13 +314,13 @@
                                         @if ($reports)
                                             @foreach ($reports as $report)
                                                 <tr id="noedit" data-id="{{ $report->id }}">
-                                                    <td style="border: 1px solid">{{ $report->student->nis }}</td>
-                                                    <td style="border: 1px solid">{{ $report->student->full_name }}</td>
+                                                    <td style="border: 1px solid">{{ $report->nis }}</td>
+                                                    <td style="border: 1px solid">{{ $report->full_name }}</td>
                                                     @for ($i = 1; $i < 6; $i++)
                                                         <td style="border: 1px solid">
                                                             <div class="input-field">
-                                                                <input class="auto_calculate" data-id="{{ $report->student_id }}" id="k{{ $i }}_{{ $report->student_id }}" type="text" name="k{{ $i }}_{{ $report->student_id }}" placeholder="K{{ $i }}" value="{{ old('k'.$i.'_'.$report->student_id, $report['k'.$i]) }}">
-                                                                @error('k'.$i.'_'.$report->student_id)
+                                                                <input class="auto_calculate" data-id="{{ $report->id }}" id="k{{ $i }}_{{ $report->id }}" type="text" name="k{{ $i }}_{{ $report->id }}" placeholder="K{{ $i }}" value="{{ old('k'.$i.'_'.$report->id, $report->report['k'.$i]) }}">
+                                                                @error('k'.$i.'_'.$report->id)
                                                                     <div class="error">{{ $message }}</div>
                                                                 @enderror
                                                             </div>
@@ -324,8 +328,8 @@
                                                     @endfor
                                                     <td style="border: 1px solid">
                                                         <div class="input-field">
-                                                            <input type="hidden" name="avg_k{{ $report->student_id }}" value="{{ old('avg_k'.$report->student_id, $report->avg_k) }}">
-                                                            <input id="avg_k{{ $report->student_id }}" type="text" name="avg_k{{ $report->student_id }}" placeholder="Rata K" value="{{ old('avg_k'.$report->student_id, $report->avg_k) }}" disabled>
+                                                            <input type="hidden" name="avg_k{{ $report->id }}" value="{{ old('avg_k'.$report->id, $report->avg_k) }}">
+                                                            <input id="avg_k{{ $report->id }}" type="text" name="avg_k{{ $report->id }}" placeholder="Rata K" value="{{ old('avg_k'.$report->id, $report->report->avg_k) }}" disabled>
                                                         </div>
                                                     </td>
                                                 </tr>

@@ -36,7 +36,7 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s6">
-                                    <select id="teacher_name" name="teacher_name" class="" disabled>
+                                    <select id="teacher_name" name="teacher_name" class="">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($teachers)
                                             @foreach ($teachers as $teacher)

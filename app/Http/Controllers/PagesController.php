@@ -69,7 +69,7 @@ class PagesController extends Controller
             'password'              => 'required',
         ]);
 
-        $check = $this->login->where('username', $request->username)->first();
+        $check = $this->login->where('username', $request->username)->where('disabled', 0)->first();
         
         if(!$check) {
             return back()->withErrors([

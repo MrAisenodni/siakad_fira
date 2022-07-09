@@ -65,14 +65,16 @@ class LoginController extends Controller
             $validated = $request->validate([
                 'teacher_name'  => 'required',
             ]);
-
-            $data['user_id'] =$input['teacher_name'];
+            $this->logins->where('user_id', $input['teacher_name'])->where('role', 'teacher')->update(['disabled' => 1]);
+            
+            $data['user_id'] = $input['teacher_name'];
         } else {
             $validated = $request->validate([
                 'student_name'  => 'required',
             ]);
+            $this->logins->where('user_id', $input['student_name'])->where('role', 'student')->update(['disabled' => 1]);
 
-            $data['user_id'] =$input['student_name'];
+            $data['user_id'] = $input['student_name'];
         }
 
         $data += [
@@ -116,13 +118,13 @@ class LoginController extends Controller
                 'teacher_name'  => 'required',
             ]);
 
-            $data['user_id'] =$input['teacher_name'];
+            $data['user_id'] = $input['teacher_name'];
         } else {
             $validated = $request->validate([
                 'student_name'  => 'required',
             ]);
 
-            $data['user_id'] =$input['student_name'];
+            $data['user_id'] = $input['student_name'];
         }
 
         $data += [
