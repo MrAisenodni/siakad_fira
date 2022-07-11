@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Studies;
 
 use App\Http\Controllers\Controller;
 use App\Models\Masters\{
+    ClassModel as MstClass,
     Month,
     Payment as MstPayment,
 };
@@ -21,6 +22,7 @@ class PaymentController extends Controller
     {
         $this->url = '/studi/spp';
         $this->menus = new Menu();
+        $this->classes = new MstClass();
         $this->months = new Month();
         $this->mst_payments = new MstPayment();
         $this->students = new Student();
@@ -31,26 +33,29 @@ class PaymentController extends Controller
     {
         $month = $request->month;
         $year = $request->year;
+        $clazz = $request->clazz;
 
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'months'        => $this->months->select('id', 'name')->where('disabled', 0)->get(),
+            'classes'       => $this->classes->select('id', 'name')->where('disabled', 0)->get(),
             'inp_year'      => $year,
             'inp_month'     => $month,
-            'payments'      => $this->payments->selectRaw('MAX(id) AS id, student_id, year, month, push_wa, status')->where('disabled', 0)->groupByRaw('student_id, year, month, push_wa, status')->get(),
+            'inp_clazz'     => $clazz,
+            'payments'      => $this->payments->selectRaw('MAX(id) AS id, student_id, year, month, push_wa, class_id, status')->where('disabled', 0)->groupByRaw('student_id, year, month, push_wa, class_id, status')->get(),
         ];
         // dd($data['payments'][0]->mst_month->name);
-        if ($month || $year) $data['payments'] = $this->payments->selectRaw('MAX(id) AS id, student_id, status')
-                ->where('month', $month)->where('year', $year)
-                ->where('disabled', 0)->groupByRaw('student_id, status')->get();
+        if ($month || $year || $clazz) $data['payments'] = $this->payments->selectRaw('MAX(id) AS id, student_id, year, month, push_wa, class_id, status')
+                ->where('month', $month)->where('year', $year)->where('class_id', $clazz)
+                ->where('disabled', 0)->groupByRaw('student_id, year, month, push_wa, class_id, status')->get();
 
         if (session()->get('srole') == 'admin') return view('studies.payment.index', $data);
         if (session()->get('srole') == 'student' || session()->get('srole') == 'parent') {
             $data['payments'] = $this->payments->selectRaw('MAX(id) AS id, year, month, status')
                 ->where('disabled', 0)->where('student_id', session()->get('suser_id'))->groupByRaw('year, month, status')->get();
 
-            if ($month || $year) $data['payments'] = $this->payments->selectRaw('MAX(id) AS id, year, month, status')
+            if ($month || $year || $clazz) $data['payments'] = $this->payments->selectRaw('MAX(id) AS id, year, month, status')
                 ->where('disabled', 0)->where('student_id', session()->get('suser_id'))
                 ->where('month', $month)->where('year', $year)->groupByRaw('year, month, status')->get();
                 
@@ -103,6 +108,7 @@ class PaymentController extends Controller
         $mst_payment = $this->mst_payments->select('id', 'year', 'amount')->where('disabled', 0)->where('id', $input['year'])->first();
         $month = $this->months->select('name')->where('id', $input['month'])->first();
         $student = $this->students->select('id')->where('disabled', 0)->get();
+
         $data = [
             'month'         => $input['month'],
             'payment_id'    => $mst_payment->id,
@@ -115,6 +121,7 @@ class PaymentController extends Controller
 
         for ($i = 0; $i < $student->count(); $i++) {
             $data['student_id'] = $student[$i]->id;
+            $data['class_id'] = $student[$i]->class['class_id'];
 
             $this->payments->insert($data);
         }
@@ -136,6 +143,7 @@ class PaymentController extends Controller
 
         if ($modal) {
             $check = $this->payments->where('disabled', 0)->where('student_id', $input['mod_student'])->where('month', $input['mod_month'])->where('payment_id', $input['mod_payment'])->first();
+            $due_date = $request->mod_due_date;
 
             $validated = $request->validate([
                 'mod_student'   => 'required',
@@ -149,13 +157,18 @@ class PaymentController extends Controller
                 'month'         => (string) $input['mod_month'],
                 'student_id'    => $input['mod_student'],
                 'payment_id'    => $input['mod_payment'],
+                'class_id'      => $input['mod_clazz'],
+                'due_date'      => date('Y-m-d', strtotime(str_replace('/', '-', $input['mod_due_date']))),
                 'amount'        => str_replace(',', '.',str_replace('.', '', trim($input['mod_amount'], 'Rp'))),
-                'status'        => 'lunas',
+                'status'        => $input['mod_status'],
                 'created_by'    => session()->get('sname'),
                 'created_at'    => now(),
             ];
+
+            if (!$due_date) $data['due_date'] = date('Y-m-d', strtotime(now()));
         } else {
             $check = $this->payments->where('disabled', 0)->where('student_id', $input['student'])->where('month', $input['month'])->where('payment_id', $input['payment'])->first();
+            $due_date = $request->due_date;
 
             $validated = $request->validate([
                 'student'       => 'required',
@@ -169,11 +182,15 @@ class PaymentController extends Controller
                 'month'         => (string) $input['month'],
                 'student_id'    => $input['student'],
                 'payment_id'    => $input['payment'],
+                'class_id'      => $input['clazz'],
+                'due_date'      => date('Y-m-d', strtotime(str_replace('/', '-', $input['mod_due_date']))),
                 'amount'        => str_replace(',', '.',str_replace('.', '', trim($input['amount'], 'Rp'))),
-                'status'        => 'lunas',
+                'status'        => $input['mod_status'],
                 'created_by'    => session()->get('sname'),
                 'created_at'    => now(),
             ];
+
+            if (!$due_date) $data['due_date'] = date('Y-m-d', strtotime(now()));
         }
 
         if ($check) return redirect(url()->previous())->with('error', 'Data sudah terdaftar.');
@@ -195,7 +212,7 @@ class PaymentController extends Controller
             'payments'      => $this->mst_payments->select('id', 'year', 'amount')->where('disabled', 0)->get(),
             'students'      => $this->students->select('id', 'full_name', 'nis')->where('disabled', 0)->get(),
             'paystuds'      => $this->payments->select('id', 'year', 'amount', 'month', 'student_id', 'payment_id', 'status')->where('student_id', $payment->student_id)->where('disabled', 0)->orderByRaw('year, month')->get(),
-            'payment'       => $this->payments->select('id', 'student_id', 'payment_id', 'month')->where('id', $id)->first(),
+            'payment'       => $this->payments->select('id', 'student_id', 'payment_id', 'due_date', 'class_id', 'month')->where('id', $id)->first(),
         ];
 
         if (session()->get('srole') == 'admin') return view('studies.payment.edit', $data);
@@ -205,6 +222,7 @@ class PaymentController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
+        $due_date = $request->due_date;
         $check = $this->payments->where('disabled', 0)->where('student_id', $input['student'])->where('month', $input['month'])->where('payment_id', $input['payment'])->first();
 
         $validated = $request->validate([
@@ -219,11 +237,15 @@ class PaymentController extends Controller
             'month'         => $input['month'],
             'student_id'    => $input['student'],
             'payment_id'    => $input['payment'],
+            'class_id'      => $input['clazz'],
+            'due_date'      => date('Y-m-d', strtotime(now())),
             'amount'        => str_replace(',', '.',str_replace('.', '', trim($input['amount'], 'Rp'))),
             'status'        => $input['status'],
             'updated_by'    => session()->get('sname'),
             'updated_at'    => now(),
         ];
+
+        if ($due_date) $data['due_date'] = date('Y-m-d', strtotime(str_replace('/', '-', $input['payment'])));
 
         // if ($check) return redirect(url()->previous())->with('error', 'Data sudah terdaftar.')->withInput();
 
@@ -259,7 +281,7 @@ class PaymentController extends Controller
         $this->payments->where('id', $input['payment_id'])->update([
             'push_wa' => 1,
         ]);
-        $body = "Siswa bernama ".$input['full_name']." belum melunasi SPP pada Bulan ".$input['month']." ".$input['year'];
+        $body = "Yth. Orang tua/Wali dari siswa yang bernama ".$input['full_name']." Menginfokan tagihan SPP bulan ".$input['month']." tahun ".$input['year']." belum terlunasi. Mohon segera diselesaikan pembayaran, Terima kasih.";
 
         $this->whatsappNotification($input['phone_number'], $body);
 

@@ -81,7 +81,11 @@ Route::middleware('authcheck')->group(function() {
     Route::resource('/studi/guru', TeacherController::class);
     Route::resource('/studi/jadwal-pembelajaran', ScheduleController::class);
     Route::resource('/studi/jadwal-uts', MidtermController::class);
+    Route::post('/studi/jadwal-uts/student', [MidtermController::class, 'store_student']);
+    Route::delete('/studi/jadwal-uts/student/{id}', [MidtermController::class, 'destroy_student']);
     Route::resource('/studi/jadwal-uas', FinalExamController::class);
+    Route::post('/studi/jadwal-uas/student', [MidtermController::class, 'store_student']);
+    Route::delete('/studi/jadwal-uas/student/{id}', [MidtermController::class, 'destroy_student']);
     Route::resource('/studi/kelas', StdClassController::class);
     Route::resource('/studi/mata-pelajaran', StdLessonController::class);
     Route::resource('/studi/orang-tua', ParentController::class);
@@ -102,6 +106,7 @@ Route::middleware('authcheck')->group(function() {
     Route::get('/studi/nilai-siswa/{id}/create', [ReportScoreController::class, 'create']);
 
     // Print Routes (PDF)
+    Route::get('/cetak/spp', [PrintController::class, 'print_payment']);
     Route::get('/cetak/guru', [PrintController::class, 'print_all_teacher']);
     Route::get('/cetak/siswa', [PrintController::class, 'print_all_student']);
     Route::get('/cetak/presensi/{id}', [PrintController::class, 'print_present']);

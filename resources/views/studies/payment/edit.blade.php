@@ -8,6 +8,9 @@
     
     {{-- Select2 --}}
     <link href="{{ asset('/libs/select2/dist/css/select2.css') }}" rel="stylesheet">
+    
+    {{-- Datepicker --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('/libs/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css') }}">
 
     {{-- Data Tables --}}
     <link href="{{ asset('/dist/css/pages/data-table.css') }}" rel="stylesheet">
@@ -103,9 +106,28 @@
                         <form method="POST" action="{{ str_replace("/edit", "", url()->current()) }}">
                             @method('put')
                             @csrf
+                            <input type="hidden" name="student" value="{{ $payment->student_id }}">
                             <div class="row">
-                                <input type="hidden" name="student" value="{{ $payment->student_id }}">
                                 <div class="input-field col s12">
+                                    <input id="nis" type="text" placeholder="10" name="NIS" value="{{ old('nis', $payment->student->nis) }}" readonly>
+                                    <label for="nis">NIS</label>
+                                    @error('nis')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="full_name" type="text" placeholder="10" name="Nama Siswa" value="{{ old('full_name', $payment->student->full_name) }}" readonly>
+                                    <label for="full_name">Nama Siswa</label>
+                                    @error('full_name')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input type="hidden" name="clazz" value="{{ $payment->class->id }}">
                                     <input id="clas" type="text" placeholder="10" name="clas" value="{{ old('clas', $payment->student->class->class->name) }}" readonly>
                                     <label for="clas">Kelas</label>
                                     @error('clas')
@@ -138,6 +160,19 @@
                                     </select>
                                     <label for="month">Bulan</label>
                                     @error('month')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="input-field col s12">
+                                    <input id="due_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="due_date" 
+                                        @if ($payment->due_date)
+                                            value="{{ old('due_date', date('d/m/Y', strtotime($payment->due_date))) }}"
+                                        @else
+                                            value="{{ old('due_date') }}"
+                                        @endif
+                                    >
+                                    <label for="due_date">Tanggal Pelunasan</label>
+                                    @error('due_date')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -193,6 +228,7 @@
                                     <div class="row">
                                         <input type="hidden" name="uid" id="url_id" value="{{ $payment->id }}">
                                         <input type="hidden" name="mod_student" id="mod_student" value="{{ $payment->student_id }}">
+                                        <input type="hidden" name="mod_clazz" id="mod_clazz" value="{{ $payment->class->id }}">
                                         <div class="input-field col s12">
                                             <select id="mod_payment" name="mod_payment" class="modal_auto_fill">
                                                 <option value="" selected>--- SILAHKAN PILIH ---</option>
@@ -221,10 +257,33 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s12">
+                                            <input id="mod_due_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="mod_due_date" 
+                                                @if ($payment->due_date)
+                                                    value="{{ old('mod_due_date', date('d/m/Y', strtotime($payment->due_date))) }}"
+                                                @else
+                                                    value="{{ old('mod_due_date') }}"
+                                                @endif
+                                            >
+                                            <label for="mod_due_date">Tanggal Pelunasan</label>
+                                            @error('mod_due_date')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="input-field col s12">
                                             <input id="mod_year" type="hidden" name="mod_year" value="{{ old('mod_year') }}" readonly>
                                             <input id="mod_amount" type="text" placeholder="Rp 2.000.000" name="mod_amount" value="{{ old('mod_amount') }}" readonly>
                                             <label for="mod_amount">Nominal</label>
                                             @error('mod_amount')
+                                                <div class="error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="input-field col s12">
+                                            <select id="mod_status" name="mod_status">
+                                                <option @if(old('mod_status', $payment->status) == 'lunas') selected @endif value="lunas">Lunas</option>
+                                                <option @if(old('mod_status', $payment->status) == 'belum') selected @endif value="belum">Belum Linas</option>
+                                            </select>
+                                            <label for="mod_status">Status</label>
+                                            @error('mod_status')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -254,6 +313,10 @@
 
     {{-- Select2 --}}
     <script src="{{ asset('/libs/select2/dist/js/select2.min.js') }}"></script>
+    
+    {{-- Datepicker --}}
+    <script src="{{ asset('/libs/moment/moment.js') }}"></script>
+    <script src="{{ asset('/libs/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker-custom.js') }}"></script>
 
     {{-- Data Tables --}}
     <script src="{{ asset('/extra-libs/datatables/datatables.min.js') }}"></script>
@@ -261,5 +324,6 @@
 
     {{-- Form --}}
     <script src="{{ asset('/dist/js/form.js') }}"></script>
+    @include('scripts.datepicker')
     @include('scripts.select2')
 @endsection

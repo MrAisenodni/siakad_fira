@@ -26,6 +26,16 @@
                         <form method="POST" action="{{ $menu->url }}">
                             @csrf
                             <input type="hidden" name="id" value="{{ $provider->id }}">
+                            {{-- Section Yayasan --}}
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <input id="founder_name" type="text" placeholder="Nama Yayasan" name="founder_name" value="{{ old('founder_name', $provider->founder_name) }}">
+                                    <label for="founder_name">Nama Yayasan</label>
+                                    @error('founder_name')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
                             {{-- Section School --}}
                             <div class="row">
                                 <div class="input-field col s3">

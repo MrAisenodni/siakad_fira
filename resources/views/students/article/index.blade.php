@@ -18,11 +18,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col s12">
+                <h5 class="card-title">Daftar {{ $menu->title }}</h5>
                 <div class="card">
                     <div class="card-content">
                         <div class="row">
                             <div class="col s10">
-                                <h5 class="card-title">Daftar {{ $menu->title }}</h5>
                             </div>
                         </div>
                         <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">

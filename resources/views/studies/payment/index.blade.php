@@ -28,7 +28,7 @@
                         </div>
                         <form action="{{ url()->current() }}" method="GET">
                             <div class="row">
-                                <div class="input-field col s6">
+                                <div class="input-field col s4">
                                     <select id="month" name="month" class="">
                                         <option value="" selected>SEMUA</option>
                                         @if ($months)
@@ -42,7 +42,7 @@
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="input-field col s6">
+                                <div class="input-field col s4">
                                     <select id="year" name="year" class="">
                                         <option value="" selected>SEMUA</option>
                                         @for ($i = date('Y', strtotime(now())); $i >= 1700; $i--)
@@ -51,6 +51,20 @@
                                     </select>
                                     <label for="year">Tahun</label>
                                     @error('year')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="input-field col s4">
+                                    <select id="clazz" name="clazz" class="">
+                                        <option value="" selected>SEMUA</option>
+                                        @if ($classes)
+                                            @foreach ($classes as $clazz)
+                                                <option @if(old('clazz', $inp_clazz) == $clazz->id) selected @endif value="{{ $clazz->id }}">{{ $clazz->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <label for="clazz">Kelas</label>
+                                    @error('clazz')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -70,13 +84,21 @@
                 <div class="card">
                     <div class="card-content">
                         <div class="row">
-                            <div class="col s8">
+                            <div class="col s6">
                                 <h5 class="card-title">Daftar Siswa</h5>
                             </div>
-                            <div class="col s4 right-align">
-                                <a class="waves-effect waves-light btn btn-round primary strong" href="{{ $menu->url }}/create-tagihan">GENERATE TAGIHAN</a>
+                            <div class="col s6 right-align">
+                                <a class="waves-effect waves-light btn btn-round primary strong" href="/cetak/spp?month={{ $inp_month }}&year={{ $inp_year }}&clazz={{ $inp_clazz }}"><i class="material-icons">print</i></a>
+                                <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}/create-tagihan">GENERATE TAGIHAN</a>
                                 <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a>
                             </div>
+                            @if (session('error'))
+                                <div class="col s12">
+                                    <div class="success-alert-bar p-15 m-t-10 red white-text" style="display: block">
+                                        {{ session('error') }}
+                                    </div>
+                                </div>
+                            @endif
                             @if (session('status'))
                                 <div class="col s12">
                                     <div class="success-alert-bar p-15 m-t-10 green white-text" style="display: block">
@@ -90,6 +112,7 @@
                                 <tr>
                                     <th>NIS</th>
                                     <th>Nama Lengkap</th>
+                                    <th>Kelas</th>
                                     <th>Tahun</th>
                                     <th>Bulan</th>
                                     <th>Nomor HP</th>
@@ -103,6 +126,7 @@
                                         <tr id="data" data-id="{{ $payment->id }}">
                                             <td>{{ $payment->student->nis }}</td>
                                             <td>{{ $payment->student->full_name }}</td>
+                                            <td>{{ $payment->class->name }}</td>
                                             <td>{{ $payment->year }}</td>
                                             <td>
                                                 @if ($months)

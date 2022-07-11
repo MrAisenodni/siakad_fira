@@ -20,6 +20,7 @@ class CreateStdFinalExamSchedule extends Migration
             $table->time('clock_out');
             $table->unsignedInteger('teacher_id')->nullable(); // Foreign Key ke tabel mst_teacher
             $table->unsignedInteger('lesson_id')->nullable(); // Foreign Key ke tabel std_lesson
+            $table->unsignedInteger('class_id')->nullable(); // Foreign Key ke tabel mst_lesson untuk Ruangan Ujian
                                     
             // Struktur Baku
             $table->boolean('disabled')->default(0);

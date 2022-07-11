@@ -37,10 +37,14 @@ class MasterSeeder extends Seeder
 
         // Menu Provider
         DB::table('stg_provider')->insert([
-            'company_name'      => 'SMP Kartika VIII-1',
-            'owner_name'        => 'Drs. Kasim Daeng',
-            'created_by'        => 'Migrasi',
-            'created_at'        => now(),
+            'founder_name'          => 'YAYASAN KARTIKA JAYA CABANG VIII MABESAD',
+            'company_name'          => 'SMP Kartika VIII-1',
+            'company_address'       => 'Jl. Anyelir Cijantung II Pasar Rebo Jakarta Timur',
+            'company_phone_number'  => '02187784046',
+            'company_email'         => 'smpkartikacijantung@gmail.com',
+            'owner_name'            => 'Drs. Kasim Daeng',
+            'created_by'            => 'Migrasi',
+            'created_at'            => now(),
         ]);
 
         // Master Nilai (5)

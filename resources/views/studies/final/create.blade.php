@@ -24,12 +24,12 @@
                         <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">
                             @csrf
                             <div class="row">
-                                <div class="input-field col s8">
+                                <div class="input-field col s6">
                                     <select id="lesson" name="lesson" class="">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($lessons)
                                             @foreach ($lessons as $lesson)
-                                                <option @if(old('lesson') == $lesson->id) selected @endif value="{{ $lesson->id }}">[{{ $lesson->teacher->nip }}] {{ $lesson->teacher->full_name }} | {{ $lesson->lesson->name }} ({{ $lesson->class->name }})</option>
+                                                <option @if(old('lesson') == $lesson->id) selected @endif value="{{ $lesson->id }}">({{ $lesson->name }})</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -37,17 +37,8 @@
                                     @error('lesson')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
-                                </div>                              
-                                <div class="input-field col s4">
-                                    <label for="date">Tanggal Ujian <span class="materialize-red-text">*</span></label>
-                                        <input id="date" type="text" name="date" placeholder="dd/MM/yyyy" class="datepicker" value="{{ old('date') }}">
-                                    @error('date')
-                                        <div class="error">{{ $message }}</div>
-                                    @enderror
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-field col s8">
+                                <div class="input-field col s6">
                                     <select id="teacher" name="teacher" class="">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($teachers)
@@ -60,7 +51,30 @@
                                     @error('teacher')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
-                                </div>  
+                                </div>          
+                            </div>
+                            <div class="row">  
+                                <div class="input-field col s4">
+                                    <select id="clazz" name="clazz" class="">
+                                        <option value="" selected>--- SILAHKAN PILIH ---</option>
+                                        @if ($classes)
+                                            @foreach ($classes as $clazz)
+                                                <option @if(old('clazz') == $clazz->id) selected @endif value="{{ $clazz->id }}">{{ $clazz->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <label for="clazz">Kelas <span class="materialize-red-text">*</span></label>
+                                    @error('clazz')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>             
+                                <div class="input-field col s4">
+                                    <label for="date">Tanggal Ujian <span class="materialize-red-text">*</span></label>
+                                        <input id="date" type="text" name="date" placeholder="dd/MM/yyyy" class="datepicker" value="{{ old('date') }}">
+                                    @error('date')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <div class="input-field col s2">
                                     <label for="clock_in">Masuk <span class="materialize-red-text">*</span></label>
                                     <input id="clock_in" type="text" name="clock_in" placeholder="07:00" class="timepicker" value="{{ old('clock_in') }}">

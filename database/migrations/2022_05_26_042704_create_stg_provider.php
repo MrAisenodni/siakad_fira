@@ -15,17 +15,20 @@ class CreateStgProvider extends Migration
     {
         Schema::create('stg_provider', function (Blueprint $table) {
             $table->id();
+            $table->string('founder_name')->nullable();
             $table->string('company_no')->nullable();
             $table->string('company_name');
             $table->date('company_birth_date')->nullable();
             $table->text('company_address')->nullable();
             $table->string('company_phone_number')->nullable();
+            $table->string('company_email')->nullable();
             $table->string('owner_nip')->nullable();
             $table->string('owner_name')->nullable();
             $table->string('owner_birth_place')->nullable();
             $table->date('owner_birth_date')->nullable();
             $table->text('owner_address')->nullable();
             $table->string('owner_phone_number')->nullable();
+            $table->string('owner_email')->nullable();
 
             // Struktur Baku
             $table->boolean('disabled')->default(0);

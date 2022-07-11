@@ -107,7 +107,7 @@ class ProfileController extends Controller
                 'language'      => 'required',
                 'height'        => 'required|numeric',
                 'weight'        => 'required|numeric',
-                'photo'         => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048|dimensions:max_width=300px,max_height=400px',
+                'photo'         => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048',
                 
                 // Validasi Keluarga
                 'family_status'     => 'required',

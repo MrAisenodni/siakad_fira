@@ -17,8 +17,8 @@ class CreateMstTeacher extends Migration
             $table->id();
             $table->string('nip')->unique();
             $table->string('full_name');
-            $table->string('birth_place');
-            $table->date('birth_date');
+            $table->string('birth_place')->nullable();
+            $table->date('birth_date')->nullable();
             $table->enum('gender', ['l' ,'p']);
             $table->string('phone_number', 25)->nullable();
             $table->string('email')->unique()->nullable();
@@ -29,10 +29,10 @@ class CreateMstTeacher extends Migration
             $table->text('picture')->nullable();
             $table->string('field_study')->nullable();
             $table->string('role_admin')->nullable();
-            $table->string('curriculum_assist')->nullable(); // Wakil Kurikulum
-            $table->string('student_assist')->nullable(); // Wakil Kesiswaan
-            $table->string('facilities_assist')->nullable(); // Wakil Sarana dan Prasarana
-            $table->string('emissary_assist')->nullable(); // Wakil Caraka
+            $table->boolean('curriculum_assist')->default(0); // Wakil Kurikulum
+            $table->boolean('student_assist')->default(0); // Wakil Kesiswaan
+            $table->boolean('facilities_assist')->default(0); // Wakil Sarana dan Prasarana
+            $table->boolean('emissary_assist')->default(0); // Wakil Caraka
             
             // Struktur Baku
             $table->boolean('disabled')->default(0);

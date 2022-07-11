@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStdPayment extends Migration
+class CreateStdExamDetail extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,12 @@ class CreateStdPayment extends Migration
      */
     public function up()
     {
-        Schema::create('std_payment', function (Blueprint $table) {
+        Schema::create('std_exam_detail', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('header_id');
             $table->unsignedInteger('student_id')->nullable();
-            $table->unsignedInteger('payment_id')->nullable();
-            $table->unsignedInteger('class_id')->nullable(); // Foreign Key ke Master Kelas
-            $table->string('month', 2);
-            $table->year('year');
-            $table->double('amount');
-            $table->enum('status', ['lunas', 'belum', 'cicil']);
-            $table->date('due_date')->nullable();
-            $table->boolean('push_wa')->default(0);
-            $table->double('installment_amount')->nullable();
-
+            $table->unsignedInteger('class_id')->nullable();
+                                    
             // Struktur Baku
             $table->boolean('disabled')->default(0);
             $table->string('created_by')->nullable();
@@ -42,6 +35,6 @@ class CreateStdPayment extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('std_payment');
+        Schema::dropIfExists('std_exam_detail');
     }
 }

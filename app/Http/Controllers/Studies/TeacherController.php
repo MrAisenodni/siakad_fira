@@ -57,55 +57,46 @@ class TeacherController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $check = $this->teachers
-                        ->where('nip', $input['nip'])
-                        ->where('email', $input['email'])
-                        ->where('disabled', 1)
-                        ->first();
 
         $validated = $request->validate([
             'nip'           => 'required|numeric|unique:mst_teacher,nip,1,disabled|digits_between:1,25',
             'full_name'     => 'required',
-            'birth_place'   => 'required',
-            'birth_date'    => 'required|date_format:d/m/Y',
-            'religion'      => 'required',
-            'picture'       => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048',
-            'email'         => 'required|email|unique:mst_teacher,email,1,disabled',
-            'phone_number'  => 'required|numeric|digits_between:1,25',
-            'last_study'    => 'required',
+            'photo'         => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048',
         ]);
 
-        if ($check) {
-            $data = [
-                'nip'       => $check['nip'],
-                'email'     => $check['email'],
-                'disabled'  => 0,
-            ];
-        } else {
-            $data = [
-                'nip'       => $input['nip'],
-                'email'     => $input['email'],
-            ];
-        }
-
-        $data += [
+        $data = [
+            'nip'                   => $input['nip'],
             'full_name'             => $input['full_name'],
             'birth_date'            => date('Y-m-d', strtotime(str_replace('/', '-', $input['birth_date']))),
             'birth_place'           => $input['birth_place'],
             'gender'                => $input['gender'],
             'phone_number'          => $input['phone_number'],
+            'address'               => $input['address'],
             'last_study'            => $input['last_study'],
             'religion_id'           => $input['religion'],
-            'role'                  => $input['role'],
+            'role'                  => 'teacher',
+            'role_admin'            => $input['role_admin'],
+            'field_study'           => $input['field_study'],
             'created_by'            => session()->get('sname'),
             'created_at'            => now(),
         ];
 
-        if ($check) {
-            $this->teachers->where('id', $check['id'])->update($data);
-        } else {
-            $id = $this->teachers->insert($data);
+        if ($request->curriculum_assist) $data['curriculum_assist'] = $request->curriculum_assist;
+        if ($request->student_assist) $data['student_assist'] = $request->student_assist;
+        if ($request->facilities_assist) $data['facilities_assist'] = $request->facilities_assist;
+        if ($request->emissary_assist) $data['emissary_assist'] = $request->emissary_assist;
+
+        if ($request->photo) {
+            $file = $request->file('photo');
+            $extension = $request->photo->getClientOriginalExtension();  //Get Image Extension
+            $fileName =  strtotime(now()).'_'.$request->nis.'_'.$request->full_name.'.'.$extension;  //Concatenate both to get FileName (eg: file.jpg)
+            $file->move(public_path().'/images/teachers/', $fileName);  
+            $data1 = $fileName;  
+
+            $data['picture'] = '/images/teachers/'.$fileName; 
         }
+        
+        $this->teachers->insert($data);
 
         return redirect($this->url)->with('status', 'Data berhasil ditambahkan.');
     }
@@ -126,44 +117,54 @@ class TeacherController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
-        $check = $this->teachers
-                        ->where('nip', $input['nip'])
-                        ->where('email', $input['email'])
-                        ->where('disabled', 1)
-                        ->first();
+        $old_photo = $request->old_photo;
 
         $validated = $request->validate([
             'nip'           => 'required|numeric|unique:mst_teacher,nip,'.$id.',id,disabled,0|digits_between:1,25',
             'full_name'     => 'required',
-            'birth_place'   => 'required',
-            'birth_date'    => 'required|date_format:d/m/Y',
-            'religion'      => 'required',
-            'picture'       => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048',
-            'email'         => 'required|email|unique:mst_teacher,email,'.$id.',id,disabled,0',
-            'phone_number'  => 'required|numeric|digits_between:1,25',
-            'last_study'    => 'required',
+            'photo'         => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048',
         ]);
 
-        if ($check) $this->teachers->where('id', $check['id'])->delete();
-
         $data = [
-            'nip'                   => $input['nip'],
-            'email'                 => $input['email'],
             'full_name'             => $input['full_name'],
             'birth_date'            => date('Y-m-d', strtotime(str_replace('/', '-', $input['birth_date']))),
             'birth_place'           => $input['birth_place'],
             'gender'                => $input['gender'],
             'phone_number'          => $input['phone_number'],
+            'address'               => $input['address'],
             'last_study'            => $input['last_study'],
             'religion_id'           => $input['religion'],
-            'role'                  => $input['role'],
+            'role'                  => 'teacher',
+            'role_admin'            => $input['role_admin'],
+            'field_study'           => $input['field_study'],
+            'curriculum_assist'     => 0,
+            'student_assist'        => 0,
+            'facilities_assist'     => 0,
+            'emissary_assist'       => 0,
+            'picture'               => $old_photo,
             'updated_by'            => session()->get('sname'),
             'updated_at'            => now(),
         ];
 
+        if ($request->curriculum_assist) $data['curriculum_assist'] = $request->curriculum_assist;
+        if ($request->student_assist) $data['student_assist'] = $request->student_assist;
+        if ($request->facilities_assist) $data['facilities_assist'] = $request->facilities_assist;
+        if ($request->emissary_assist) $data['emissary_assist'] = $request->emissary_assist;
+
+        if ($request->photo) {
+            if ($request->old_photo) File::delete(public_path().$request->old_photo);
+            $file = $request->file('photo');
+            $extension = $request->photo->getClientOriginalExtension();  //Get Image Extension
+            $fileName =  strtotime(now()).'_'.$request->nis.'_'.$request->full_name.'.'.$extension;  //Concatenate both to get FileName (eg: file.jpg)
+            $file->move(public_path().'/images/teachers/', $fileName);  
+            $data1 = $fileName;  
+
+            $data['picture'] = '/images/teachers/'.$fileName; 
+        }
+
         $this->teachers->where('id', $id)->update($data);
 
-        return redirect($this->url)->with('status', 'Data berhasil diubah.');
+        return redirect(url()->previous())->with('status', 'Data berhasil diubah.');
     }
 
     public function destroy($id)

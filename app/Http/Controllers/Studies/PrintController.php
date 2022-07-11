@@ -7,6 +7,7 @@ use App\Models\Studies\{
     ClassModel,
     ParentModel,
     Present,
+    Payment,
     Student,
     Teacher,
 };
@@ -22,6 +23,7 @@ class PrintController extends Controller
         $this->months = new Month();
         $this->students = new Student();
         $this->parents = new ParentModel();
+        $this->payments = new Payment();
         $this->presents = new Present();
         $this->teachers = new Teacher();
         $this->classes = new ClassModel();
@@ -64,6 +66,24 @@ class PrintController extends Controller
         return view('studies.present.print', $data);
     }
 
+    public function print_payment(Request $request)
+    {
+        $year = $request->year;
+        $clazz = $request->clazz;
+
+        $data = [
+            'provider'      => $this->provider->where('disabled', 0)->first(),
+            'months'        => $this->months->where('disabled', 0)->get(),
+            'payments'      => $this->payments->print(),
+        ];
+
+        if ($year && $clazz) $data['payments'] = $this->payments->print_filter($year, $clazz);
+
+        $pdf = PDF::loadView('studies.payment.print', $data)->setPaper('a4', 'landscape');
+        return $pdf->stream('Histori Pelunasan SPP.pdf');
+        return view('studies.payment.print', $data);
+    }
+
     public function print_student($id)
     {
         $data = [
@@ -95,7 +115,7 @@ class PrintController extends Controller
     {
         $data = [
             'provider'  => $this->provider->where('disabled', 0)->first(),
-            'teachers'       => $this->teachers->where('disabled', 0)->get(),
+            'teachers'  => $this->teachers->where('disabled', 0)->get(),
         ];
 
         $pdf = PDF::loadView('studies.teacher.print_all', $data)->setPaper('a4', 'landscape');

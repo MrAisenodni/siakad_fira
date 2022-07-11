@@ -40,23 +40,21 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Jadwal Ujian</th>
-                                    <th>Mata Pelajaran</th>
-                                    <th>Kelas</th>
+                                    <th>Ruangan</th>
                                     <th>Guru Pengawas</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($midterms)
-                                    @foreach ($midterms as $midterm)
-                                        <tr id="data" data-id="{{ $midterm->id }}">
+                                @if ($exams)
+                                    @foreach ($exams as $exam)
+                                        <tr id="data" data-id="{{ $exam->id }}">
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ date('d F Y', strtotime($midterm->date)) }} | {{ date('H:i', strtotime($midterm->clock_in)) }} - {{ date('H:i', strtotime($midterm->clock_out)) }}</td>
-                                            <td>{{ $midterm->lesson->lesson->name }} | {{ $midterm->lesson->teacher->full_name }}</td>
-                                            <td>{{ $midterm->lesson->class->name }}</td>
-                                            <td>{{ $midterm->teacher->full_name }}</td>
+                                            <td>{{ date('d F Y', strtotime($exam->date)) }} | {{ date('H:i', strtotime($exam->clock_in)) }} - {{ date('H:i', strtotime($exam->clock_out)) }}</td>
+                                            <td>{{ $exam->class->name }}</td>
+                                            <td>{{ $exam->teacher->full_name }}</td>
                                             <td id="no-data" class="text-center" style="width: 5%">
-                                                <form action="{{ $menu->url }}/{{ $midterm->id }}" method="POST" class="d-inline">
+                                                <form action="{{ $menu->url }}/{{ $exam->id }}" method="POST" class="d-inline">
                                                     @method('delete')
                                                     @csrf
                                                     <button type="submit" class="transparent fas fa-trash materialize-red-text" style="border: 0px"></button>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStdMidtermExamSchedule extends Migration
+class CreateStdExamSchedule extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateStdMidtermExamSchedule extends Migration
      */
     public function up()
     {
-        Schema::create('std_midterm_exam_schedule', function (Blueprint $table) {
+        Schema::create('std_exam_schedule', function (Blueprint $table) {
             $table->id();
             $table->date('date');
             $table->time('clock_in');
             $table->time('clock_out');
-            $table->unsignedInteger('teacher_id')->nullable(); // Foreign Key ke tabel mst_teacher
-            $table->unsignedInteger('lesson_id')->nullable(); // Foreign Key ke tabel std_lesson
+            $table->enum('type', ['uts', 'uas']);
+            $table->unsignedInteger('teacher_id')->nullable(); // Foreign Key ke tabel mst_teacher untuk Guru Pengawas
+            $table->unsignedInteger('lesson_id')->nullable(); // Foreign Key ke tabel mst_lesson untuk Mata Pelajaran
+            $table->unsignedInteger('class_id')->nullable(); // Foreign Key ke tabel mst_lesson untuk Ruangan Ujian
                                     
             // Struktur Baku
             $table->boolean('disabled')->default(0);
@@ -37,6 +39,6 @@ class CreateStdMidtermExamSchedule extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('std_midterm_exam_schedule');
+        Schema::dropIfExists('std_exam_schedule');
     }
 }
