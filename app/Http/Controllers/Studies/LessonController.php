@@ -11,8 +11,7 @@ use App\Models\Masters\{
 use App\Models\Settings\Menu;
 use App\Models\Studies\{
     Lesson,
-    FinalExam,
-    Midterm,
+    Exam,
     Schedule,
     Teacher,
 };
@@ -29,8 +28,7 @@ class LessonController extends Controller
         $this->mst_lessons = new MstLesson();
         $this->studies = new StudyYear();
         $this->teachers = new Teacher();
-        $this->midterms = new Midterm();
-        $this->finalexams = new FinalExam();
+        $this->exams = new Exam();
         $this->schedules = new Schedule();
     }
     
@@ -159,8 +157,8 @@ class LessonController extends Controller
     public function destroy($id)
     {
         $schedule = $this->schedules->where('disabled', 0)->where('lesson_id', $id)->first();
-        $midterm = $this->midterms->where('disabled', 0)->where('lesson_id', $id)->first();
-        $finalexam = $this->finalexams->where('disabled', 0)->where('lesson_id', $id)->first();
+        $uts = $this->exams->where('disabled', 0)->where('type', 'uts')->where('lesson_id', $id)->first();
+        $uas = $this->exams->where('disabled', 0)->where('type', 'uas')->where('lesson_id', $id)->first();
 
         $data = [
             'disabled'      => 1,
@@ -169,8 +167,8 @@ class LessonController extends Controller
         ];
         
         if ($schedule) return redirect(url()->previous())->with('errdel', 'Data gagal dihapus karena Mata Pelajaran masih aktif di Menu')->with('errurl', 'jadwal-pembelajaran')->with('errtitle', 'Jadwal Pelajaran');
-        if ($midterm) return redirect(url()->previous())->with('errdel', 'Data gagal dihapus karena Mata Pelajaran masih aktif di Menu')->with('errurl', 'jadwal-uts')->with('errtitle', 'Jadwal UTS');
-        if ($finalexam) return redirect(url()->previous())->with('errdel', 'Data gagal dihapus karena Mata Pelajaran masih aktif di Menu')->with('errurl', 'jadwal-uas')->with('errtitle', 'Jadwal UAS');
+        if ($uts) return redirect(url()->previous())->with('errdel', 'Data gagal dihapus karena Jadwal UTS masih aktif di Menu')->with('errurl', 'jadwal-uts')->with('errtitle', 'Jadwal UTS');
+        if ($uas) return redirect(url()->previous())->with('errdel', 'Data gagal dihapus karena Jadwal UAS masih aktif di Menu')->with('errurl', 'jadwal-uas')->with('errtitle', 'Jadwal UAS');
 
         $this->lessons->where('id', $id)->update($data);
 
