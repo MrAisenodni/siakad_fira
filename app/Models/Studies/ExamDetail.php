@@ -3,6 +3,7 @@
 namespace App\Models\Studies;
 
 use App\Models\Studies\{
+    ClassModel,
     Exam,
     Student,
 };
@@ -18,6 +19,11 @@ class ExamDetail extends Model
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id', 'id')->select('id', 'full_name', 'nis')->where('disabled', 0);
+    }
+
+    public function class()
+    {
+        return $this->belongsTo(ClassModel::class, 'class_id', 'id')->select('id', 'class_id')->where('disabled', 0);
     }
 
     public function exam()

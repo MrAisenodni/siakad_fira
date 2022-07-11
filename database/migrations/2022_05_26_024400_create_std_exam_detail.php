@@ -17,7 +17,7 @@ class CreateStdExamDetail extends Migration
             $table->id();
             $table->unsignedInteger('header_id');
             $table->unsignedInteger('student_id')->nullable();
-            $table->unsignedInteger('class_id')->nullable();
+            $table->unsignedInteger('class_id')->nullable(); // Foreign Key ke tabel std_class
                                     
             // Struktur Baku
             $table->boolean('disabled')->default(0);

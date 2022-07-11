@@ -7,6 +7,8 @@
         // ============================================================== 
         $('select').not('.disabled').formSelect();
 
+        $('.select2').select2();
+
         $('.auto_fill_teacher').change(function (){
             var id = $('option:selected', this).val()
             var class_id = $('#class_id').val()

@@ -119,6 +119,25 @@ class FinalExamController extends Controller
 
         $id = $this->exams->insertGetId($data);
 
+        $c_class = $this->mst_classes->where('disabled', 0)->count();
+        $c_student = $this->students->where('disabled', 0)->count();
+        $ex_student = $this->exam_details->select('student_id')->where('disabled', 0)->get();
+        $student = $this->classes->select('id', 'student_id')->whereNotIn('student_id', $ex_student)->where('disabled', 0)->orderBy('id')->get();
+        
+        if ($c_student && $c_class) {
+            for ($i = 0; $i <= round($c_student/$c_class); $i++) {
+                $data = [
+                    'header_id'         => $id,
+                    'student_id'        => $student[$i]->student_id,
+                    'class_id'          => $student[$i]->id,
+                    'created_by'        => session()->get('sname'),
+                    'created_at'        => now(),
+                ];
+    
+                $this->exam_details->insert($data);
+            }
+        }
+
         return redirect($this->url.'/'.$id.'/edit')->with('status', 'Data berhasil ditambahkan.');
     }
 

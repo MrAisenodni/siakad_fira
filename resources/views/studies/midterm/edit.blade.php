@@ -129,7 +129,7 @@
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $exam->id }}">
                                 <div class="input-field col s10">
-                                    <select id="student" name="student" class="">
+                                    <select id="student" name="student" class="select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($students)
                                             @foreach ($students as $student)
@@ -153,6 +153,7 @@
                                     <th>No</th>
                                     <th>NIS</th>
                                     <th>Nama Siswa</th>
+                                    <th>Kelas</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -163,6 +164,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $exam->student->nis }}</td>
                                             <td>{{ $exam->student->full_name }}</td>
+                                            <td>{{ $exam->student->class->class->name }}</td>
                                             <td id="no-data" class="text-center" style="width: 5%">
                                                 <form action="{{ $menu->url }}/student/{{ $exam->id }}" method="POST" class="d-inline">
                                                     @method('delete')

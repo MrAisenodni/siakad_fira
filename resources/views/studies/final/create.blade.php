@@ -29,7 +29,7 @@
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($lessons)
                                             @foreach ($lessons as $lesson)
-                                                <option @if(old('lesson') == $lesson->id) selected @endif value="{{ $lesson->id }}">({{ $lesson->name }})</option>
+                                                <option @if(old('lesson') == $lesson->id) selected @endif value="{{ $lesson->id }}">{{ $lesson->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
