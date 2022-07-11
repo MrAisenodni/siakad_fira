@@ -16,8 +16,15 @@ class DatabaseSeeder extends Seeder
         $this->call([
             MenuSeeder::class,
             MasterSeeder::class,
+            MasterClassSeeder::class,
+            MasterLessonSeeder::class,
+            StudentSeeder::class,
+            ParentSeeder::class,
+            TeacherSeeder::class,
+            StdClassSeeder::class,
+            StdLessonSeeder::class,
             UserSeeder::class,
-            StudySeeder::class,
+            // StudySeeder::class,
         ]);
     }
 }

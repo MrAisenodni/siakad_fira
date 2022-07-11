@@ -158,6 +158,7 @@ class MasterSeeder extends Seeder
         ]);
 
         // Master Mata Pelajaran (18)
+        /* Using CSV
         DB::table('mst_lesson')->insert([
             [
                 'name'          => 'Biologi',
@@ -274,6 +275,7 @@ class MasterSeeder extends Seeder
                 'created_by'    => 'Migrasi',
             ],
         ]);
+        */
 
         // Master Status Keluarga (5)
         DB::table('mst_family_status')->insert([
@@ -340,6 +342,7 @@ class MasterSeeder extends Seeder
         ]);
 
         // Master Kelas (9)
+        /* Komentar karena sudah menggunakan CSV
         DB::table('mst_class')->insert([
             [
                 'name'          => '10.1',
@@ -378,6 +381,7 @@ class MasterSeeder extends Seeder
                 'created_by'    => 'Migrasi',
             ],
         ]);
+        */
 
         // Master Alasan
         DB::table('mst_reason')->insert([

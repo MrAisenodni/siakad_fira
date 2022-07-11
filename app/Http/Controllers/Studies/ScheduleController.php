@@ -44,10 +44,7 @@ class ScheduleController extends Controller
             
             return view('teachers.schedule.index', $data);
         } else {
-            $class = $this->classes->select('id')->where('student_id', session()->get('suser_id'))->where('disabled', 0)->first();
-            $lesson_id = $this->lessons->select('id')->where('class_id', $class->id)->where('disabled', 0)->get();
-
-            $data['schedules'] = $this->schedules->select('id', 'day', 'clock_in', 'clock_out', 'lesson_id')->whereIn('lesson_id', $lesson_id)->where('disabled', 0)->orderBy('day')->get();
+            $data['schedules'] = $this->schedules->get_schedule(session()->get('suser_id'));
 
             return view('students.schedule.index', $data);
         }

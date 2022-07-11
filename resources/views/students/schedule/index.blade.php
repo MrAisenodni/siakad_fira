@@ -56,9 +56,9 @@
                                                 @if ($schedule->day == '7') Minggu @endif
                                             </td>
                                             <td>({{ date('H:i', strtotime($schedule->clock_in)) }} - {{ date('H:i', strtotime($schedule->clock_out)) }})</td>
-                                            <td>{{ $schedule->lesson->lesson->name }}</td>
-                                            <td>{{ $schedule->lesson->class->name }}</td>
-                                            <td>{{ $schedule->lesson->teacher->full_name }}</td>
+                                            <td>{{ $schedule->lesson_name }}</td>
+                                            <td>{{ $schedule->class_name }}</td>
+                                            <td>{{ $schedule->teacher_name }}</td>
                                         </tr>
                                     @endforeach
                                 @endif

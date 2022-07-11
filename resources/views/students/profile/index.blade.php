@@ -43,9 +43,9 @@
                                     <ul class="tabs">
                                         <li class="tab col s3"><a class="active" href="#personal">Personal</a></li>
                                         <li class="tab col s3"><a href="#contact">Kontak</a></li>
-                                        <li class="tab col s2"><a href="#family">Keluarga</a></li>
-                                        <li class="tab col s2"><a href="#study">Pendidikan</a></li>
-                                        <li class="tab col s2"><a href="#report">Nilai</a></li>
+                                        <li class="tab col s3"><a href="#family">Keluarga</a></li>
+                                        <li class="tab col s3"><a href="#study">Pendidikan</a></li>
+                                        {{-- <li class="tab col s2"><a href="#report">Nilai</a></li> --}}
                                     </ul>
                                 </div>
                                 <div id="personal" class="col s12"><hr>
@@ -699,14 +699,20 @@
                                     <div class="row">
                                         <div class="input-field col s2">
                                             <input id="distance" type="text" placeholder="10" name="distance" value="{{ old('distance', $student->distance) }}" disabled>
-                                            <label for="distance">Jarak Tempuh (km) <span class="materialize-red-text">*</span></label>
+                                            <label for="distance">Jarak Tempuh (km)</label>
                                             @error('distance')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s5">
-                                            <input id="phone_number" type="text" placeholder="Nomor HP" name="phone_number" value="{{ old('phone_number', $student->phone_number) }}" disabled>
-                                            <label for="phone_number">Nomor HP <span class="materialize-red-text">*</span></label>
+                                            <input id="phone_number" type="text" placeholder="Nomor HP" name="phone_number" disabled 
+                                                @if ($student->phone_number)
+                                                    value="{{ old('phone_number', $student->phone_number) }}"
+                                                @else
+                                                    value="{{ old('phone_number', 0) }}"
+                                                @endif
+                                            >
+                                            <label for="phone_number">Nomor HP</label>
                                             @error('phone_number')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
@@ -732,7 +738,7 @@
                                         </div>
                                         <div class="input-field col s2">
                                             <input id="group" type="text" placeholder="Kelompok" name="group" value="{{ old('group', $student->group) }}" disabled>
-                                            <label for="group">Kelompok <span class="materialize-red-text">*</span></label>
+                                            <label for="group">Kelompok</label>
                                             @error('group')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror

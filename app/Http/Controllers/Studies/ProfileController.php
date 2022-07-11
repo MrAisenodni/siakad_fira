@@ -97,9 +97,9 @@ class ProfileController extends Controller
                             ->first();
     
             $validated = $request->validate([
-                'nik'           => 'required|numeric|unique:mst_student,nik,'.session()->get('suser_id').',id,disabled,0|digits_between:1,16',
-                'nis'           => 'required|numeric|unique:mst_student,nis,'.session()->get('suser_id').',id,disabled,0|digits_between:1,20',
-                'nisn'          => 'required|numeric|unique:mst_student,nisn,'.session()->get('suser_id').',id,disabled,0|digits_between:1,20',
+                'nik'           => 'required|numeric',
+                'nis'           => 'required|numeric',
+                'nisn'          => 'required|numeric',
                 'full_name'     => 'required',
                 'birth_place'   => 'required',
                 'birth_date'    => 'required|date_format:d/m/Y',
@@ -119,13 +119,11 @@ class ProfileController extends Controller
     
                 // Validasi Kontak
                 'address'       => 'required',
-                'distance'      => 'required|numeric',
-                'phone_number'  => 'required|numeric|digits_between:1,25',
-                'home_number'   => 'numeric|digits_between:1,25',
+                'distance'      => 'numeric',
+                'phone_number'  => 'numeric',
+                'home_number'   => 'numeric',
     
                 // Validasi Pendidikan
-                'level'             => 'required',
-                'group'             => 'required',
                 'start_date'        => 'required|date_format:d/m/Y',
                 'study_year'        => 'required',
                 'sttb_no'           => 'required|unique:mst_student,sttb_no,'.session()->get('suser_id').',id,disabled,0',

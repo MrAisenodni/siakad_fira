@@ -15,7 +15,7 @@ class CreateMstTeacher extends Migration
     {
         Schema::create('mst_teacher', function (Blueprint $table) {
             $table->id();
-            $table->string('nip')->unique();
+            $table->string('nip')->nullable();
             $table->string('full_name');
             $table->string('birth_place')->nullable();
             $table->date('birth_date')->nullable();

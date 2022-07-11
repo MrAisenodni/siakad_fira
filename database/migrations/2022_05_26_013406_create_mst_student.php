@@ -17,9 +17,9 @@ class CreateMstStudent extends Migration
             $table->id();
 
             // Personal
-            $table->string('nis', 25)->unique();
-            $table->string('nik', 16)->unique();
-            $table->string('nisn', 25)->unique();
+            $table->string('nis', 25)->nullable();
+            $table->string('nik', 16)->nullable();
+            $table->string('nisn', 25)->nullable();
             $table->string('full_name')->nullable();
             $table->string('birth_place')->nullable();
             $table->date('birth_date')->nullable();

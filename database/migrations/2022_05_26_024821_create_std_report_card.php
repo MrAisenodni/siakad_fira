@@ -15,11 +15,11 @@ class CreateStdReportCard extends Migration
     {
         Schema::create('std_report_card', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('mst_student');
-            $table->foreignId('class_id')->constrained('mst_class');
-            $table->foreignId('study_year_id')->constrained('mst_study_year');
-            $table->foreignId('score_id')->constrained('std_score');
-            $table->foreignId('present_id')->constrained('std_present');
+            $table->unsignedInteger('student_id')->nullable();
+            $table->unsignedInteger('class_id')->nullable();
+            $table->unsignedInteger('study_year_id')->nullable();
+            $table->unsignedInteger('score_id')->nullable();
+            $table->unsignedInteger('present_id')->nullable();
             $table->text('description')->nullable();
                                     
             // Struktur Baku

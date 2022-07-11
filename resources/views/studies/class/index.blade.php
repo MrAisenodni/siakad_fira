@@ -40,6 +40,7 @@
                                 <tr>
                                     <th>Kelas</th>
                                     <th>Wali Kelas</th>
+                                    <th>Semester</th>
                                     <th>Tahun Ajar</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -50,6 +51,7 @@
                                         <tr id="data" data-id="{{ $clas->id }}">
                                             <td>{{ $clas->class->name }}</td>
                                             <td>{{ $clas->teacher->full_name }}</td>
+                                            <td>{{ ucwords($clas->study_year->semester) }}</td>
                                             <td>{{ $clas->study_year->name }}</td>
                                             <td>
                                                 <form action="{{ $menu->url }}/{{ $clas->id }}" method="POST" class="d-inline">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Studies;
 use App\Http\Controllers\Controller;
 use App\Models\Masters\{
     Lesson as MstLesson,
+    StudyYear,
 };
 use App\Models\Settings\{
     Login,
@@ -32,10 +33,13 @@ class ReportScoreController extends Controller
         $this->parents = new ParentModel();
         $this->reports = new ReportScore();
         $this->students = new Student();
+        $this->study_years = new StudyYear();
     }
     
     public function index(Request $request)
     {
+        $inp_study_year = $request->study_year;
+
         $data = [
             'menus'         => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'          => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
@@ -47,7 +51,13 @@ class ReportScoreController extends Controller
         } elseif (session()->get('srole') == 'teacher') {
             return view('teachers.report.index', $data);
         } else {
-            $data['classes'] = $this->classes->select('id', 'student_id', 'class_id')->where('student_id', session()->get('suser_id'))->get();
+            $data += [
+                'clazz'         => $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('student_id', session()->get('suser_id'))->first(),
+                'study_years'   => $this->study_years->select('id', 'name', 'semester')->where('disabled', 0)->get(),
+                'reports'       => $this->reports->where('disabled', 0)->where('student_id', session()->get('suser_id'))->get(),
+            ];
+
+            if ($inp_study_year) $data['inp_study_year'] = $inp_study_year;
 
             return view('students.report.index', $data);
         }

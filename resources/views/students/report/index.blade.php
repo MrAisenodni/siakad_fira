@@ -23,42 +23,316 @@
             <div class="col s12">
                 <div class="card">
                     <div class="card-content">
-                        <div class="row">
-                            <div class="col s10">
-                                <h5 class="card-title">Daftar Siswa</h5>
-                            </div>
-                            @if (session('status'))
-                                <div class="col s12">
-                                    <div class="success-alert-bar p-15 m-t-10 green white-text" style="display: block">
-                                        {{ session('status') }}
-                                    </div>
+                        <h5 class="card-title">Nilai Siswa</h5>
+                        <form action="{{ url()->current() }}" method="GET">
+                            <div class="row">
+                                <div class="input-field col s2">
+                                    <input id="clazz" type="text" name="clazz" value="{{ $clazz->class->name }}" disabled>
+                                    <label for="clazz">Kelas</label>
                                 </div>
-                            @endif
-                        </div>
-                        <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
-                            <thead>
-                                <tr>
-                                    <th>NIS</th>
-                                    <th>NISN</th>
-                                    <th>Nama</th>
-                                    <th>Kelas</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if ($classes)
-                                    @foreach ($classes as $class)
-                                        <tr id="show" data-id="{{ $class->class->id }}">
-                                            <td>{{ $class->student->nis }}</td>
-                                            <td>{{ $class->student->nisn }}</td>
-                                            <td>{{ $class->student->full_name }}</td>
-                                            <td>{{ $class->class->name }}</td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
+                                <div class="input-field col s4">
+                                    <input id="teacher_head" type="text" name="teacher_head" value="{{ $clazz->teacher->full_name }}" disabled>
+                                    <label for="teacher_head">Wali Kelas</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <select id="study_year" name="study_year" class="">
+                                        <option value="" selected>SEMUA</option>
+                                        @if ($study_years)
+                                            @foreach ($study_years as $study_year)
+                                                <option @if(old('study_year') == $study_year->id) selected @endif value="{{ $study_year->id }}">{{ $study_year->name }} | {{ ucwords($study_year->semester) }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <label for="study_year">Tahun Pelajaran</label>
+                                    @error('study_year')
+                                        <div class="error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            
+                            <hr>
+                            <div class="row">
+                                <div class="col s12" style="text-align: right">
+                                    <button class="waves-effect waves-light btn btn-round green strong" type="submit">CARI</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
+            
+                <ul class="card collapsible collapsible-accordion collapsible-dark">
+                    <li class="">
+                        <div class="collapsible-header">
+                            <h5 class="card-title">Penilaian Harian</h5>                            
+                        </div>
+                        <div class="collapsible-body">
+                            <table class="responsive-table display" style="width:100%">
+                                <thead>
+                                    <tr style="background: rgb(205, 255, 204)">
+                                        <th style="border: 1px solid">Mata Pelajaran</th>
+                                        @for ($i = 1; $i < 6; $i++)
+                                            <th style="border: 1px solid">PH{{ $i }}</th>
+                                            <th style="border: 1px solid">R{{ $i }}</th>
+                                            <th style="border: 1px solid">N{{ $i }}</th>
+                                        @endfor
+                                        <th style="border: 1px solid">Rata PH</th>
+                                        <th style="border: 1px solid">PTS</th>
+                                        <th style="border: 1px solid">PAS</th>
+                                        <th style="border: 1px solid">NPA</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if ($reports)
+                                        @foreach ($reports as $report)
+                                            <tr id="noedit_config" data-id="{{ $report->id }}">
+                                                <td style="border: 1px solid">{{ $report->lesson->name }}</td>
+                                                @for ($i = 1; $i < 6; $i++)
+                                                    <td style="border: 1px solid">
+                                                        <div class="input-field">
+                                                            <input class="auto_calculate" id="ph{{ $i }}_{{ $report->id }}" data-id="{{ $report->id }}" type="text" name="ph{{ $i }}_{{ $report->id }}" placeholder="PH{{ $i }}" 
+                                                                @if ($report->report)
+                                                                    value="{{ old('ph'.$i.'_'.$report->id, $report->report['ph'.$i]) }}"
+                                                                @else
+                                                                    value="{{ old('ph'.$i.'_'.$report->id) }}"
+                                                                @endif
+                                                            >
+                                                            @error('ph'.$i.'_'.$report->id)
+                                                                <div class="error">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </td>
+                                                    <td style="border: 1px solid">
+                                                        <div class="input-field">
+                                                            <input class="auto_calculate" id="r{{ $i }}_{{ $report->id }}" data-id="{{ $report->id }}" type="text" name="r{{ $i }}_{{ $report->id }}" placeholder="R{{ $i }}" 
+                                                                @if ($report->report)
+                                                                    value="{{ old('r'.$i.'_'.$report->id, $report->report['r'.$i]) }}"
+                                                                @else
+                                                                    value="{{ old('r'.$i.'_'.$report->id) }}"
+                                                                @endif
+                                                            >
+                                                            @error('r'.$i.'_'.$report->id)
+                                                                <div class="error">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </td>
+                                                    <td style="border: 1px solid">
+                                                        <div class="input-field">
+                                                            <input type="hidden" id="nh{{ $i }}_{{ $report->id }}" name="n{{ $i }}_{{ $report->id }}" 
+                                                                @if ($report->report)
+                                                                    value="{{ old('n'.$i.'_'.$report->id, $report->report['n'.$i]) }}"
+                                                                @else
+                                                                    value="{{ old('n'.$i.'_'.$report->id) }}"
+                                                                @endif
+                                                            >
+                                                            <input id="n{{ $i }}_{{ $report->id }}" type="text" name="n{{ $i }}_{{ $report->id }}" placeholder="N{{ $i }}" disabled
+                                                                @if ($report->report)
+                                                                    value="{{ old('n'.$i.'_'.$report->id, $report->report['n'.$i]) }}"
+                                                                @else
+                                                                    value="{{ old('n'.$i.'_'.$report->id) }}"
+                                                                @endif
+                                                            >
+                                                        </div>
+                                                    </td>
+                                                @endfor
+                                                <td style="border: 1px solid">
+                                                    <div class="input-field">
+                                                        <input type="hidden" name="avg_ph{{ $report->id }}" 
+                                                            @if ($report->report)
+                                                                value="{{ old('avg_ph'.$report->id, $report->report->avg_ph) }}"
+                                                            @else
+                                                                value="{{ old('avg_ph'.$report->id) }}"
+                                                            @endif
+                                                        >
+                                                        <input id="avg_ph{{ $report->id }}" type="text" name="avg_ph{{ $report->id }}" placeholder="Rata PH" disabled
+                                                        @if ($report->report)
+                                                                value="{{ old('avg_ph'.$report->id, $report->report->avg_ph) }}"
+                                                            @else
+                                                                value="{{ old('avg_ph'.$report->id) }}"
+                                                            @endif
+                                                        >
+                                                    </div>
+                                                </td>
+                                                <td style="border: 1px solid">
+                                                    <div class="input-field">
+                                                        <input class="auto_npa" id="pts{{ $report->id }}" data-id="{{ $report->id }}" type="text" name="pts{{ $report->id }}" placeholder="PTS" 
+                                                            @if ($report->report)
+                                                                value="{{ old('pts'.$report->id, $report->report->pts) }}"
+                                                            @else
+                                                                value="{{ old('pts'.$report->id) }}"
+                                                            @endif
+                                                        >
+                                                        @error('pts{{ $report->id }}')
+                                                            <div class="error">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </td>
+                                                <td style="border: 1px solid">
+                                                    <div class="input-field">
+                                                        <input class="auto_npa" id="pas{{ $report->id }}" data-id="{{ $report->id }}" type="text" name="pas{{ $report->id }}" placeholder="PAS" 
+                                                            @if ($report->report)
+                                                                value="{{ old('pas'.$report->id, $report->report->pas) }}"
+                                                            @else
+                                                                value="{{ old('pas'.$report->id) }}"
+                                                            @endif
+                                                        >
+                                                        @error('pas{{ $report->id }}')
+                                                            <div class="error">{{ $message }}</div>
+                                                        @enderror
+                                                    </div>
+                                                </td>
+                                                <td style="border: 1px solid">
+                                                    <div class="input-field">
+                                                        <input type="hidden" id="npah{{ $report->id }}" name="npa{{ $report->id }}" 
+                                                            @if ($report->report)
+                                                                value="{{ old('npa'.$report->id, $report->report->npa) }}"
+                                                            @else
+                                                                value="{{ old('npa'.$report->id) }}"
+                                                            @endif
+                                                        >
+                                                        <input id="npa{{ $report->id }}" type="text" name="npa{{ $report->id }}" placeholder="NPA" disabled
+                                                            @if ($report->report)
+                                                                value="{{ old('npa'.$report->id, $report->report->npa) }}"
+                                                            @else
+                                                                value="{{ old('npa'.$report->id) }}"
+                                                            @endif
+                                                        >
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li class="active">
+                        <div class="collapsible-header">
+                            <h5 class="card-title">Nilai Tugas</h5>                            
+                        </div>
+                        <div class="collapsible-body">
+                            <table class="responsive-table" style="width:100%; border: 1px solid">
+                                <thead style="background: rgb(236, 217, 255)">
+                                    <tr>
+                                        <th style="border: 1px solid">NIS</th>
+                                        <th style="border: 1px solid">Siswa</th>
+                                        @for ($i = 1; $i < 6; $i++)
+                                            <th style="border: 1px solid">T{{ $i }}</th>
+                                        @endfor
+                                        <th style="border: 1px solid">Rata T</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if ($reports)
+                                        @foreach ($reports as $report)
+                                            <tr id="noedit" data-id="{{ $report->id }}">
+                                                <td style="border: 1px solid">{{ $report->nis }}</td>
+                                                <td style="border: 1px solid">{{ $report->full_name }}</td>
+                                                @for ($i = 1; $i < 6; $i++)
+                                                    <td style="border: 1px solid">
+                                                        <div class="input-field">
+                                                            <input class="auto_calculate" data-id="{{ $report->id }}" id="t{{ $i }}_{{ $report->id }}" type="text" name="t{{ $i }}_{{ $report->id }}" placeholder="T{{ $i }}" 
+                                                                @if ($report->report)
+                                                                    value="{{ old('t'.$i.'_'.$report->id, $report->report['t'.$i]) }}"
+                                                                @else
+                                                                    value="{{ old('t'.$i.'_'.$report->id) }}"
+                                                                @endif
+                                                            >
+                                                            @error('t'.$i.'_'.$report->id)
+                                                                <div class="error">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </td>
+                                                @endfor
+                                                <td style="border: 1px solid">
+                                                    <div class="input-field">
+                                                        <input type="hidden" name="avg_t{{ $report->id }}" 
+                                                            @if ($report->report)
+                                                                value="{{ old('avg_t'.$report->id, $report->report->avg_t) }}"
+                                                            @else
+                                                                value="{{ old('avg_t'.$report->id) }}"
+                                                            @endif
+                                                        >
+                                                        <input id="avg_t{{ $report->id }}" type="text" name="avg_t{{ $report->id }}" placeholder="Rata T" disabled
+                                                            @if ($report->report)
+                                                                value="{{ old('avg_t'.$report->id, $report->report->avg_t) }}"
+                                                            @else
+                                                                value="{{ old('avg_t'.$report->id) }}"
+                                                            @endif
+                                                        >
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                    <li class="">
+                        <div class="collapsible-header">
+                            <h5 class="card-title">Nilai Keterampilan</h5>                            
+                        </div>
+                        <div class="collapsible-body">
+                            
+                            <table class="responsive-table" style="width:100%; border: 1px solid">
+                                <thead style="background: rgb(254, 241, 200)">
+                                    <tr>
+                                        <th style="border: 1px solid">NIS</th>
+                                        <th style="border: 1px solid">Siswa</th>
+                                        @for ($i = 1; $i < 6; $i++)
+                                            <th style="border: 1px solid">K{{ $i }}</th>
+                                        @endfor
+                                        <th style="border: 1px solid">Rata K</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if ($reports)
+                                        @foreach ($reports as $report)
+                                            <tr id="noedit" data-id="{{ $report->id }}">
+                                                <td style="border: 1px solid">{{ $report->nis }}</td>
+                                                <td style="border: 1px solid">{{ $report->full_name }}</td>
+                                                @for ($i = 1; $i < 6; $i++)
+                                                    <td style="border: 1px solid">
+                                                        <div class="input-field">
+                                                            <input class="auto_calculate" data-id="{{ $report->id }}" id="k{{ $i }}_{{ $report->id }}" type="text" name="k{{ $i }}_{{ $report->id }}" placeholder="K{{ $i }}"
+                                                                @if ($report->report)
+                                                                    value="{{ old('k'.$i.'_'.$report->id, $report->report['k'.$i]) }}"
+                                                                @else
+                                                                    value="{{ old('k'.$i.'_'.$report->id) }}"
+                                                                @endif
+                                                            >
+                                                            @error('k'.$i.'_'.$report->id)
+                                                                <div class="error">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </td>
+                                                @endfor
+                                                <td style="border: 1px solid">
+                                                    <div class="input-field">
+                                                        <input type="hidden" name="avg_k{{ $report->id }}" 
+                                                            @if ($report->report)
+                                                                value="{{ old('avg_k'.$report->id, $report->report->avg_k) }}"
+                                                            @else
+                                                                value="{{ old('avg_k'.$report->id) }}"
+                                                            @endif
+                                                        >
+                                                        <input id="avg_k{{ $report->id }}" type="text" name="avg_k{{ $report->id }}" placeholder="Rata K" disabled
+                                                            @if ($report->report)
+                                                                value="{{ old('avg_k'.$report->id, $report->report->avg_k) }}"
+                                                            @else
+                                                                value="{{ old('avg_k'.$report->id) }}"
+                                                            @endif
+                                                        >
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
