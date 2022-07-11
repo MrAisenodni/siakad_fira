@@ -40,6 +40,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Jadwal Ujian</th>
+                                    <th>Mata Pelajaran</th>
                                     <th>Ruangan</th>
                                     <th>Guru Pengawas</th>
                                     <th>Aksi</th>
@@ -52,6 +53,7 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ date('d F Y', strtotime($exam->date)) }} | {{ date('H:i', strtotime($exam->clock_in)) }} - {{ date('H:i', strtotime($exam->clock_out)) }}</td>
                                             <td>{{ $exam->class->name }}</td>
+                                            <td>{{ $exam->lesson->name }}</td>
                                             <td>{{ $exam->teacher->full_name }}</td>
                                             <td id="no-data" class="text-center" style="width: 5%">
                                                 <form action="{{ $menu->url }}/{{ $exam->id }}" method="POST" class="d-inline">

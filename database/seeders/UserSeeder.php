@@ -51,7 +51,7 @@ class UserSeeder extends Seeder
                 'password'      => Hash::make('siswa123'),
                 'role'          => 'student',
             ])->create();
-        Login::factory()->count(186)->sequence(fn ($sequence) => 
+        Login::factory()->count(93)->sequence(fn ($sequence) => 
             [
                 'user_id'       => $sequence->index+1,
                 'username'      => 'orangtua'.strval($sequence->index+1),
