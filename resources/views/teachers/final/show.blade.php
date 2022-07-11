@@ -26,24 +26,34 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        <div class="row">
-                            <div class="input-field col s8">
-                                <label for="lesson">Mata Pelajaran</label>
-                                <input id="lesson" type="text" name="lesson" placeholder="Mata Pelajaran" value="[{{ $final->lesson->teacher->nip }}] {{ $final->lesson->teacher->full_name }} | {{ $final->lesson->lesson->name }} ({{ $final->lesson->class->name }})" disabled>
-                            </div>     
-                            <div class="input-field col s4">
-                                <label for="date">Jadwal Ujian</label>
-                                <input id="date" type="text" name="date" placeholder="Jadwal" value="{{ date('d/m/Y', strtotime($final->date)) }} | {{ date('H:i', strtotime($final->clock_in)).' - '.date('H:i', strtotime($final->clock_out)) }}" disabled>
+                        <form method="POST" action="{{ str_replace("/edit", "", url()->current()) }}">
+                            @method('put')
+                            @csrf
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <label for="lesson">Mata Pelajaran</label>
+                                    <input id="lesson" type="text" name="lesson" placeholder="Mata Pelajaran" value="[{{ $final->lesson->teacher->nip }}] {{ $final->lesson->teacher->full_name }} | {{ $final->lesson->lesson->name }} ({{ $final->lesson->class->name }})" disabled>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <hr>
-                        <div class="row">
-                            <div class="col s12" style="text-align: right">
-                                <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}">KEMBALI</a>
-                                {{-- <button class="waves-effect waves-light btn btn-round green strong" type="submit">SIMPAN</button> --}}
+                            <div class="row">
+                                <div class="input-field col s7">
+                                    <label for="teacher">Pengawas</label>
+                                    <input id="teacher" type="text" name="teacher" placeholder="Pengawas" value="[{{ $final->teacher->nip }}] {{ $final->teacher->full_name }}" disabled>
+                                </div>
+                                <div class="input-field col s5">
+                                    <label for="date">Jadwal Ujian</label>
+                                    <input id="date" type="text" name="date" placeholder="Jadwal" value="{{ date('d/m/Y', strtotime($final->date)) }} | {{ date('H:i', strtotime($final->clock_in)).' - '.date('H:i', strtotime($final->clock_out)) }}" disabled>
+                                </div>
                             </div>
-                        </div>
+                            
+                            <hr>
+                            <div class="row">
+                                <div class="col s12" style="text-align: right">
+                                    <a class="waves-effect waves-light btn btn-round blue strong" href="{{ $menu->url }}">KEMBALI</a>
+                                    {{-- <button class="waves-effect waves-light btn btn-round green strong" type="submit">SIMPAN</button> --}}
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

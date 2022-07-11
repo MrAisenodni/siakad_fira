@@ -22,7 +22,10 @@
                     <div class="card-content">
                         <div class="row">
                             <div class="col s10">
-                                <h5 class="card-title">Daftar Siswa</h5>
+                                <h5 class="card-title">Daftar Kelas</h5>
+                            </div>
+                            <div class="col s2 right-align">
+                                {{-- <a class="waves-effect waves-light btn btn-round green strong" href="{{ $menu->url }}/create">TAMBAH</a> --}}
                             </div>
                             @if (session('status'))
                                 <div class="col s12">
@@ -32,28 +35,32 @@
                                 </div>
                             @endif
                         </div>
-                        <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
-                            <thead>
-                                <tr>
-                                    <th>NIS</th>
-                                    <th>NISN</th>
-                                    <th>Nama</th>
-                                    <th>Kelas</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if ($students)
-                                    @foreach ($students as $student)
-                                        <tr id="show" data-id="{{ $student->id }}">
-                                            <td>{{ $student->nis }}</td>
-                                            <td>{{ $student->nisn }}</td>
-                                            <td>{{ $student->full_name }}</td>
-                                            <td>{{ $student->class->class->name }}</td>
+                        <div class="row">
+                            <div class="col s12">
+                                <table id="payment_config" class="responsive-table display" style="width:100%" onload="message()">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kelas</th>
+                                            <th>Wali Kelas</th>
+                                            <th>Tahun Ajar</th>
                                         </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
+                                    </thead>
+                                    <tbody>
+                                        @if ($classes)
+                                            @foreach ($classes as $clas)
+                                                <tr id="show" data-id="{{ $clas->id }}">
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $clas->class->name }}</td>
+                                                    <td>{{ $clas->teacher->full_name }}</td>
+                                                    <td>{{ $clas->study_year->name }}</td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

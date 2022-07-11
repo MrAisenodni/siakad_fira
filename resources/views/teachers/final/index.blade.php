@@ -41,17 +41,17 @@
                                     <th>No</th>
                                     <th>Jadwal Ujian</th>
                                     <th>Mata Pelajaran</th>
-                                    <th>Kelas</th>
+                                    <th>Ruangan</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($finals)
-                                    @foreach ($finals as $final)
-                                        <tr id="show" data-id="{{ $final->id }}">
+                                @if ($exams)
+                                    @foreach ($exams as $exam)
+                                        <tr id="show" data-id="{{ $exam->id }}">
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ date('d F Y', strtotime($final->date)) }} | {{ date('H:i', strtotime($final->clock_in)) }} - {{ date('H:i', strtotime($final->clock_out)) }}</td>
-                                            <td>{{ $final->lesson->lesson->name }} | {{ $final->lesson->teacher->full_name }}</td>
-                                            <td>{{ $final->lesson->class->name }}</td>
+                                            <td>{{ date('d F Y', strtotime($exam->date)) }} | {{ date('H:i', strtotime($exam->clock_in)) }} - {{ date('H:i', strtotime($exam->clock_out)) }}</td>
+                                            <td>{{ $exam->lesson_name }}</td>
+                                            <td>{{ $exam->class_name }}</td>
                                         </tr>
                                     @endforeach
                                 @endif

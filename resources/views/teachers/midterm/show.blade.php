@@ -30,11 +30,17 @@
                             @method('put')
                             @csrf
                             <div class="row">
-                                <div class="input-field col s8">
+                                <div class="input-field col s12">
                                     <label for="lesson">Mata Pelajaran</label>
                                     <input id="lesson" type="text" name="lesson" placeholder="Mata Pelajaran" value="[{{ $midterm->lesson->teacher->nip }}] {{ $midterm->lesson->teacher->full_name }} | {{ $midterm->lesson->lesson->name }} ({{ $midterm->lesson->class->name }})" disabled>
-                                </div>     
-                                <div class="input-field col s4">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s7">
+                                    <label for="teacher">Pengawas</label>
+                                    <input id="teacher" type="text" name="teacher" placeholder="Pengawas" value="[{{ $midterm->teacher->nip }}] {{ $midterm->teacher->full_name }}" disabled>
+                                </div>
+                                <div class="input-field col s5">
                                     <label for="date">Jadwal Ujian</label>
                                     <input id="date" type="text" name="date" placeholder="Jadwal" value="{{ date('d/m/Y', strtotime($midterm->date)) }} | {{ date('H:i', strtotime($midterm->clock_in)).' - '.date('H:i', strtotime($midterm->clock_out)) }}" disabled>
                                 </div>

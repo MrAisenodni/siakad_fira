@@ -44,11 +44,11 @@ class MidtermController extends Controller
 
             return view('studies.midterm.index', $data);
         } elseif (session()->get('srole') == 'teacher') {
-            $data['exams'] = $this->exams->select('id', 'date', 'clock_in', 'clock_out', 'lesson_id')->where('teacher_id', session()->get('suser_id'))->where('disabled', 0)->orderByRaw('date, clock_in ASC')->get();
+            $data['exams'] = $this->exams->get_uts(session()->get('suser_id'), session()->get('srole'));
             
             return view('teachers.midterm.index', $data);
         } else {
-            $data['exams'] = $this->exams->get_uts(session()->get('suser_id'));
+            $data['exams'] = $this->exams->get_uts(session()->get('suser_id'), session()->get('srole'));
             
             return view('students.midterm.index', $data);
         }
