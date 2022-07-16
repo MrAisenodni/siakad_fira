@@ -28,18 +28,22 @@
                             @csrf
                             <input type="hidden" name="clazz_id" value="{{ $clazz->id }}">
                             <div class="row">
-                                <div class="input-field col s5">
+                                <div class="input-field col s3">
                                     <input id="study_date" class="datepicker" type="text" placeholder="dd/mm/yyyy" name="study_date" value="{{ old('study_date') }}" required>
                                     <label for="study_date">Tanggal</label>
                                     @error('study_date')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="input-field col s3">
+                                <div class="input-field col s1">
                                     <label for="clazz">Kelas</label>
                                     <input id="clazz" type="text" name="clazz" value="{{ $clazz->class->name }}" disabled>
                                 </div>
-                                <div class="input-field col s4">
+                                <div class="input-field col s5">
+                                    <label for="teacher">Wali Kelas</label>
+                                    <input id="teacher" type="text" name="teacher" value="{{ $clazz->teacher->full_name }}" disabled>
+                                </div>
+                                <div class="input-field col s3">
                                     <label for="study_year">Tahun Pelajaran</label>
                                     <input id="study_year" type="text" name="study_year" value="{{ $clazz->study_year->name }}" disabled>
                                 </div>
@@ -60,34 +64,45 @@
                     <div class="card-content">
                         <div class="row">
                             <form action="{{ url()->current() }}" method="GET">
-                                @csrf
                                 <div class="input-field col s5">
-                                    <select id="month" name="month" class="disabled select2">
+                                    <select id="month" name="month" class="">
                                         <option value="" selected>SEMUA</option>
                                         @if ($months)
                                             @foreach ($months as $month)
-                                                <option @if(old('month') == $month->id) selected @endif value="{{ $month->id }}">{{ $month->name }}</option>
+                                                <option 
+                                                    @if ($inp_month) 
+                                                        @if(old('month', $inp_month) == $month->id) selected @endif 
+                                                    @else 
+                                                        @if(old('month') == $month->id) selected @endif 
+                                                    @endif value="{{ $month->id }}">{{ $month->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="month" class="active">Bulan</label>
+                                    <label for="month">Bulan</label>
                                     @error('month')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="input-field col s5">
-                                    <select id="year" name="year" class="disabled select2">
+                                <div class="input-field col s4">
+                                    <select id="year" name="year" class="">
                                         <option value="" selected>SEMUA</option>
                                         @for ($i = date('Y', strtotime(now())); $i >= 1700; $i--)
-                                            <option @if(old('year') == $i) selected @endif value="{{ $i }}">{{ $i }}</option>
+                                            <option 
+                                                @if ($inp_year) 
+                                                    @if(old('year', $inp_year) == $i) selected @endif 
+                                                @else 
+                                                    @if(old('year') == $i) selected @endif 
+                                                @endif value="{{ $i }}">{{ $i }}</option>
                                         @endfor
                                     </select>
-                                    <label for="year" class="active">Tahun</label>
+                                    <label for="year">Tahun</label>
                                     @error('year')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="input-field col s2" style="text-align: right">
+                                <div class="input-field col s3" style="text-align: right">
+                                    <a class="waves-effect waves-light btn btn-round primary strong" 
+                                        href="/cetak/presensi/{{ $clazz->id }}?month={{ $inp_month }}&year={{ $inp_year }}">CETAK</a>
                                     <button class="waves-effect waves-light btn btn-round green strong" type="submit">CARI</button>
                                 </div>
                             </form>

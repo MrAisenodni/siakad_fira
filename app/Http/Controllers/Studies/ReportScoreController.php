@@ -164,6 +164,8 @@ class ReportScoreController extends Controller
         if (session()->get('srole') == 'admin') {
             return view('studies.report.show', $data);
         } elseif (session()->get('srole') == 'teacher') {
+            $data['lessons'] = $this->lessons->get_lesson_filter($clazz->class_id, $clazz->study_year_id, session()->get('suser_id'));
+
             return view('teachers.report.show', $data);
         } else {
             abort(403);
@@ -187,6 +189,8 @@ class ReportScoreController extends Controller
         if (session()->get('srole') == 'admin') {
             return view('studies.report.edit', $data);
         } elseif (session()->get('srole') == 'teacher') {
+            if (session()->get('suser_id') != $data['lesson']->teacher_id) abort(403);
+
             return view('teachers.report.edit', $data);
         } else {
             abort(403);

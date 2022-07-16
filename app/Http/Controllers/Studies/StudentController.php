@@ -94,6 +94,9 @@ class StudentController extends Controller
             'nik'           => 'required|numeric|unique:mst_student,nik,1,disabled|digits_between:1,16',
             'nis'           => 'required|numeric|unique:mst_student,nis,1,disabled|digits_between:1,20',
             'nisn'          => 'required|numeric|unique:mst_student,nisn,1,disabled|digits_between:1,20',
+            'birth_date'    => 'required',
+            'birth_place'   => 'required',
+            'religion'      => 'required',
             'full_name'     => 'required',
             'height'        => 'numeric',
             'weight'        => 'numeric',
@@ -111,13 +114,15 @@ class StudentController extends Controller
             'home_number'   => 'digits_between:1,25',
 
             // Validasi Pendidikan
-            'sttb_no'           => 'unique:mst_student,sttb_no,1,disabled',
+            'sttb_no'           => 'required|unique:mst_student,sttb_no,1,disabled',
 
             // Validasi Ayah
+            'father_name'           => 'required',
             'father_phone_number'   => 'digits_between:1,25',
             'father_home_number'    => 'digits_between:1,25',
 
             // Validasi Ibu
+            'mother_name'           => 'required',
             'mother_phone_number'   => 'digits_between:1,25',
             'mother_home_number'    => 'digits_between:1,25',
         ]);
@@ -343,6 +348,9 @@ class StudentController extends Controller
             'nik'           => 'required|numeric|unique:mst_student,nik,'.$id.',id,disabled,0|digits_between:1,16',
             'nis'           => 'required|numeric|unique:mst_student,nis,'.$id.',id,disabled,0|digits_between:1,20',
             'nisn'          => 'required|numeric|unique:mst_student,nisn,'.$id.',id,disabled,0|digits_between:1,20',
+            'birth_date'    => 'required',
+            'birth_place'   => 'required',
+            'religion'      => 'required',
             'full_name'     => 'required',
             'birth_date'    => 'date_format:d/m/Y',
             'height'        => 'numeric',
@@ -361,18 +369,15 @@ class StudentController extends Controller
             'home_number'   => 'digits_between:1,25',
 
             // Validasi Pendidikan
-            'start_date'        => 'date_format:d/m/Y',
-            'sttb_no'           => 'unique:mst_student,sttb_no,'.$id.',id,disabled,0',
-            'from_study_date'   => 'date_format:d/m/Y',
-            'to_study_date'     => 'date_format:d/m/Y|after:from_study_date',
+            'sttb_no'           => 'required|unique:mst_student,sttb_no,1,disabled',
 
             // Validasi Ayah
-            'father_birth_date'     => 'date_format:d/m/Y',
+            'father_name'           => 'required',
             'father_phone_number'   => 'digits_between:1,25',
             'father_home_number'    => 'digits_between:1,25',
 
             // Validasi Ibu
-            'mother_birth_date'     => 'date_format:d/m/Y',
+            'mother_name'           => 'required',
             'mother_phone_number'   => 'digits_between:1,25',
             'mother_home_number'    => 'digits_between:1,25',
         ]);

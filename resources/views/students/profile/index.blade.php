@@ -837,7 +837,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="report" class="col s12">
+                                {{-- <div id="report" class="col s12">
                                     <h5 class="card-title">@if (session()->get('srole') == 'student') @endif</h5>
                                     <table id="zero_config" class="responsive-table display" style="width:100%" onload="message()">
                                         <thead>
@@ -871,7 +871,7 @@
                                             @endif
                                         </tbody>
                                     </table>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <hr>
