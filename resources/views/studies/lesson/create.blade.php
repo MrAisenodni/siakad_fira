@@ -27,7 +27,7 @@
                             @csrf
                             <div class="row">
                                 <div class="input-field col s6">
-                                    <select id="teacher" name="teacher" class="">
+                                    <select id="teacher" name="teacher" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($teachers)
                                             @foreach ($teachers as $teacher)
@@ -35,13 +35,13 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="teacher">Guru <span class="materialize-red-text">*</span></label>
+                                    <label for="teacher" class="active">Guru <span class="materialize-red-text">*</span></label>
                                     @error('teacher')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-field col s6">
-                                    <select id="lesson" name="lesson" class="">
+                                    <select id="lesson" name="lesson" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($mst_lessons)
                                             @foreach ($mst_lessons as $mst_lesson)
@@ -49,7 +49,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="lesson">Mata Pelajaran <span class="materialize-red-text">*</span></label>
+                                    <label for="lesson" class="active">Mata Pelajaran <span class="materialize-red-text">*</span></label>
                                     @error('lesson')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
@@ -58,7 +58,7 @@
 
                             <div class="row">
                                 <div class="input-field col s6">
-                                    <select id="study" name="study" class="">
+                                    <select id="study" name="study" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($studies)
                                             @foreach ($studies as $study)
@@ -66,13 +66,13 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="study">Tahun Ajar <span class="materialize-red-text">*</span></label>
+                                    <label for="study" class="active">Tahun Ajar <span class="materialize-red-text">*</span></label>
                                     @error('study')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-field col s6">
-                                    <select id="class" name="class" class="">
+                                    <select id="class" name="class" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($classes)
                                             @foreach ($classes as $class)
@@ -80,7 +80,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="class">Kelas <span class="materialize-red-text">*</span></label>
+                                    <label for="class" class="active">Kelas <span class="materialize-red-text">*</span></label>
                                     @error('class')
                                         <div class="error">{{ $message }}</div>
                                     @enderror

@@ -49,7 +49,7 @@
                                     <label for="teacher">Wali Kelas</label>
                                 </div>
                                 <div class="input-field col s6">
-                                    <select id="student" name="student" class="">
+                                    <select id="student" name="student" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($students)
                                             @foreach ($students as $student)
@@ -57,7 +57,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="student">Siswa <span class="materialize-red-text">*</span></label>
+                                    <label for="student" class="active">Siswa <span class="materialize-red-text">*</span></label>
                                     @error('student')
                                         <div class="error">{{ $message }}</div>
                                     @enderror

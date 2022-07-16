@@ -159,7 +159,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="input-field col s6">
-                                                    <select id="religion" name="religion" class="">
+                                                    <select id="religion" name="religion" class="disabled select2">
                                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                                         @if ($religions)
                                                             @foreach ($religions as $religion)
@@ -167,7 +167,7 @@
                                                             @endforeach
                                                         @endif
                                                     </select>
-                                                    <label for="religion">Agama <span class="materialize-red-text">*</span></label>
+                                                    <label for="religion" class="active">Agama <span class="materialize-red-text">*</span></label>
                                                     @error('religion')
                                                         <div class="error">{{ $message }}</div>
                                                     @enderror
@@ -186,7 +186,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="input-field col s6">
-                                                    <select id="language" name="language" class="">
+                                                    <select id="language" name="language" class="disabled select2">
                                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                                         @if ($languages)
                                                             @foreach ($languages as $language)
@@ -194,13 +194,13 @@
                                                             @endforeach
                                                         @endif
                                                     </select>
-                                                    <label for="language">Bahasa <span class="materialize-red-text">*</span></label>
+                                                    <label for="language" class="active">Bahasa <span class="materialize-red-text">*</span></label>
                                                     @error('language')
                                                         <div class="error">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                                 <div class="input-field col s6">
-                                                    <select id="blood_type" name="blood_type" class="">
+                                                    <select id="blood_type" name="blood_type" class="disabled select2">
                                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                                         @if ($blood_types)
                                                             @foreach ($blood_types as $blood_type)
@@ -208,7 +208,7 @@
                                                             @endforeach
                                                         @endif
                                                     </select>
-                                                    <label for="blood_type">Golongan Darah</label>
+                                                    <label for="blood_type" class="active">Golongan Darah</label>
                                                     @error('blood_type')
                                                         <div class="error">{{ $message }}</div>
                                                     @enderror
@@ -221,7 +221,7 @@
                                     {{-- Keluarga --}}
                                     <div class="row">
                                         <div class="input-field col s4">
-                                            <select id="family_status" name="family_status" class="">
+                                            <select id="family_status" name="family_status" class="disabled select2">
                                                 <option value="" selected>--- SILAHKAN PILIH ---</option>
                                                 @if ($families)
                                                     @foreach ($families as $family)
@@ -229,7 +229,7 @@
                                                     @endforeach
                                                 @endif
                                             </select>
-                                            <label for="family_status">Status Keluarga <span class="materialize-red-text">*</span></label>
+                                            <label for="family_status" class="active">Status Keluarga <span class="materialize-red-text">*</span></label>
                                             @error('family_status')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
@@ -357,7 +357,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s4">
-                                            <select id="father_occupation" name="father_occupation" class="">
+                                            <select id="father_occupation" name="father_occupation" class="disabled select2">
                                                 <option value="" selected>--- SILAHKAN PILIH ---</option>
                                                 @if ($occupations)
                                                     @foreach ($occupations as $occupation)
@@ -365,7 +365,7 @@
                                                     @endforeach
                                                 @endif
                                             </select>
-                                            <label for="father_occupation">Pekerjaan <span class="materialize-red-text">*</span></label>
+                                            <label for="father_occupation" class="active">Pekerjaan <span class="materialize-red-text">*</span></label>
                                             @error('father_occupation')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
@@ -378,7 +378,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s1">
-                                            <select id="father_revenue_type" name="father_revenue_type" class="">
+                                            <select id="father_revenue_type" name="father_revenue_type" class="disabled select2">
                                                 <option @if(old('revenue_type', $father->revenue_type) == 'day') selected @endif value="day">/Hari</option>
                                                 <option @if(old('revenue_type', $father->revenue_type) == 'month') selected @endif value="month" selected>/Bulan</option>
                                                 <option @if(old('revenue_type', $father->revenue_type) == 'year') selected @endif value="year">/Tahun</option>
@@ -493,7 +493,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s4">
-                                            <select id="mother_occupation" name="mother_occupation" class="">
+                                            <select id="mother_occupation" name="mother_occupation" class="disabled select2">
                                                 <option value="" selected>--- SILAHKAN PILIH ---</option>
                                                 @if ($occupations)
                                                     @foreach ($occupations as $occupation)
@@ -501,7 +501,7 @@
                                                     @endforeach
                                                 @endif
                                             </select>
-                                            <label for="mother_occupation">Pekerjaan <span class="materialize-red-text">*</span></label>
+                                            <label for="mother_occupation" class="active">Pekerjaan <span class="materialize-red-text">*</span></label>
                                             @error('mother_occupation')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
@@ -514,7 +514,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s1">
-                                            <select id="mother_revenue_type" name="mother_revenue_type" class="">
+                                            <select id="mother_revenue_type" name="mother_revenue_type" class="disabled select2">
                                                 <option @if(old('revenue_type', $mother->revenue_type) == 'day') selected @endif value="day">/Hari</option>
                                                 <option @if(old('revenue_type', $mother->revenue_type) == 'month') selected @endif value="month" selected>/Bulan</option>
                                                 <option @if(old('revenue_type', $mother->revenue_type) == 'year') selected @endif value="year">/Tahun</option>
@@ -642,7 +642,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s4">
-                                            <select id="guardian" name="guardian_occupation" class="">
+                                            <select id="guardian" name="guardian_occupation" class="disabled select2">
                                                 <option value="" selected>--- SILAHKAN PILIH ---</option>
                                                 @if ($occupations)
                                                     @foreach ($occupations as $occupation)
@@ -650,7 +650,7 @@
                                                     @endforeach
                                                 @endif
                                             </select>
-                                            <label for="guardian_occupation">Pekerjaan</label>
+                                            <label for="guardian_occupation" class="active">Pekerjaan</label>
                                             @error('guardian_occupation')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
@@ -663,7 +663,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s1">
-                                            <select id="guardian" name="guardian_revenue_type" class="">
+                                            <select id="guardian" name="guardian_revenue_type" class="disabled select2">
                                                 <option @if($guardian) @if(old('guardian_revenue_type', $guardian->revenue_type) == 'day') selected @endif @else @if(old('guardian_revenue_type') == 'day') selected @endif @endif value="day">/Hari</option>
                                                 <option @if($guardian) @if(old('guardian_revenue_type', $guardian->revenue_type) == 'month') selected @endif @else @if(old('guardian_revenue_type') == 'month') selected @endif @endif value="month" selected>/Bulan</option>
                                                 <option @if($guardian) @if(old('guardian_revenue_type', $guardian->revenue_type) == 'year') selected @endif @else @if(old('guardian_revenue_type') == 'year') selected @endif @endif value="year">/Tahun</option>
@@ -751,7 +751,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <select id="extracurricular" name="extracurricular" class="">
+                                            <select id="extracurricular" name="extracurricular" class="disabled select2">
                                                 <option value="" selected>--- SILAHKAN PILIH ---</option>
                                                 @if ($extracurriculars)
                                                     @foreach ($extracurriculars as $extracurricular)
@@ -759,13 +759,13 @@
                                                     @endforeach
                                                 @endif
                                             </select>
-                                            <label for="extracurricular">Ekstrakurikuler</label>
+                                            <label for="extracurricular" class="active">Ekstrakurikuler</label>
                                             @error('extracurricular')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror
                                         </div>
                                         <div class="input-field col s3">
-                                            <select id="study_year" name="study_year" class="">
+                                            <select id="study_year" name="study_year" class="disabled select2">
                                                 <option value="" selected>--- SILAHKAN PILIH ---</option>
                                                 @if ($studies)
                                                     @foreach ($studies as $study)
@@ -773,7 +773,7 @@
                                                     @endforeach
                                                 @endif
                                             </select>
-                                            <label for="study_year">Tahun Pelajaran <span class="materialize-red-text">*</span></label>
+                                            <label for="study_year" class="active">Tahun Pelajaran <span class="materialize-red-text">*</span></label>
                                             @error('study_year')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror

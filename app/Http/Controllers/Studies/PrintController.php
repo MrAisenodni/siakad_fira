@@ -47,10 +47,11 @@ class PrintController extends Controller
     public function print_present(Request $request, $id)
     {
         $check = $this->classes->select('id', 'class_id', 'teacher_id', 'study_year_id')->where('id', $id)->first();
+        // dd($check->class_id, $check->study_year_id);
 
         $data = [
             'provider'      => $this->provider->where('disabled', 0)->first(),
-            'classes'       => $this->classes->get_present($check->class_id, $check->study_year_id),
+            'classes'       => $this->classes->get_present($check->study_year_id, $check->class_id),
             'clazz'         => $check,
         ];
         // dd($check->study_year['semester']);

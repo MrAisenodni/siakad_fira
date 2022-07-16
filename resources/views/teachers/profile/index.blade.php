@@ -72,7 +72,7 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s4">
-                                    <select id="religion" name="religion" class="">
+                                    <select id="religion" name="religion" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($religions)
                                             @foreach ($religions as $religion)
@@ -80,7 +80,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="religion">Agama <span class="materialize-red-text">*</span></label>
+                                    <label for="religion" class="active">Agama <span class="materialize-red-text">*</span></label>
                                     @error('religion')
                                         <div class="error">{{ $message }}</div>
                                     @enderror

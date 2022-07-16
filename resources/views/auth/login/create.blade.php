@@ -22,7 +22,7 @@
                             @csrf
                             <div class="row">
                                 <div class="input-field col s6">
-                                    <select id="student_name" name="student_name" class="">
+                                    <select id="student_name" name="student_name" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($students)
                                             @foreach ($students as $student)
@@ -36,7 +36,7 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s6">
-                                    <select id="teacher_name" name="teacher_name" class="">
+                                    <select id="teacher_name" name="teacher_name" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($teachers)
                                             @foreach ($teachers as $teacher)

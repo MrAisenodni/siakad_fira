@@ -67,15 +67,15 @@
             </thead>
             <tbody>
                 @if ($classes)
-                    @foreach ($classes as $clazz)
+                    @foreach ($classes as $claz)
                         <tr>
                             <td style="text-align: center">{{ $loop->iteration }}</td>
-                            <td>{{ $clazz->full_name }}</td>
+                            <td>{{ $claz->full_name }}</td>
                             @for ($i = 0; $i < 7; $i++)
-                                <td style="text-align: center">H</td>
-                                <td style="text-align: center">S</td>
-                                <td style="text-align: center">I</td>
-                                <td style="text-align: center">A</td>
+                                <td style="text-align: center">{{ $claz->present }}</td>
+                                <td style="text-align: center">{{ $claz->sick }}</td>
+                                <td style="text-align: center">{{ $claz->permit }}</td>
+                                <td style="text-align: center">{{ $claz->absent }}</td>
                             @endfor
                         </tr>
                     @endforeach

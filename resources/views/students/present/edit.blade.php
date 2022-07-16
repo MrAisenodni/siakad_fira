@@ -31,7 +31,7 @@
                             @csrf
                             <div class="row">
                                 <div class="input-field col s2">
-                                    <select id="role" name="role" class="role_present">
+                                    <select id="role" name="role" class="role_present select2">
                                         <option @error(old('role', $present->role) == 'student') selected @enderror value="student" selected>Siswa</option>
                                         <option @error(old('role', $present->role) == 'teacher') selected @enderror value="teacher">Guru</option>
                                     </select>
@@ -41,7 +41,7 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s4">
-                                    <select id="lesson" name="lesson" class="">
+                                    <select id="lesson" name="lesson" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($lessons)
                                             @foreach ($lessons as $lesson)
@@ -49,13 +49,13 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="lesson">Mata Pelajaran <span class="materialize-red-text">*</span></label>
+                                    <label for="lesson" class="active">Mata Pelajaran <span class="materialize-red-text">*</span></label>
                                     @error('lesson')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-field col s2">
-                                    <select id="reason" name="reason" class="">
+                                    <select id="reason" name="reason" class="disabled select2">
                                         <option value="" selected>--- PILIH ---</option>
                                         @if ($reasons)
                                             @foreach ($reasons as $reason)
@@ -63,7 +63,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="reason">Alasan Absen</label>
+                                    <label for="reason" class="active">Alasan Absen</label>
                                     @error('reason')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
@@ -99,7 +99,7 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s4">
-                                    <select id="student" name="student" class="">
+                                    <select id="student" name="student" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($students)
                                             @foreach ($students as $student)
@@ -111,13 +111,13 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="student">Siswa <span class="materialize-red-text">*</span></label>
+                                    <label for="student" class="active">Siswa <span class="materialize-red-text">*</span></label>
                                     @error('student')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-field col s4">
-                                    <select id="teacher" name="teacher" class="" disabled>
+                                    <select id="teacher" name="teacher" class="disabled select2" disabled>
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($teachers)
                                             @foreach ($teachers as $teacher)
@@ -129,7 +129,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="teacher">Guru <span class="materialize-red-text">*</span></label>
+                                    <label for="teacher" class="active">Guru <span class="materialize-red-text">*</span></label>
                                     @error('teacher')
                                         <div class="error">{{ $message }}</div>
                                     @enderror

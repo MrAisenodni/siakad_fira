@@ -121,7 +121,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s6">
-                                            <select id="religion" name="religion" class="">
+                                            <select id="religion" name="religion" class="disabled select2">
                                                 <option value="" selected>--- SILAHKAN PILIH ---</option>
                                                 @if ($religions)
                                                     @foreach ($religions as $religion)
@@ -129,7 +129,7 @@
                                                     @endforeach
                                                 @endif
                                             </select>
-                                            <label for="religion">Agama</label>
+                                            <label for="religion" class="active">Agama</label>
                                             @error('religion')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror

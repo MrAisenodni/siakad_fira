@@ -39,7 +39,7 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s3">
-                                    <select id="category" name="category" class="">
+                                    <select id="category" name="category" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($categories)
                                             @foreach ($categories as $category)
@@ -47,13 +47,13 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="category">Kategori <span class="materialize-red-text">*</span></label>
+                                    <label for="category" class="active">Kategori <span class="materialize-red-text">*</span></label>
                                     @error('category')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-field col s3">
-                                    <select id="tag" name="tag" class="">
+                                    <select id="tag" name="tag" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($tags)
                                             @foreach ($tags as $tag)
@@ -61,7 +61,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="tag">Tag</label>
+                                    <label for="tag" class="active">Tag</label>
                                     @error('tag')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
@@ -75,7 +75,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col s12" style="text-align: center">
-                                        <img class="img-preview img-fluid" alt="Foto Profil" style="max-width: 100%" @if ($article->photo) src="{{ asset($article->photo) }}" @endif>
+                                        <img class="img-preview img-fluid" alt="Foto Profil" style="max-width: 100%; max-height: 50px" @if ($article->photo) src="{{ asset($article->photo) }}" @endif>
                                     </div>
                                 </div>
                                 <div class="file-field input-field col s12">

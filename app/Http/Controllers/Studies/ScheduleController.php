@@ -24,6 +24,7 @@ class ScheduleController extends Controller
         $this->schedules = new Schedule();
         $this->students = new Student();
         $this->teachers = new Teacher();
+        $this->days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
     }
     
     public function index(Request $request)
@@ -73,9 +74,17 @@ class ScheduleController extends Controller
             'lesson'    => 'required',
         ]);
 
+        $str_time = $input['clock_in'].":00";
+        $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
+        sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
+        $clock_in = $hours * 3600 + $minutes * 60 + $seconds;
+        $str_time = $input['clock_out'].":00";
+        $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
+        sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
+        $clock_out = $hours * 3600 + $minutes * 60 + $seconds;
         // Uncomment this validation if you need
-        // $check = $this->lessons->where('lesson_id', $input['lesson'])->where('clock_in', $input['clock_in'])->where('clock_out', $input['clock_out'])->where('day', $input['day'])->first();
-        // if ($check) return redirect(url()->previous())->with('error', 'Mata Pelajaran '.$check->lesson->name.' sudah terdaftar pada hari '.$check->days->name.' pukul '.$check->clock_in.'-'.$check->clock_out);
+        $check = $this->schedules->whereRaw('day = '.$input['day'].' AND disabled = 0 AND lesson_id = '.$input['lesson'].' AND '.$clock_in.' BETWEEN TIME_TO_SEC(clock_in) AND TIME_TO_SEC(clock_out)')->first();
+        if ($check) return redirect(url()->previous())->with('error', 'Mata Pelajaran '.$check->lesson->lesson->name.' ['.$check->lesson->teacher->full_name.'] sudah terdaftar pada hari '.$this->days[$check->day-1].' pukul '.date('H:i', strtotime($check->clock_in)).'-'.date('H:i', strtotime($check->clock_out)))->withInput();
 
         $data = [
             'day'               => $input['day'],
@@ -135,6 +144,18 @@ class ScheduleController extends Controller
             'clock_out' => 'required|date_format:H:i|after:clock_in',
             'lesson'    => 'required',
         ]);
+
+        $str_time = $input['clock_in'].":00";
+        $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
+        sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
+        $clock_in = $hours * 3600 + $minutes * 60 + $seconds;
+        $str_time = $input['clock_out'].":00";
+        $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
+        sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
+        $clock_out = $hours * 3600 + $minutes * 60 + $seconds;
+        // Uncomment this validation if you need
+        $check = $this->schedules->whereRaw('day = '.$input['day'].' AND disabled = 0 AND lesson_id = '.$input['lesson'].' AND id <> '.$id.' AND '.$clock_in.' BETWEEN TIME_TO_SEC(clock_in) AND TIME_TO_SEC(clock_out)')->first();
+        if ($check) return redirect(url()->previous())->with('error', 'Mata Pelajaran '.$check->lesson->lesson->name.' ['.$check->lesson->teacher->full_name.'] sudah terdaftar pada hari '.$this->days[$check->day-1].' pukul '.date('H:i', strtotime($check->clock_in)).'-'.date('H:i', strtotime($check->clock_out)))->withInput();
 
         $data = [
             'day'               => $input['day'],

@@ -98,12 +98,26 @@ class FinalExamController extends Controller
         $input = $request->all();
 
         $validated = $request->validate([
+            'date'      => 'required',
             'clock_in'  => 'required|date_format:H:i',
             'clock_out' => 'required|date_format:H:i|after:clock_in',
             'teacher'   => 'required',
             'lesson'    => 'required',
             'clazz'     => 'required',
         ]);
+
+        $str_time = $input['clock_in'].":00";
+        $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
+        sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
+        $clock_in = $hours * 3600 + $minutes * 60 + $seconds;
+        $str_time = $input['clock_out'].":00";
+        $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
+        sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
+        $clock_out = $hours * 3600 + $minutes * 60 + $seconds;
+        // Uncomment this validation if you need
+        $check = $this->exams->whereRaw("date LIKE '%".date('Y-m-d', strtotime(str_replace('/', '-', $input['date'])))."%' AND disabled = 0 AND lesson_id = ".$input['lesson']." AND type = 'uas' AND class_id = ".$input['clazz']." AND ".$clock_in." BETWEEN TIME_TO_SEC(clock_in) AND TIME_TO_SEC(clock_out)")->first();
+        // dd($check, $clock_in, $clock_out);
+        if ($check) return redirect(url()->previous())->with('error', 'Mata Pelajaran '.$check->lesson->name.' dengan Pengawas ['.$check->teacher->full_name.'] sudah terdaftar pada hari '.date('Y-m-d', strtotime(str_replace('/', '-', $input['date']))).' pukul '.date('H:i', strtotime($check->clock_in)).'-'.date('H:i', strtotime($check->clock_out)))->withInput();
 
         $data = [
             'date'              => date('Y-m-d', strtotime(str_replace('/', '-', $input['date']))),
@@ -122,7 +136,7 @@ class FinalExamController extends Controller
         $c_class = $this->mst_classes->where('disabled', 0)->count();
         $c_student = $this->students->where('disabled', 0)->count();
         $ex_student = $this->exam_details->select('student_id')->where('disabled', 0)->get();
-        $student = $this->classes->select('id', 'student_id')->whereNotIn('student_id', $ex_student)->where('disabled', 0)->orderBy('id')->get();
+        $student = $this->classes->select('id', 'student_id')->whereIn('student_id', $ex_student)->where('disabled', 0)->orderBy('id')->get();
         
         if ($c_student && $c_class) {
             for ($i = 0; $i <= round($c_student/$c_class); $i++) {

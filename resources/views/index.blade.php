@@ -189,6 +189,47 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col l12 m12 s12">
+                <div class="card">
+                    <div class="card-content">
+                        <h4 class="card-title">Berita Terbaru</h4>
+                        <ul class="search-listing">
+                            @if ($articles)
+                                @foreach ($articles as $article)
+                                    <li>
+                                        <h4><a 
+                                            @if (session()->get('srole') == 'admin')
+                                                href="/studi/pengumuman/{{ $article->id }}/edit"
+                                            @else
+                                                href="/studi/pengumuman/{{ $article->id }}"
+                                            @endif
+                                        >{{ $article->title }}</a></h4>
+                                        <a class="search-links"
+                                            @if (session()->get('srole') == 'admin')
+                                                href="/studi/pengumuman/{{ $article->id }}/edit"
+                                            @else
+                                                href="/studi/pengumuman/{{ $article->id }}"
+                                            @endif
+                                        >{{ $article->category->name }}</a>
+                                        <p>{!! $article->description !!}</p>
+                                    </li>
+                                @endforeach
+                            @endif
+                        </ul>
+                        {{-- <ul class="pagination m-t-20">
+                            <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+                            @if ($articles)
+                                @for ($i = 1; $i <= $articles->count()/5; $i++)
+                                    <li class="active"><a href="{{ url()->current() }}?page=">1</a></li>
+                                    <li class="waves-effect"><a href="{{ url()->current() }}?page={{ $i }}">{{ $i }}</a></li>
+                                @endfor
+                            @endif
+                            <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+                        </ul> --}}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

@@ -115,7 +115,7 @@
                             </div>
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <select id="payment" name="payment" class="auto_fill">
+                                    <select id="payment" name="payment" class="auto_fill select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($payments)
                                             @foreach ($payments as $pay)
@@ -129,14 +129,14 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s12">
-                                    <select id="month" name="month">
+                                    <select id="month" name="month" class="disabled select2">
                                         @if ($months)
                                             @foreach ($months as $month)
                                                 <option @if(old('month', $payment->month) == $month->id) selected @endif value="{{ $month->id }}">{{ $month->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="month">Bulan</label>
+                                    <label for="month" class="active">Bulan</label>
                                     @error('month')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
@@ -150,11 +150,11 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s12">
-                                    <select id="status" name="status">
+                                    <select id="status" name="status" class="disabled select2">
                                         <option @if(old('status', $payment->status) == 'lunas') selected @endif value="lunas">Lunas</option>
                                         <option @if(old('status', $payment->status) == 'belum') selected @endif value="belum">Belum Linas</option>
                                     </select>
-                                    <label for="status">Status</label>
+                                    <label for="status" class="active">Status</label>
                                     @error('status')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
@@ -194,7 +194,7 @@
                                         <input type="hidden" name="uid" id="url_id" value="{{ $payment->id }}">
                                         <input type="hidden" name="mod_student" id="mod_student" value="{{ $payment->student_id }}">
                                         <div class="input-field col s12">
-                                            <select id="mod_payment" name="mod_payment" class="modal_auto_fill">
+                                            <select id="mod_payment" name="mod_payment" class="modal_auto_fill select2">
                                                 <option value="" selected>--- SILAHKAN PILIH ---</option>
                                                 @if ($payments)
                                                     @foreach ($payments as $payment)
@@ -208,14 +208,14 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s12">
-                                            <select id="mod_month" name="mod_month">
+                                            <select id="mod_month" name="mod_month" class="disabled select2">
                                                 @if ($months)
                                                     @foreach ($months as $month)
                                                         <option @if(old('mod_month') == $month->id) selected @endif value="{{ $month->id }}">{{ $month->name }}</option>
                                                     @endforeach
                                                 @endif
                                             </select>
-                                            <label for="mod_month">Bulan</label>
+                                            <label for="mod_month" class="active">Bulan</label>
                                             @error('mod_month')
                                                 <div class="error">{{ $message }}</div>
                                             @enderror

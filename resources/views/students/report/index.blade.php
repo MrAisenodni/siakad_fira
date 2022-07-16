@@ -35,7 +35,7 @@
                                     <label for="teacher_head">Wali Kelas</label>
                                 </div>
                                 <div class="input-field col s6">
-                                    <select id="study_year" name="study_year" class="">
+                                    <select id="study_year" name="study_year" class="disabled select2">
                                         <option value="" selected>SEMUA</option>
                                         @if ($study_years)
                                             @foreach ($study_years as $study_year)
@@ -43,7 +43,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="study_year">Tahun Pelajaran</label>
+                                    <label for="study_year" class="active">Tahun Pelajaran</label>
                                     @error('study_year')
                                         <div class="error">{{ $message }}</div>
                                     @enderror

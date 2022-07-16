@@ -27,7 +27,7 @@
                             <input type="hidden" name="role" value="{{ $role }}">
                             <div class="row">
                                 <div class="input-field col s4">
-                                    <select id="lesson" name="lesson" class="">
+                                    <select id="lesson" name="lesson" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($lessons)
                                             @foreach ($lessons as $lesson)
@@ -35,13 +35,13 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="lesson">Mata Pelajaran <span class="materialize-red-text">*</span></label>
+                                    <label for="lesson" class="active">Mata Pelajaran <span class="materialize-red-text">*</span></label>
                                     @error('lesson')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-field col s2">
-                                    <select id="reason" name="reason" class="">
+                                    <select id="reason" name="reason" class="disabled select2">
                                         <option value="" selected>--- PILIH ---</option>
                                         @if ($reasons)
                                             @foreach ($reasons as $reason)
@@ -49,7 +49,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="reason">Alasan Absen</label>
+                                    <label for="reason" class="active">Alasan Absen</label>
                                     @error('reason')
                                         <div class="error">{{ $message }}</div>
                                     @enderror

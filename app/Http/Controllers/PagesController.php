@@ -7,6 +7,7 @@ use App\Models\Settings\{
     Menu,
 };
 use App\Models\Studies\{
+    Article,
     Payment,
     Student,
     Teacher,
@@ -20,6 +21,7 @@ class PagesController extends Controller
     {
         $this->login = new Login();
         $this->menus = new Menu();
+        $this->articles = new Article();
         $this->students = new Student();
         $this->teachers = new Teacher();
         $this->payments = new Payment();
@@ -36,6 +38,7 @@ class PagesController extends Controller
             'cf_teacher'    => $this->teachers->select('id')->where('gender', 'p')->where('disabled', 0)->count(),
             'cm_teacher'    => $this->teachers->select('id')->where('gender', 'l')->where('disabled', 0)->count(),
             'c_teacher'     => $this->teachers->select('id')->where('disabled', 0)->count(),
+            'articles'      => $this->articles->select('id', 'category_id', 'tag_id', 'title', 'description')->where('disabled', 0)->where('status', 'new')->get(),
         ];
 
         if (session()->get('srole') == 'student' || session()->get('srole') == 'parent') {

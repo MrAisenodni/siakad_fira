@@ -21,11 +21,20 @@
                 <div class="card">
                     <div class="card-content">
                         <h5 class="card-title">Tambah {{ $menu->title }}</h5>
+                        @if (session('error'))
+                            <div class="row m-b-20">
+                                <div class="col s12">
+                                    <div class="success-alert-bar p-15 m-t-10 red white-text" style="display: block">
+                                        {{ session('error') }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">
                             @csrf
                             <div class="row">
                                 <div class="input-field col s6">
-                                    <select id="lesson" name="lesson" class="">
+                                    <select id="lesson" name="lesson" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($lessons)
                                             @foreach ($lessons as $lesson)
@@ -33,13 +42,13 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="lesson">Mata Pelajaran <span class="materialize-red-text">*</span></label>
+                                    <label for="lesson" class="active">Mata Pelajaran <span class="materialize-red-text">*</span></label>
                                     @error('lesson')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-field col s2">
-                                    <select id="day" name="day" class="">
+                                    <select id="day" name="day" class="disabled select2">
                                         <option @if(old('day') == '1') selected @endif value="1" selected>Senin</option>
                                         <option @if(old('day') == '2') selected @endif value="2">Selasa</option>
                                         <option @if(old('day') == '3') selected @endif value="3">Rabu</option>
@@ -48,25 +57,21 @@
                                         <option @if(old('day') == '6') selected @endif value="6" disabled>Sabtu</option>
                                         <option @if(old('day') == '7') selected @endif value="7" disabled>Minggu</option>
                                     </select>
-                                    <label for="day">Hari <span class="materialize-red-text">*</span></label>
+                                    <label for="day" class="active">Hari <span class="materialize-red-text">*</span></label>
                                     @error('day')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col s2">
-                                    <label for="clock_in" class="m-t-20">Masuk <span class="materialize-red-text">*</span></label>
-                                    <div class="input-fleid">
-                                        <input id="clock_in" type="text" name="clock_in" placeholder="07:00" class="timepicker" value="{{ old('clock_in') }}">
-                                    </div>
+                                <div class="input-field col s2">
+                                    <label for="clock_in">Masuk <span class="materialize-red-text">*</span></label>
+                                    <input id="clock_in" type="text" name="clock_in" placeholder="07:00" class="timepicker" value="{{ old('clock_in') }}">
                                     @error('clock_in')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="col s2">
-                                    <label for="clock_out" class="m-t-20">Keluar <span class="materialize-red-text">*</span></label>
-                                    <div class="input-fleid">
-                                        <input id="clock_out" type="text" name="clock_out" placeholder="09:00" class="timepicker" value="{{ old('clock_out') }}">
-                                    </div>
+                                <div class="input-field col s2">
+                                    <label for="clock_out">Keluar <span class="materialize-red-text">*</span></label>
+                                    <input id="clock_out" type="text" name="clock_out" placeholder="09:00" class="timepicker" value="{{ old('clock_out') }}">
                                     @error('clock_out')
                                         <div class="error">{{ $message }}</div>
                                     @enderror

@@ -121,7 +121,7 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s4">
-                                    <select id="occupation" name="occupation" class="">
+                                    <select id="occupation" name="occupation" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($occupations)
                                             @foreach ($occupations as $occupation)
@@ -129,7 +129,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="occupation">Pekerjaan <span class="materialize-red-text">*</span></label>
+                                    <label for="occupation" class="active">Pekerjaan <span class="materialize-red-text">*</span></label>
                                     @error('occupation')
                                         <div class="error">{{ $message }}</div>
                                     @enderror

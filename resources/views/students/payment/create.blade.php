@@ -74,7 +74,7 @@
                             </div>
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <select id="payment" name="payment" class="auto_fill">
+                                    <select id="payment" name="payment" class="auto_fill select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($payments)
                                             @foreach ($payments as $payment)
@@ -88,14 +88,14 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s12">
-                                    <select id="month" name="month">
+                                    <select id="month" name="month" class="disabled select2">
                                         @if ($months)
                                             @foreach ($months as $month)
                                                 <option @if(old('month') == $month->id) selected @endif value="{{ $month->id }}">{{ $month->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="month">Bulan</label>
+                                    <label for="month" class="active">Bulan</label>
                                     @error('month')
                                         <div class="error">{{ $message }}</div>
                                     @enderror

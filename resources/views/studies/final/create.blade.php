@@ -21,11 +21,16 @@
                 <div class="card">
                     <div class="card-content">
                         <h5 class="card-title">Tambah {{ $menu->title }}</h5>
+                        @if (session('error'))
+                            <div class="success-alert-bar p-15 m-t-10 m-b-10 red white-text" style="display: block">
+                                {{ session('error') }}
+                            </div>
+                        @endif
                         <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">
                             @csrf
                             <div class="row">
                                 <div class="input-field col s6">
-                                    <select id="lesson" name="lesson" class="">
+                                    <select id="lesson" name="lesson" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($lessons)
                                             @foreach ($lessons as $lesson)
@@ -33,13 +38,13 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="lesson">Mata Pelajaran <span class="materialize-red-text">*</span></label>
+                                    <label for="lesson" class="active">Mata Pelajaran <span class="materialize-red-text">*</span></label>
                                     @error('lesson')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-field col s6">
-                                    <select id="teacher" name="teacher" class="">
+                                    <select id="teacher" name="teacher" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($teachers)
                                             @foreach ($teachers as $teacher)
@@ -47,7 +52,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="teacher">Guru Pengawas <span class="materialize-red-text">*</span></label>
+                                    <label for="teacher" class="active">Guru Pengawas <span class="materialize-red-text">*</span></label>
                                     @error('teacher')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
@@ -55,7 +60,7 @@
                             </div>
                             <div class="row">  
                                 <div class="input-field col s4">
-                                    <select id="clazz" name="clazz" class="">
+                                    <select id="clazz" name="clazz" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($classes)
                                             @foreach ($classes as $clazz)
@@ -63,7 +68,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="clazz">Kelas <span class="materialize-red-text">*</span></label>
+                                    <label for="clazz" class="active">Kelas <span class="materialize-red-text">*</span></label>
                                     @error('clazz')
                                         <div class="error">{{ $message }}</div>
                                     @enderror

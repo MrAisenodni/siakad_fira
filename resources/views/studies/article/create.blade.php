@@ -37,21 +37,21 @@
                                     @enderror
                                 </div>
                                 <div class="input-field col s3">
-                                    <select id="category" name="category" class="">
+                                    <select id="category" name="category" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($categories)
                                             @foreach ($categories as $category)
-                                                <option @if(old('category') == $category->id) selected @endif value="{{ $category->id }}">{{ $category->name }}</option>
+                                            <option @if(old('category') == $category->id) selected @endif value="{{ $category->id }}">{{ $category->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="category">Kategori <span class="materialize-red-text">*</span></label>
+                                    <label for="category" class="active">Kategori <span class="materialize-red-text">*</span></label>
                                     @error('category')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-field col s3">
-                                    <select id="tag" name="tag" class="">
+                                    <select id="tag" name="tag" class="disabled select2">
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($tags)
                                             @foreach ($tags as $tag)
@@ -59,7 +59,7 @@
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="tag">Tag</label>
+                                    <label for="tag" class="active">Tag</label>
                                     @error('tag')
                                         <div class="error">{{ $message }}</div>
                                     @enderror

@@ -22,27 +22,27 @@
                             @csrf
                             <div class="row">
                                 <div class="input-field col s6">
-                                    <select id="month" name="month" class="">
+                                    <select id="month" name="month" class="disabled select2">
                                         @if ($months)
                                             @foreach ($months as $month)
                                                 <option @if(old('month') == $month->id) selected @endif value="{{ $month->id }}">{{ $month->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="month">Bulan</label>
+                                    <label for="month" class="active">Bulan</label>
                                     @error('month')
                                         <div class="error">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="input-field col s6">
-                                    <select id="year" name="year" class="">
+                                    <select id="year" name="year" class="disabled select2">
                                         @if ($payments)
                                             @foreach ($payments as $year)
                                                 <option @if(old('year') == $year->id) selected @endif value="{{ $year->id }}">{{ $year->year }}</option>
                                             @endforeach
                                         @endif
                                     </select>
-                                    <label for="year">Tahun</label>
+                                    <label for="year" class="active">Tahun</label>
                                     @error('year')
                                         <div class="error">{{ $message }}</div>
                                     @enderror

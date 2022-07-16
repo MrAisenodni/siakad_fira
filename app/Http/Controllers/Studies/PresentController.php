@@ -59,10 +59,17 @@ class PresentController extends Controller
             
             return view('students.present.index', $data);
         } else {
-            $data['classes'] = $this->classes->selectRaw('MAX(id) AS id, COUNT(student_id) AS student, class_id, study_year_id')->where('disabled', 0)->groupByRaw('class_id, study_year_id')->get();
+            if (session()->get('srole') == 'admin') {
+                $data['classes'] = $this->classes->selectRaw('MAX(id) AS id, COUNT(student_id) AS student, class_id, study_year_id')->where('disabled', 0)->groupByRaw('class_id, study_year_id')->get();
 
-            if (session()->get('srole') == 'admin') return view('studies.present.index', $data);
-            if (session()->get('srole') == 'teacher') return view('teachers.present.index', $data);
+                return view('studies.present.index', $data);
+            } 
+
+            if (session()->get('srole') == 'teacher') {
+                $data['classes'] = $this->classes->selectRaw('MAX(id) AS id, COUNT(student_id) AS student, class_id, study_year_id')->where('disabled', 0)->where('teacher_id', session()->get('suser_id'))->groupByRaw('class_id, study_year_id')->get();
+
+                return view('teachers.present.index', $data);
+            }
         }
     }
 
@@ -112,7 +119,18 @@ class PresentController extends Controller
         // dd($data);
 
         if (session()->get('srole') == 'admin') return view('studies.present.show', $data);
-        if (session()->get('srole') == 'teacher') return view('teachers.present.show', $data);
+        if (session()->get('srole') == 'teacher') {
+            $check = $this->classes->select('id', 'class_id', 'teacher_id', 'study_year_id')->where('teacher_id', session()->get('suser_id'))->where('id', $id)->first();
+
+            $data += [
+                'classes'       => $this->classes->get_present($check->class_id, $check->study_year_id),
+                'inp_month'     => $month,
+                'inp_year'      => $year,
+                'clazz'         => $check,
+            ];
+
+            return view('teachers.present.show', $data);
+        }
         abort(403);
     }
 
