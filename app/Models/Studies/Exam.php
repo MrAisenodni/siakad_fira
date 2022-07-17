@@ -75,4 +75,24 @@ class Exam extends Model
                 ->where('a.disabled', 0)->where('b.disabled', 0)->where('b.student_id', $student)->where('a.type', 'uas')->get();
         }
     }
+
+    public function check_uts($day, $clazz, $clock_in, $clock_out, $id = 0)
+    {
+        return DB::table('std_exam_schedule AS a')->select('a.id', 'c.id', 'a.date', 'a.clock_in', 'a.clock_out', 'c.name AS clazz', 'd.name AS lesson')
+            ->join('mst_class AS c', 'a.class_id', '=', 'c.id')
+            ->join('mst_lesson AS d', 'a.lesson_id', '=', 'd.id')
+            ->whereRaw("a.id <> ".$id." AND a.type = 'uts' AND a.disabled = 0 AND c.disabled = 0 AND d.disabled = 0 AND a.date LIKE '%".date('Y-m-d', strtotime(str_replace('/', '-', $day)))."%' AND a.class_id = ".$clazz." AND (".$clock_in." BETWEEN TIME_TO_SEC(a.clock_in) AND TIME_TO_SEC(a.clock_out) OR ".$clock_out." BETWEEN TIME_TO_SEC(a.clock_in) AND TIME_TO_SEC(a.clock_out))")
+            // ->whereRaw('a.disabled = 0 AND b.disabled = 0 AND c.disabled = 0 AND d.disabled = 0 AND a.day ='.$day.' AND b.class_id = '.$clazz.' AND '.$clock_in.' >= TIME_TO_SEC(a.clock_in) AND '.$clock_out.' <= TIME_TO_SEC(a.clock_out)')
+            ->first();
+    }
+
+    public function check_uas($day, $clazz, $clock_in, $clock_out, $id = 0)
+    {
+        return DB::table('std_exam_schedule AS a')->select('a.id', 'c.id', 'a.date', 'a.clock_in', 'a.clock_out', 'c.name AS clazz', 'd.name AS lesson')
+            ->join('mst_class AS c', 'a.class_id', '=', 'c.id')
+            ->join('mst_lesson AS d', 'a.lesson_id', '=', 'd.id')
+            ->whereRaw("a.id <> ".$id." AND a.type = 'uas' AND a.disabled = 0 AND c.disabled = 0 AND d.disabled = 0 AND a.date LIKE '%".date('Y-m-d', strtotime(str_replace('/', '-', $day)))."%' AND a.class_id = ".$clazz." AND (".$clock_in." BETWEEN TIME_TO_SEC(a.clock_in) AND TIME_TO_SEC(a.clock_out) OR ".$clock_out." BETWEEN TIME_TO_SEC(a.clock_in) AND TIME_TO_SEC(a.clock_out))")
+            // ->whereRaw('a.disabled = 0 AND b.disabled = 0 AND c.disabled = 0 AND d.disabled = 0 AND a.day ='.$day.' AND b.class_id = '.$clazz.' AND '.$clock_in.' >= TIME_TO_SEC(a.clock_in) AND '.$clock_out.' <= TIME_TO_SEC(a.clock_out)')
+            ->first();
+    }
 }

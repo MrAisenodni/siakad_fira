@@ -22,8 +22,16 @@
                     <div class="card-content">
                         <h5 class="card-title">Tambah {{ $menu->title }}</h5>
                         @if (session('error'))
-                            <div class="success-alert-bar p-15 m-t-10 m-b-10 red white-text" style="display: block">
-                                {{ session('error') }}
+                            <div class="row m-b-20">
+                                <div class="col s12">
+                                    <div class="success-alert-bar p-15 m-t-10 red white-text" style="display: block">
+                                        @if (session('error') == 'kelas')
+                                            Pada tanggal <b style="color: cyan">{{ date('d F Y', strtotime(session('err_day'))) }}</b> pukul <b style="color: cyan">{{ session('err_ci') }}-{{ session('err_co') }}</b> sudah ada jadwal di Kelas <b style="color: cyan">{{ session('err_clazz') }}</b>
+                                        @else
+                                            Mata Pelajaran <b style="color: cyan">{{ session('err_lesson') }}</b> sudah ada jadwal pada tanggal <b style="color: cyan">{{ date('d F Y', strtotime(session('err_day'))) }}</b> pukul <b style="color: cyan">{{ session('err_ci') }}-{{ session('err_co') }}</b> di Kelas <b style="color: cyan">{{ session('err_clazz') }}</b>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                         @endif
                         <form method="POST" action="{{ str_replace("/create", "", $menu->url) }}">

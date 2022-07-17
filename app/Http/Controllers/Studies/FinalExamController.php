@@ -114,10 +114,26 @@ class FinalExamController extends Controller
         $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
         sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
         $clock_out = $hours * 3600 + $minutes * 60 + $seconds;
+        
         // Uncomment this validation if you need
-        $check = $this->exams->whereRaw("date LIKE '%".date('Y-m-d', strtotime(str_replace('/', '-', $input['date'])))."%' AND disabled = 0 AND lesson_id = ".$input['lesson']." AND type = 'uas' AND class_id = ".$input['clazz']." AND ".$clock_in." BETWEEN TIME_TO_SEC(clock_in) AND TIME_TO_SEC(clock_out)")->first();
-        // dd($check, $clock_in, $clock_out);
-        if ($check) return redirect(url()->previous())->with('error', 'Mata Pelajaran '.$check->lesson->name.' dengan Pengawas ['.$check->teacher->full_name.'] sudah terdaftar pada hari '.date('Y-m-d', strtotime(str_replace('/', '-', $input['date']))).' pukul '.date('H:i', strtotime($check->clock_in)).'-'.date('H:i', strtotime($check->clock_out)))->withInput();
+        $check = $this->exams->check_uas($input['date'], $input['clazz'], $clock_in, $clock_out);
+        $check_lesson = $this->exams->select('lesson_id', 'class_id', 'date', 'clock_in', 'clock_out')
+            ->where('type', 'uas')->where('disabled', 0)->where('class_id', $input['clazz'])->where('lesson_id', $input['lesson'])
+            ->where('date', 'LIKE', '%'.date('Y-m-d', strtotime(str_replace('/', '-', $input['date']))).'%')
+            ->first();
+        // dd($input, $check, $check_lesson, $clock_in, $clock_out);
+        if ($check) return redirect(url()->previous())->with('error', 'kelas')
+            ->with('err_day', $check->date)
+            ->with('err_ci', date('H:i', strtotime($check->clock_in)))
+            ->with('err_co', date('H:i', strtotime($check->clock_out)))
+            ->with('err_clazz', $check->clazz)->withInput();
+
+        if ($check_lesson) return redirect(url()->previous())->with('error', 'mapel')
+            ->with('err_day', $check_lesson->date)
+            ->with('err_ci', date('H:i', strtotime($check_lesson->clock_in)))
+            ->with('err_co', date('H:i', strtotime($check_lesson->clock_out)))
+            ->with('err_lesson', $check_lesson->lesson->name)->withInput()
+            ->with('err_clazz', $check_lesson->class->name)->withInput();
 
         $data = [
             'date'              => date('Y-m-d', strtotime(str_replace('/', '-', $input['date']))),
@@ -133,21 +149,18 @@ class FinalExamController extends Controller
 
         $id = $this->exams->insertGetId($data);
 
-        $c_class = $this->mst_classes->where('disabled', 0)->count();
-        $c_student = $this->students->where('disabled', 0)->count();
-        $ex_student = $this->exam_details->select('student_id')->where('disabled', 0)->get();
-        $student = $this->classes->select('id', 'student_id')->whereIn('student_id', $ex_student)->where('disabled', 0)->orderBy('id')->get();
+        $classes = $this->classes->where('disabled', 0)->where('class_id', $input['clazz'])->get();        
         
-        if ($c_student && $c_class) {
-            for ($i = 0; $i <= round($c_student/$c_class); $i++) {
+        if ($classes) {
+            for ($i = 0; $i < $classes->count(); $i++) {
                 $data = [
                     'header_id'         => $id,
-                    'student_id'        => $student[$i]->student_id,
-                    'class_id'          => $student[$i]->id,
+                    'student_id'        => $classes[$i]->student_id,
+                    'class_id'          => $classes[$i]->id,
                     'created_by'        => session()->get('sname'),
                     'created_at'        => now(),
                 ];
-    
+
                 $this->exam_details->insert($data);
             }
         }
@@ -203,6 +216,35 @@ class FinalExamController extends Controller
             'teacher'   => 'required',
             'lesson'    => 'required',
         ]);
+
+        $str_time = $input['clock_in'].":00";
+        $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
+        sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
+        $clock_in = $hours * 3600 + $minutes * 60 + $seconds;
+        $str_time = $input['clock_out'].":00";
+        $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
+        sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
+        $clock_out = $hours * 3600 + $minutes * 60 + $seconds;
+
+        // Uncomment this validation if you need
+        $check = $this->exams->check_uas($input['date'], $input['clazz'], $clock_in, $clock_out, $id);
+        $check_lesson = $this->exams->select('lesson_id', 'class_id', 'date', 'clock_in', 'clock_out')
+            ->where('disabled', 0)->where('class_id', $input['clazz'])->where('lesson_id', $input['lesson'])
+            ->where('date', 'LIKE', '%'.date('Y-m-d', strtotime(str_replace('/', '-', $input['date']))).'%')
+            ->where('id', '<>', $id)->where('type', 'uas')->first();
+        // dd($input, $check, $check_lesson, $clock_in, $clock_out);
+        if ($check) return redirect(url()->previous())->with('error', 'kelas')
+            ->with('err_day', $check->date)
+            ->with('err_ci', date('H:i', strtotime($check->clock_in)))
+            ->with('err_co', date('H:i', strtotime($check->clock_out)))
+            ->with('err_clazz', $check->clazz)->withInput();
+
+        if ($check_lesson) return redirect(url()->previous())->with('error', 'mapel')
+            ->with('err_day', $check_lesson->date)
+            ->with('err_ci', date('H:i', strtotime($check_lesson->clock_in)))
+            ->with('err_co', date('H:i', strtotime($check_lesson->clock_out)))
+            ->with('err_lesson', $check_lesson->lesson->name)->withInput()
+            ->with('err_clazz', $check_lesson->class->name)->withInput();
 
         $data = [
             'date'              => date('Y-m-d', strtotime(str_replace('/', '-', $input['date']))),
