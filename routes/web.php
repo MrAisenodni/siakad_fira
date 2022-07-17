@@ -104,7 +104,7 @@ Route::middleware('authcheck')->group(function() {
     Route::get('/studi/nilai-siswa/{id}/{ids}/edit', [ReportScoreController::class, 'edit']);
     Route::put('/studi/nilai-siswa/{id}/{ids}', [ReportScoreController::class, 'update']);
     Route::get('/studi/nilai-siswa/{id}/create', [ReportScoreController::class, 'create']);
-
+    
     // Print Routes (PDF)
     Route::get('/cetak/spp', [PrintController::class, 'print_payment']);
     Route::get('/cetak/guru', [PrintController::class, 'print_all_teacher']);
@@ -112,9 +112,10 @@ Route::middleware('authcheck')->group(function() {
     Route::get('/cetak/presensi/{id}', [PrintController::class, 'print_present']);
     Route::get('/studi/kelas/{id}/cetak', [PrintController::class, 'print_class']);
     Route::get('/studi/siswa/{id}/cetak', [PrintController::class, 'print_student']);
-
+    
     // Print Routes (Word)
     Route::get('/studi/siswa/{id}/word', [PrintController::class, 'word_student']);
 });
 
+Route::get('/studi/nilai-siswa/{id}/cetak', [PrintController::class, 'print_excel_score']);
 Route::get('/download', [ArticleController::class, 'download']);

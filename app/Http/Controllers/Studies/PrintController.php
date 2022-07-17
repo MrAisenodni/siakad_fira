@@ -8,12 +8,15 @@ use App\Models\Studies\{
     ParentModel,
     Present,
     Payment,
+    ReportScore,
     Student,
     Teacher,
 };
+use App\Exports\ReportScoreExport;
 use App\Models\Settings\Provider;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 
 class PrintController extends Controller
@@ -25,6 +28,7 @@ class PrintController extends Controller
         $this->parents = new ParentModel();
         $this->payments = new Payment();
         $this->presents = new Present();
+        $this->reports = new ReportScore();
         $this->teachers = new Teacher();
         $this->classes = new ClassModel();
         $this->provider = new Provider();
@@ -129,7 +133,7 @@ class PrintController extends Controller
         $file = public_path('/document/Format_Lembar-Induk-Siswa.rtf');
 
         $data = [
-            'provider'  => $this->provider->where('disabled', 0)->first(),
+            'provider'      => $this->provider->where('disabled', 0)->first(),
             'student'       => $this->students->where('id', $id)->first(),
             'father'        => $this->parents->where('student_id', $id)->where('parent', 1)->where('gender', 'l')->where('disabled', 0)->first(),
             'mother'        => $this->parents->where('student_id', $id)->where('parent', 1)->where('gender', 'p')->where('disabled', 0)->first(),
@@ -143,5 +147,10 @@ class PrintController extends Controller
         $export = $data['student']->nis.'_Lembar Induk Siswa_'.$data['student']->full_name.'.docx';
 
         return \WordTemplate::export($file, $array, $export);
+    }
+
+    public function print_excel_score($id)
+    {
+        return Excel::download(new ReportScoreExport, 'coba.xlsx');
     }
 }

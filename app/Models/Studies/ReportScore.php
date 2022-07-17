@@ -38,4 +38,14 @@ class ReportScore extends Model
             $query->where('disabled', 0)->orderBy('full_name');
         }])->get();
     }
+
+    public function get_excel()
+    {
+        DB::table('std_score AS a')->select('b.full_name', 'c.name', 'd.name')
+            ->join('mst_student AS b', 'b.id', '=', 'a.student_id')
+            ->join('mst_class AS c', 'c.id', '=', 'a.class_id')
+            ->join('mst_lesson AS d', 'd.id', '=', 'a.lesson_id')
+            // ->where('a.class_id', $id)
+            ->where('a.disabled', 0);
+    }
 }
