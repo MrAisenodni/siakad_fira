@@ -67,6 +67,7 @@ class ScheduleController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+        $custom = explode('|', $request->lesson);
 
         $validated = $request->validate([
             'clock_in'  => 'required|date_format:H:i',
@@ -82,15 +83,28 @@ class ScheduleController extends Controller
         $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
         sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
         $clock_out = $hours * 3600 + $minutes * 60 + $seconds;
+        
         // Uncomment this validation if you need
-        $check = $this->schedules->whereRaw('day = '.$input['day'].' AND disabled = 0 AND lesson_id = '.$input['lesson'].' AND '.$clock_in.' BETWEEN TIME_TO_SEC(clock_in) AND TIME_TO_SEC(clock_out)')->first();
-        if ($check) return redirect(url()->previous())->with('error', 'Mata Pelajaran '.$check->lesson->lesson->name.' ['.$check->lesson->teacher->full_name.'] sudah terdaftar pada hari '.$this->days[$check->day-1].' pukul '.date('H:i', strtotime($check->clock_in)).'-'.date('H:i', strtotime($check->clock_out)))->withInput();
+        $check = $this->schedules->check_available($input['day'], $custom[1], $clock_in, $clock_out);
+        $check_lesson = $this->schedules->select('lesson_id', 'day', 'clock_in', 'clock_out')->where('disabled', 0)->where('lesson_id', $custom[0])->where('day', $input['day'])->first();
+        // dd($check, $check_lesson, $clock_in, $clock_out);
+        if ($check) return redirect(url()->previous())->with('error', 'kelas')
+            ->with('err_day', $this->days[$check->day-1])
+            ->with('err_ci', date('H:i', strtotime($check->clock_in)))
+            ->with('err_co', date('H:i', strtotime($check->clock_out)))
+            ->with('err_clazz', $check->clazz)->withInput();
+
+        if ($check_lesson) return redirect(url()->previous())->with('error', 'mapel')
+            ->with('err_day', $this->days[$check_lesson->day-1])
+            ->with('err_ci', date('H:i', strtotime($check_lesson->clock_in)))
+            ->with('err_co', date('H:i', strtotime($check_lesson->clock_out)))
+            ->with('err_lesson', $check_lesson->lesson->lesson->name)->withInput();
 
         $data = [
             'day'               => $input['day'],
             'clock_in'          => $input['clock_in'],
             'clock_out'         => $input['clock_out'],
-            'lesson_id'         => $input['lesson'],
+            'lesson_id'         => $custom[0],
             'created_by'        => session()->get('sname'),
             'created_at'        => now(),
         ];
@@ -138,6 +152,7 @@ class ScheduleController extends Controller
     public function update(Request $request, $id)
     {
         $input = $request->all();
+        $custom = explode('|', $request->lesson);
 
         $validated = $request->validate([
             'clock_in'  => 'required|date_format:H:i',
@@ -153,15 +168,28 @@ class ScheduleController extends Controller
         $str_time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $str_time);
         sscanf($str_time, "%d:%d:%d", $hours, $minutes, $seconds);
         $clock_out = $hours * 3600 + $minutes * 60 + $seconds;
+        
         // Uncomment this validation if you need
-        $check = $this->schedules->whereRaw('day = '.$input['day'].' AND disabled = 0 AND lesson_id = '.$input['lesson'].' AND id <> '.$id.' AND '.$clock_in.' BETWEEN TIME_TO_SEC(clock_in) AND TIME_TO_SEC(clock_out)')->first();
-        if ($check) return redirect(url()->previous())->with('error', 'Mata Pelajaran '.$check->lesson->lesson->name.' ['.$check->lesson->teacher->full_name.'] sudah terdaftar pada hari '.$this->days[$check->day-1].' pukul '.date('H:i', strtotime($check->clock_in)).'-'.date('H:i', strtotime($check->clock_out)))->withInput();
+        $check = $this->schedules->check_available($input['day'], $custom[1], $clock_in, $clock_out, $id);
+        $check_lesson = $this->schedules->select('lesson_id', 'day', 'clock_in', 'clock_out')->where('disabled', 0)->where('lesson_id', $custom[0])->where('day', $input['day'])->where('id', '<>', $id)->first();
+        // dd($check, $check_lesson, $clock_in, $clock_out);
+        if ($check) return redirect(url()->previous())->with('error', 'kelas')
+            ->with('err_day', $this->days[$check->day-1])
+            ->with('err_ci', date('H:i', strtotime($check->clock_in)))
+            ->with('err_co', date('H:i', strtotime($check->clock_out)))
+            ->with('err_clazz', $check->clazz)->withInput();
+
+        if ($check_lesson) return redirect(url()->previous())->with('error', 'mapel')
+            ->with('err_day', $this->days[$check_lesson->day-1])
+            ->with('err_ci', date('H:i', strtotime($check_lesson->clock_in)))
+            ->with('err_co', date('H:i', strtotime($check_lesson->clock_out)))
+            ->with('err_lesson', $check_lesson->lesson->lesson->name)->withInput();
 
         $data = [
             'day'               => $input['day'],
             'clock_in'          => $input['clock_in'],
             'clock_out'         => $input['clock_out'],
-            'lesson_id'         => $input['lesson'],
+            'lesson_id'         => $custom[0],
             'updated_by'        => session()->get('sname'),
             'updated_at'        => now(),
         ];

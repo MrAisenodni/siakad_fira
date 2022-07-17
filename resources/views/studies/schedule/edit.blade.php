@@ -25,7 +25,11 @@
                             <div class="row m-b-20">
                                 <div class="col s12">
                                     <div class="success-alert-bar p-15 m-t-10 red white-text" style="display: block">
-                                        {{ session('error') }}
+                                        @if (session('error') == 'kelas')
+                                            Pada hari <b style="color: cyan">{{ session('err_day') }}</b> pukul <b style="color: cyan">{{ session('err_ci') }}-{{ session('err_co') }}</b> sudah ada jadwal di Kelas <b style="color: cyan">{{ session('err_clazz') }}</b>
+                                        @else
+                                            Mata Pelajaran <b style="color: cyan">{{ session('err_lesson') }}</b> sudah ada jadwal di hari <b style="color: cyan">{{ session('err_day') }}</b> pukul <b style="color: cyan">{{ session('err_ci') }}-{{ session('err_co') }}</b>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -39,7 +43,7 @@
                                         <option value="" selected>--- SILAHKAN PILIH ---</option>
                                         @if ($lessons)
                                             @foreach ($lessons as $lesson)
-                                                <option @if(old('lesson', $schedule->lesson_id) == $lesson->id) selected @endif value="{{ $lesson->id }}">[{{ $lesson->teacher->nip }}] {{ $lesson->teacher->full_name }} | {{ $lesson->lesson->name }} ({{ $lesson->class->name }})</option>
+                                                <option @if(old('lesson', $schedule->lesson_id) == $lesson->id) selected @endif value="{{ $lesson->id }}|{{ $lesson->class_id }}">[{{ $lesson->teacher->nip }}] {{ $lesson->teacher->full_name }} | {{ $lesson->lesson->name }} ({{ $lesson->class->name }})</option>
                                             @endforeach
                                         @endif
                                     </select>
