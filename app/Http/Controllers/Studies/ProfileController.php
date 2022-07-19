@@ -281,8 +281,6 @@ class ProfileController extends Controller
                 }
             } 
     
-            if ($check) $this->students->where('id', $check['id'])->delete();
-    
             $this->students->where('id', session()->get('suser_id'))->update($data);
     
             $c_father = $this->parents->where('student_id', session()->get('suser_id'))->where('parent', 1)->where('gender', 'l')->first();
