@@ -149,8 +149,8 @@ class PrintController extends Controller
         return \WordTemplate::export($file, $array, $export);
     }
 
-    public function print_excel_score($id)
+    public function print_excel_score($id, $ids)
     {
-        return Excel::download(new ReportScoreExport, 'Rekap Nilai.xlsx');
+        return Excel::download(new ReportScoreExport($id, $ids), date('Ymd', strtotime(now())).'_Rekap Nilai.xlsx');
     }
 }
