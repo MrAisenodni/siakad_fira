@@ -118,13 +118,9 @@ class StudentController extends Controller
 
             // Validasi Ayah
             'father_name'           => 'required',
-            'father_phone_number'   => 'digits_between:1,25',
-            'father_home_number'    => 'digits_between:1,25',
 
             // Validasi Ibu
             'mother_name'           => 'required',
-            'mother_phone_number'   => 'digits_between:1,25',
-            'mother_home_number'    => 'digits_between:1,25',
         ]);
 
         if ($check) {
@@ -323,6 +319,7 @@ class StudentController extends Controller
 
             return view('studies.student.edit', $data);
         } elseif (session()->get('srole') == 'teacher') {
+            // dd($data);
             return view('teachers.student.edit', $data);
         } else {
             abort(403);
@@ -345,9 +342,9 @@ class StudentController extends Controller
                         ->first();
 
         $validated = $request->validate([
-            'nik'           => 'required|numeric|unique:mst_student,nik,'.$id.',id,disabled,0|digits_between:1,16',
-            'nis'           => 'required|numeric|unique:mst_student,nis,'.$id.',id,disabled,0|digits_between:1,20',
-            'nisn'          => 'required|numeric|unique:mst_student,nisn,'.$id.',id,disabled,0|digits_between:1,20',
+            'nik'           => 'required|numeric|unique:mst_student,nik,'.$id.',id,disabled,1|digits_between:1,16',
+            'nis'           => 'required|numeric|unique:mst_student,nis,'.$id.',id,disabled,1|digits_between:1,20',
+            'nisn'          => 'required|numeric|unique:mst_student,nisn,'.$id.',id,disabled,1|digits_between:1,20',
             'birth_date'    => 'required',
             'birth_place'   => 'required',
             'religion'      => 'required',
@@ -369,17 +366,13 @@ class StudentController extends Controller
             'home_number'   => 'digits_between:1,25',
 
             // Validasi Pendidikan
-            'sttb_no'           => 'required|unique:mst_student,sttb_no,1,disabled',
+            'sttb_no'           => 'required|unique:mst_student,sttb_no,'.$id.',id,disabled,1',
 
             // Validasi Ayah
             'father_name'           => 'required',
-            'father_phone_number'   => 'digits_between:1,25',
-            'father_home_number'    => 'digits_between:1,25',
 
             // Validasi Ibu
             'mother_name'           => 'required',
-            'mother_phone_number'   => 'digits_between:1,25',
-            'mother_home_number'    => 'digits_between:1,25',
         ]);
 
         $data = [

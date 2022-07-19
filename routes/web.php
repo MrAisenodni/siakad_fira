@@ -103,6 +103,7 @@ Route::middleware('authcheck')->group(function() {
     Route::resource('/studi/nilai-siswa', ReportScoreController::class);
     Route::get('/studi/nilai-siswa/{id}/{ids}/edit', [ReportScoreController::class, 'edit']);
     Route::put('/studi/nilai-siswa/{id}/{ids}', [ReportScoreController::class, 'update']);
+    Route::get('/studi/nilai-siswa/{id}/{ids}', [ReportScoreController::class, 'generate']);
     Route::get('/studi/nilai-siswa/{id}/create', [ReportScoreController::class, 'create']);
     
     // Print Routes (PDF)
@@ -117,5 +118,5 @@ Route::middleware('authcheck')->group(function() {
     Route::get('/studi/siswa/{id}/word', [PrintController::class, 'word_student']);
 });
 
-Route::get('/studi/nilai-siswa/{id}/cetak', [PrintController::class, 'print_excel_score']);
+Route::get('/studi/nilai-siswa/{id}/{ids}/cetak', [PrintController::class, 'print_excel_score']);
 Route::get('/download', [ArticleController::class, 'download']);

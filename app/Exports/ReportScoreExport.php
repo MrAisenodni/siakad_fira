@@ -2,26 +2,18 @@
 
 namespace App\Exports;
 
+use App\Models\Settings\Provider;
 use App\Models\Studies\ReportScore;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 
-class ReportScoreExport implements FromCollection, ToModel, WithHeadingRow
+class ReportScoreExport implements FromView
 {
-    public function model(array $row)
+    public function view() : View 
     {
-        return new ReportScore([
-            'Kelas'      => $row['class_id'],
-            'Mata Pelajaran'     => $row['lesson_id'],
-            'Nama Siswa'    => $row['student_id'],
+        return view('studies.report.excel', [
+            'provider'      => Provider::all(),
+            'reports'       => ReportScore::query()->where('disabled', 0),
         ]);
-    }
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
-    {
-        return ReportScore::all();
     }
 }

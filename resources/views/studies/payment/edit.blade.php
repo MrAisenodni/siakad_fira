@@ -230,7 +230,7 @@
                                         <input type="hidden" name="mod_student" id="mod_student" value="{{ $payment->student_id }}">
                                         <input type="hidden" name="mod_clazz" id="mod_clazz" value="{{ $payment->class->id }}">
                                         <div class="input-field col s12">
-                                            <select id="mod_payment" name="mod_payment" class="modal_auto_fill disabled select2">
+                                            <select id="mod_payment" name="mod_payment" class="modal_auto_fill">
                                                 <option value="" selected>--- SILAHKAN PILIH ---</option>
                                                 @if ($payments)
                                                     @foreach ($payments as $payment)
@@ -244,7 +244,7 @@
                                             @enderror
                                         </div>
                                         <div class="input-field col s12">
-                                            <select id="mod_month" name="mod_month" class="disabled select2">
+                                            <select id="mod_month" name="mod_month" class="">
                                                 @if ($months)
                                                     @foreach ($months as $month)
                                                         <option @if(old('mod_month') == $month->id) selected @endif value="{{ $month->id }}">{{ $month->name }}</option>

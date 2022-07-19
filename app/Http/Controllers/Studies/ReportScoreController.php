@@ -172,6 +172,27 @@ class ReportScoreController extends Controller
         }
     }
 
+    public function generate($id, $ids)
+    {
+        $clazz = $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('id', $id)->first();
+        $student = $this->classes->select('student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();
+
+        for ($i = 1; $i <= $student->count(); $i++) 
+        {
+            $data = [
+                'student_id'    => $student[$i-1]->student_id,
+                'class_id'      => $id,
+                'lesson_id'     => $ids,
+                'created_at'    => now(),
+                'created_by'    => session()->get('sname'),
+            ];
+
+            $this->reports->insert($data);
+        }
+
+        return redirect($this->url.'/'.$id.'/'.$ids.'/edit')->with('status', 'Nilai Siswa berhasil disimpan.');
+    }
+
     public function edit($id, $ids)
     {
         $clazz = $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('id', $id)->first();
@@ -181,7 +202,8 @@ class ReportScoreController extends Controller
             'menus'             => $this->menus->select('title', 'url', 'icon', 'parent', 'id', 'role')->where('disabled', 0)->where('role', 'like', '%'.session()->get('srole').'%')->get(),
             'menu'              => $this->menus->select('title', 'url')->where('url', $this->url)->first(),
             'lesson'            => $this->lessons->select('teacher_id', 'lesson_id')->where('id', $ids)->first(),
-            'reports'           => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereIn('id', $student_id)->orderBy('full_name')->get(),
+            'reports'           => $this->reports->get_report($id, $ids),
+            // 'reports'           => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereIn('id', $student_id)->orderBy('full_name')->get(),
             'students'          => $this->students->select('id', 'nis', 'full_name')->where('disabled', 0)->whereIn('id', $student_id)->orderBy('full_name')->get(),
             'clazz'             => $clazz,
         ];
@@ -200,6 +222,7 @@ class ReportScoreController extends Controller
     public function update(Request $request, $id, $ids)
     {
         $input = $request->all();
+        // dd($input);
 
         $clazz = $this->classes->select('id', 'teacher_id', 'class_id', 'study_year_id')->where('id', $id)->first();
         $student = $this->classes->select('student_id')->where('class_id', $clazz->class_id)->where('teacher_id', $clazz->teacher_id)->where('study_year_id', $clazz->study_year_id)->where('disabled', 0)->get();

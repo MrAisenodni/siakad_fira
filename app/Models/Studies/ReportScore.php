@@ -34,9 +34,10 @@ class ReportScore extends Model
 
     public function get_report($id, $ids)
     {
-        return $this->where('disabled', 0)->where('class_id', $id)->where('lesson_id', $ids)->with(['student' => function ($query) {
-            $query->where('disabled', 0)->orderBy('full_name');
-        }])->get();
+        return DB::table('std_score AS a')->select('b.id AS student_id', 'b.nis', 'b.full_name', 'a.*')
+            ->join('mst_student AS b', 'a.student_id', '=', 'b.id')
+            ->join('std_class AS c', 'a.class_id', '=', 'c.id')->join('std_lesson AS d', 'a.lesson_id', '=', 'd.id')
+            ->where('a.disabled', 0)->where('a.class_id', $id)->where('a.lesson_id', $ids)->orderBy('b.full_name')->get();
     }
 
     public function get_excel()

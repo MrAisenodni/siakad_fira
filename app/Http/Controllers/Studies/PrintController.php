@@ -151,6 +151,6 @@ class PrintController extends Controller
 
     public function print_excel_score($id)
     {
-        return Excel::download(new ReportScoreExport, 'coba.xlsx');
+        return Excel::download(new ReportScoreExport, 'Rekap Nilai.xlsx');
     }
 }

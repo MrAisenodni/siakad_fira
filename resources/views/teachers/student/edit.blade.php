@@ -73,11 +73,11 @@
                                             <label for="birth_place">Tempat Lahir</label>
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="height" type="text" name="height" value="{{ $student->height }}" disabled>
+                                            <input id="height" type="text" name="height" value="@if ($student->height) {{ $student->height }} @endif" disabled>
                                             <label for="height">Tinggi Badan (cm)</label>
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="weight" type="text" name="weight" value="{{ old('weight', $student->weight) }}" disabled>
+                                            <input id="weight" type="text" name="weight" value="@if ($student->weight) {{ old('weight', $student->weight) }} @endif" disabled>
                                             <label for="weight">Berat Badan (kg)</label>
                                         </div>
                                     </div>
@@ -112,23 +112,23 @@
                                     {{-- Keluarga --}}
                                     <div class="row">
                                         <div class="input-field col s4">
-                                            <input id="family_status" type="text" name="family_status" value="{{ $student->family_status->name }}" disabled>
+                                            <input id="family_status" type="text" name="family_status" value="@if ($student->family_status_id) {{ $student->family_status->name }} @endif" disabled>
                                             <label for="family_status">Golongan Darah</label>
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="child_to" type="text" name="child_to" value="{{ $student->child_to }}" disabled>
+                                            <input id="child_to" type="text" name="child_to" value="@if ($student->child_to) {{ $student->child_to }} @endif" disabled>
                                             <label for="child_to">Anak Ke</label>
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="child_count" type="text" name="child_count" value="{{ $student->child_count }}" disabled>
+                                            <input id="child_count" type="text" name="child_count" value="@if ($student->child_count) {{ $student->child_count }} @endif" disabled>
                                             <label for="child_count">Dari</label>
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="stepbrother_count" type="text" name="stepbrother_count" value="{{ $student->stepbrother_count }}" disabled>
+                                            <input id="stepbrother_count" type="text" name="stepbrother_count" value="@if ($student->stepbrother_count) {{ $student->stepbrother_count }} @endif" disabled>
                                             <label for="stepbrother_count">Saudara Tiri</label>
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="stepsibling_count" type="text" name="stepsibling_count" value="{{ $student->stepsibling_count }}" disabled>
+                                            <input id="stepsibling_count" type="text" name="stepsibling_count" value="@if ($student->stepsibling_count) {{ $student->stepsibling_count }} @endif" disabled>
                                             <label for="stepsibling_count">Saudara Angkat</label>
                                         </div>
                                     </div>
@@ -141,11 +141,11 @@
                                             <label for="father_name">Nama Ayah</label>
                                         </div>
                                         <div class="input-field col s4">
-                                            <input id="father_birth_place" type="text" name="father_birth_place" value="{{ $father->birth_place }}" disabled>
+                                            <input id="father_birth_place" type="text" name="father_birth_place" value="@if ($father->birth_place) {{ $father->birth_place }} @endif" disabled>
                                             <label for="father_birth_place">Tempat Lahir</label>
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="father_birth_date" class="datepicker" type="text" name="father_birth_date" value="{{ date('d/m/Y', strtotime($father->birth_date)) }}" disabled>
+                                            <input id="father_birth_date" class="datepicker" type="text" name="father_birth_date" value="@if ($father->birth_date) {{ date('d/m/Y', strtotime($father->birth_date)) }} @endif" disabled>
                                             <label for="father_birth_date">Tanggal Lahir</label>
                                         </div>
                                     </div>
@@ -153,7 +153,7 @@
                                     {{-- Kontak Ayah --}}
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <textarea id="father_address" class="materialize-textarea" name="father_address" disabled>{{ $father->address }}</textarea>
+                                            <textarea id="father_address" class="materialize-textarea" name="father_address" disabled>@if ($father->address) {{ $father->address }} @endif</textarea>
                                             <label for="father_address">Alamat</label>
                                         </div>
                                     </div>
@@ -179,15 +179,15 @@
                                     {{-- Pendidikan/Pekerjaan Ayah --}}
                                     <div class="row">
                                         <div class="input-field col s4">
-                                            <input id="father_last_study" type="text" name="father_last_study" value="{{ $father->last_study }}" disabled>
+                                            <input id="father_last_study" type="text" name="father_last_study" value="@if ($father->last_study) {{ $father->last_study }} @endif" disabled>
                                             <label for="father_last_study">Pendidikan Terakhir</label>
                                         </div>
                                         <div class="input-field col s4">
-                                            <input id="father_occupation" type="text" name="father_occupation" value="{{ $father->occupation->name }}" disabled>
+                                            <input id="father_occupation" type="text" name="father_occupation" value="@if ($father->occupation_id) {{ $father->occupation->name }} @endif" disabled>
                                             <label for="father_occupation">Pekerjaan</label>
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="father_revenue" type="text" name="father_revenue" value="Rp {{ number_format($father->revenue, 0, ',', '.') }}" disabled>
+                                            <input id="father_revenue" type="text" name="father_revenue" value="@if ($father->revenue) Rp {{ number_format($father->revenue, 0, ',', '.') }} @endif" disabled>
                                             <label for="father_revenue">Penghasilan</label>
                                         </div>
                                         <div class="input-field col s1">
@@ -220,11 +220,11 @@
                                             <label for="mother_name">Nama Ibu</label>
                                         </div>
                                         <div class="input-field col s4">
-                                            <input id="mother_birth_place" type="text" name="mother_birth_place" value="{{ $mother->birth_place }}" disabled>
+                                            <input id="mother_birth_place" type="text" name="mother_birth_place" value="@if ($mother->birth_place) {{ $mother->birth_place }} @endif" disabled>
                                             <label for="mother_birth_place">Tempat Lahir</label>
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="mother_birth_date" class="datepicker" type="text" name="mother_birth_date" value="{{ date('d/m/Y', strtotime($mother->birth_date)) }}" disabled>
+                                            <input id="mother_birth_date" class="datepicker" type="text" name="mother_birth_date" value="@if ($mother->birth_date) {{ date('d/m/Y', strtotime($mother->birth_date)) }} @endif" disabled>
                                             <label for="mother_birth_date">Tanggal Lahir</label>
                                         </div>
                                     </div>
@@ -232,7 +232,7 @@
                                     {{-- Kontak Ibu --}}
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <textarea id="mother_address" class="materialize-textarea" name="mother_address" disabled>{{ $mother->address }}</textarea>
+                                            <textarea id="mother_address" class="materialize-textarea" name="mother_address" disabled>@if ($mother->address) {{ $mother->address }} @endif</textarea>
                                             <label for="mother_address">Alamat</label>
                                         </div>
                                     </div>
@@ -242,11 +242,11 @@
                                             <label for="mother_gender">Jenis Kelamin</label>
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="mother_phone_number" type="text" name="mother_phone_number" value="{{ $mother->phone_number }}" disabled>
+                                            <input id="mother_phone_number" type="text" name="mother_phone_number" value="@if ($mother->phone_number) {{ $mother->phone_number }} @endif" disabled>
                                             <label for="mother_phone_number">Nomor HP</label>
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="mother_home_number" type="text" name="mother_home_number" value="{{ $mother->home_number }}" disabled>
+                                            <input id="mother_home_number" type="text" name="mother_home_number" value="@if ($mother->home_number) {{ $mother->home_number }} @endif" disabled>
                                             <label for="mother_home_number">Nomor Telepon</label>
                                         </div>
                                         <div class="input-field col s3">
@@ -258,15 +258,15 @@
                                     {{-- Pendidikan/Pekerjaan Ibu --}}
                                     <div class="row">
                                         <div class="input-field col s4">
-                                            <input id="mother_last_study" type="text" name="mother_last_study" value="{{ $mother->last_study }}" disabled>
+                                            <input id="mother_last_study" type="text" name="mother_last_study" value="@if ($mother->last_study) {{ $mother->last_study }} @endif" disabled>
                                             <label for="mother_last_study">Pendidikan Terakhir</label>
                                         </div>
                                         <div class="input-field col s4">
-                                            <input id="mother_occupation" type="text" name="mother_occupation" value="{{ $mother->occupation->name }}" disabled>
+                                            <input id="mother_occupation" type="text" name="mother_occupation" value="@if ($mother->occupation_id) {{ $mother->occupation->name }} @endif" disabled>
                                             <label for="mother_occupation">Pekerjaan</label>
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="mother_revenue" type="text" name="mother_revenue" value="Rp {{ number_format($mother->revenue, 0, ',', '.') }}" disabled>
+                                            <input id="mother_revenue" type="text" name="mother_revenue" value="@if ($mother->revenue) Rp {{ number_format($mother->revenue, 0, ',', '.') }} @endif" disabled>
                                             <label for="mother_revenue">Penghasilan</label>
                                         </div>
                                         <div class="input-field col s1">
@@ -295,21 +295,21 @@
                                     {{-- Kontak --}}
                                     <div class="row">
                                         <div class="input-field col s12">
-                                            <textarea id="address" class="materialize-textarea" name="address" disabled>{{ $student->address }}</textarea>
+                                            <textarea id="address" class="materialize-textarea" name="address" disabled>@if ($student->address) {{ $student->address }} @endif</textarea>
                                             <label for="address">Alamat</label>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="input-field col s2">
-                                            <input id="distance" type="text" name="distance" value="{{ $student->distance }}" disabled>
+                                            <input id="distance" type="text" name="distance" value="@if ($student->distance) {{ $student->distance }} @endif" disabled>
                                             <label for="distance">Jarak Tempuh (km)</label>
                                         </div>
                                         <div class="input-field col s5">
-                                            <input id="phone_number" type="text" name="phone_number" value="{{ $student->phone_number }}" disabled>
+                                            <input id="phone_number" type="text" name="phone_number" value="@if ($student->phone_number) {{ $student->phone_number }} @endif" disabled>
                                             <label for="phone_number">Nomor HP</label>
                                         </div>
                                         <div class="input-field col s5">
-                                            <input id="home_number" type="text" name="home_number" value="{{ $student->home_number }}" disabled>
+                                            <input id="home_number" type="text" name="home_number" value="@if ($student->home_number) {{ $student->home_number }} @endif" disabled>
                                             <label for="home_number">Nomor Telepon</label>
                                         </div>
                                     </div>
@@ -318,23 +318,23 @@
                                     {{-- Studi/Pelajaran --}}
                                     <div class="row">
                                         <div class="input-field col s1">
-                                            <input id="level" type="text" name="level" value="{{ $student->level }}" disabled>
+                                            <input id="level" type="text" name="level" value="@if ($student->level) {{ $student->level }} @endif" disabled>
                                             <label for="level">Tingkat</label>
                                         </div>
                                         <div class="input-field col s2">
-                                            <input id="group" type="text" name="group" value="{{ $student->group }}" disabled>
+                                            <input id="group" type="text" name="group" value="@if ($student->group) {{ $student->group }} @endif" disabled>
                                             <label for="group">Kelompok</label>
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="start_date" class="datepicker" type="text" name="start_date" value="{{ date('d/m/Y', strtotime($student->start_date)) }}" disabled>
+                                            <input id="start_date" class="datepicker" type="text" name="start_date" value="@if ($student->start_date) {{ date('d/m/Y', strtotime($student->start_date)) }} @endif" disabled>
                                             <label for="start_date">Tanggal Mulai</label>
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="extracurricular" type="text" name="extracurricular" value="{{ $student->extracurricular->name }}" disabled>
+                                            <input id="extracurricular" type="text" name="extracurricular" value="@if ($student->extracurricular_id) {{ $student->extracurricular->name }} @endif" disabled>
                                             <label for="extracurricular">Ekstrakurikuler</label>
                                         </div>
                                         <div class="input-field col s3">
-                                            <input id="study_year" type="text" name="study_year" value="{{ $student->study_year->name }}" disabled>
+                                            <input id="study_year" type="text" name="study_year" value="@if ($student->study_year_id) {{ $student->study_year->name }} @endif" disabled>
                                             <label for="study_year">Tahun Pelajaran</label>
                                         </div>
                                     </div>
