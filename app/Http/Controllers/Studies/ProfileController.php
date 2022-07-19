@@ -147,10 +147,6 @@ class ProfileController extends Controller
             ]);
     
             $data = [
-                'nik'                   => $input['nik'],
-                'nis'                   => $input['nis'],
-                'nisn'                  => $input['nisn'],
-                'full_name'             => $input['full_name'],
                 'birth_date'            => date('Y-m-d', strtotime(str_replace('/', '-', $input['birth_date']))),
                 'birth_place'           => $input['birth_place'],
                 'gender'                => $input['gender'],
