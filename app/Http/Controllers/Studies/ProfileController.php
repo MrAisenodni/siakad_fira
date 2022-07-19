@@ -304,7 +304,6 @@ class ProfileController extends Controller
             $data = [
                 'nip'                   => $input['nip'],
                 'email'                 => $input['email'],
-                'full_name'             => $input['full_name'],
                 'birth_date'            => date('Y-m-d', strtotime(str_replace('/', '-', $input['birth_date']))),
                 'birth_place'           => $input['birth_place'],
                 'gender'                => $input['gender'],
