@@ -89,18 +89,8 @@ class ProfileController extends Controller
             $mother_died = $request->mother_died;
             $guardian_died = $request->guardian_died;
             $guardian = $request->guardian;
-            $check = $this->students
-                            ->where('nik', $input['nik'])
-                            ->where('nis', $input['nis'])
-                            ->where('nisn', $input['nisn'])
-                            ->where('disabled', 1)
-                            ->first();
     
             $validated = $request->validate([
-                'nik'           => 'required|numeric',
-                'nis'           => 'required|numeric',
-                'nisn'          => 'required|numeric',
-                'full_name'     => 'required',
                 'birth_place'   => 'required',
                 'birth_date'    => 'required|date_format:d/m/Y',
                 'religion'      => 'required',
@@ -308,15 +298,13 @@ class ProfileController extends Controller
             $this->parents->where('id', $c_mother['id'])->update($mother);
         } elseif (session()->get('srole') == 'teacher') {
             $validated = $request->validate([
-                'nip'           => 'required|numeric|unique:mst_teacher,nip,'.session()->get('suser_id').',id,disabled,0|digits_between:1,25',
-                'full_name'     => 'required',
+                'nip'           => 'numeric|unique:mst_teacher,nip,'.session()->get('suser_id').',id,disabled,0|digits_between:1,25',
                 'birth_place'   => 'required',
                 'birth_date'    => 'required|date_format:d/m/Y',
                 'religion'      => 'required',
                 'picture'       => 'mimes:jpg,jpeg,png,JPG,JPEG,PNG|max:2048',
                 'email'         => 'required|email|unique:mst_teacher,email,'.session()->get('suser_id').',id,disabled,0',
                 'phone_number'  => 'required|numeric|digits_between:1,25',
-                'last_study'    => 'required',
             ]);
     
             $data = [
